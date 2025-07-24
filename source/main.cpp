@@ -135,7 +135,6 @@ int main() {
     Node* solution;
     SearchConfiguration config;
 
-
     FPSCamera* camera = new FPSCamera(glm::radians(90.0f), window.getWidth(), window.getHeight(), 1500.0f, 0.1f, 10.0f, 20000.0f);
     FPSCameraController* controller = new FPSCameraController(*camera);
     camera->translate(glm::vec3(width / 2, 10000.0f, length / 2));

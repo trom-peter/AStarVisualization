@@ -1,6 +1,7 @@
 #include "gui.h"
+#include <algorithm>
 
-GUI::GUI() : step(0), initial(glm::ivec2(0, 0)), goal(glm::ivec2(0, 0)), viewportActive(false) {}
+GUI::GUI() : viewportActive(false), config(nullptr) {}
 
 void GUI::init(Window& window) {
     // Setup Dear ImGui context
@@ -44,19 +45,57 @@ void GUI::renderStuff(Framebuffer& fb, bool& configuring) {
     // Konfigurationen
     ImGui::Begin("Konfiguration", nullptr, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse);
     if (configuring) {
-        ImGui::InputInt("Startzustand X", &initial.x, stateSpacing);
-        ImGui::InputInt("Startzustand Z", &initial.y, stateSpacing);
+        ImGui::Text("Startzustand");
+        if (ImGui::InputInt("X##start", &config->initial.x, config->stateSpacing)) 
+            config->initial.x = std::clamp(config->initial.x, 0, (config->gridSize - 1) * config->stateSpacing);
 
-        ImGui::InputInt("Zielzustand X", &goal.x, stateSpacing);
-        ImGui::InputInt("Zielzustand Z", &goal.y, stateSpacing);
-        configuring = !ImGui::Button("Suche!");
+        if (ImGui::InputInt("Z##start", &config->initial.y, config->stateSpacing)) 
+            config->initial.y = std::clamp(config->initial.y, 0, (config->gridSize - 1) * config->stateSpacing);
+
+        ImGui::NewLine();
+
+        ImGui::Text("Zielzustand");
+        if (ImGui::InputInt("X##ziel", &config->goal.x, config->stateSpacing)) 
+            config->goal.x = std::clamp(config->goal.x, 0, (config->gridSize - 1) * config->stateSpacing);
+
+        if (ImGui::InputInt("Z##ziel", &config->goal.y, config->stateSpacing)) 
+            config->goal.y = std::clamp(config->goal.y, 0, (config->gridSize - 1) * config->stateSpacing);
+
+        ImGui::NewLine();
+
+        configuring = !ImGui::Button("Suche!", ImVec2(80.0f, 40.0f));
+
+        if (ImGui::Button("Reset", ImVec2(50.0f, 25.0f))) config->reset();
     }
     else {
-        ImGui::InputInt("Schritt", &step);
+        if (ImGui::InputInt("Schritt", &config->step)) {
+            if (config->step > config->maxSteps) {
+                config->step = config->maxSteps;
+                if (!config->finished) ImGui::OpenPopup("Pfad gefunden!"); //open a pop up when the search is finished for the first time
+                config->finished = true;
+            }
+            else if (config->step < 0) {
+                config->step = 0;
+            }
+        }
     }
-    ImGui::ColorEdit3("Frontier Farbe", (float*)&frontierColor);
-    ImGui::ColorEdit3("Reached Farbe", (float*)&reachedColor);
-    ImGui::ColorEdit3("Default Farbe", (float*)&defaultColor);
+
+    if (ImGui::BeginPopupModal("Pfad gefunden!")) {
+        if (ImGui::Button("Ok", ImVec2(80.0f, 30.0f))) ImGui::CloseCurrentPopup();
+        ImGui::EndPopup();
+    }
+
+    ImGui::Text("Sichtbarkeit");
+    ImGui::Checkbox("Grenzbereich", &config->frontierVisible);
+    ImGui::Checkbox("Reached", &config->reachedVisible);
+    ImGui::Checkbox("Unbesucht", &config->unexploredVisible);
+
+    ImGui::NewLine();
+
+    ImGui::Text("Farben");
+    ImGui::ColorEdit3("Frontier Farbe", (float*)&config->frontierColor);
+    ImGui::ColorEdit3("Reached Farbe", (float*)&config->reachedColor);
+    ImGui::ColorEdit3("Default Farbe", (float*)&config->defaultColor);
 
     ImGui::End();
     
@@ -80,10 +119,6 @@ void GUI::renderStuff(Framebuffer& fb, bool& configuring) {
         ImGui::EndChild();
     }
     ImGui::End();
-
-    if (step < 0) step = 0;
-    else if (step > maxSteps) step = maxSteps;
-    //TODO max and min inital and goal coordiantes
 
     ImGui::Render();
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
@@ -113,30 +148,6 @@ void GUI::quit() {
     ImGui::DestroyContext();
 }
 
-int GUI::getStep() {
-    return step;
-}
-
-glm::vec3 GUI::getDefaultColor() {
-    return glm::vec3(defaultColor.x, defaultColor.y, defaultColor.z);
-}
-
-glm::vec3 GUI::getFrontierColor() {
-    return glm::vec3(frontierColor.x, frontierColor.y, frontierColor.z);
-}
-
-glm::vec3 GUI::getReachedColor() {
-    return glm::vec3(reachedColor.x, reachedColor.y, reachedColor.z);
-}
-
-glm::ivec2 GUI::getInitial() {
-    return initial;
-}
-
-glm::ivec2 GUI::getGoal() {
-    return goal;
-}
-
 bool GUI::isViewportActive() const {
     return viewportActive;
 }
@@ -145,10 +156,6 @@ void GUI::setViewportActive(bool active) {
     viewportActive = active;
 }
 
-void GUI::setMaxSteps(int maxSteps) {
-    this->maxSteps = maxSteps;
-}
-
-void GUI::setStateSpacing(int stateSpacing) {
-    this->stateSpacing = stateSpacing;
+void GUI::setSearchConfig(SearchConfiguration* config) {
+    this->config = config;
 }

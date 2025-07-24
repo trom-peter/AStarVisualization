@@ -15,7 +15,7 @@ public:
 	virtual void update();
 
 	virtual void translate(glm::vec3 v);
-	
+
 	glm::vec3 getPosition();
 
 	float getFov();

@@ -15,6 +15,8 @@ public:
 
 	void moveUp(float amount);
 
+	void rotate(glm::vec2 degrees);
+
 	float getSpeed();
 
 	glm::vec3 getLookAt();

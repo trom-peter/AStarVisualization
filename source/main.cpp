@@ -21,31 +21,41 @@
 #include "a_star/problem.h"
 #include "a_star/state.h"
 #include "a_star/a_star_search.h"
+#include "search_configuration.h"
 
 #pragma comment(lib, "SDL2.lib")
 #pragma comment(lib, "glew32s.lib")
 #pragma comment(lib, "opengl32.lib")
 
-void updateSphereColors(std::unordered_map<State, Sphere*>& spheres, int step, GUI& gui, Problem& p, AStarSearch& aStar, bool forwards) {
-
-    if (forwards) {
-        for (State s : aStar.allFrontiers.at(step)) {
-            spheres[s]->color = gui.getFrontierColor();
-        }
-    }
-    else {
-        for (State s : aStar.allFrontiers.at(step)) {
-            spheres[s]->color = gui.getDefaultColor();
-        }
-    }
-
+void updateSphereColors(std::unordered_map<State, Sphere*>& spheres, int step, SearchConfiguration& config, Graph& g, Problem& p, AStarSearch& aStar, bool forwards) {
     State expanded = aStar.allExpanded.at(step);
 
     if (forwards) {
-        spheres[expanded]->color = gui.getReachedColor();
+        spheres[expanded]->color = config.reachedColor;
     }
     else {
-        spheres[expanded]->color = gui.getFrontierColor();
+        spheres[expanded]->color = config.frontierColor;
+    }
+
+    if (forwards) {
+        for (State s : aStar.allFrontiers.at(step)) {
+            spheres[s]->color = config.frontierColor;
+        }
+    }
+    else {
+        for (State s : aStar.allFrontiers.at(step)) {
+            //check if any neighbour of s is a frontier node
+            bool anyNeighbourFrontier = false;
+            for (State n : g.getNeighbours(s.x, s.z)) {
+                if (spheres[n]->color == config.reachedColor) {
+                    anyNeighbourFrontier = true;
+                    break;
+                }
+            }
+
+            //only change s to default color if no neighbouring spheres are frontiers
+            if (!anyNeighbourFrontier) spheres[s]->color = config.defaultColor;
+        }
     }
 
     spheres[p.initial]->color = glm::vec3(0.2f, 1.0f, 0.2f);
@@ -123,29 +133,32 @@ int main() {
     Problem p(g);
     AStarSearch aStar;
     Node* solution;
+    SearchConfiguration config;
 
-    FPSCamera* camera = new FPSCamera(glm::radians(90.0f), window.getWidth(), window.getHeight(), 1500.0f, 0.1f, 5.0f, 10000.0f);
+
+    FPSCamera* camera = new FPSCamera(glm::radians(90.0f), window.getWidth(), window.getHeight(), 1500.0f, 0.1f, 10.0f, 20000.0f);
     FPSCameraController* controller = new FPSCameraController(*camera);
     camera->translate(glm::vec3(width / 2, 10000.0f, length / 2));
+    camera->rotate(glm::vec2(0.0f, 90.0f));
     camera->update();
 
-    bool configuring = true; //true when visualization is in configuring mode
-    bool searching = false; //true when visualization is in searching mode
+    config.gridSize = gridSize;
+    config.stateSpacing = g.getSpacing();
 
-    int step = 0; // step number in search process. measured in number of expanded nodes
-    int maxSteps = 0;
+    gui.setSearchConfig(&config);
 
-    gui.setStateSpacing(g.getSpacing());
     for (auto& kv : spheres) {
-        kv.second->color = gui.getDefaultColor();
+        kv.second->color = config.defaultColor;
     }
 
     bool running = true;
+    int prevStep = 0;
     while (running) {
         //std::cout << gui.isViewportActive() << std::endl;
         //std::cout << "x:" << camera->getPosition().x << std::endl;
         //std::cout << "y:" << camera->getPosition().y << std::endl;
         //std::cout << "z:" << camera->getPosition().z << std::endl << std::endl;
+        //std::cout << camera->getLookAt().x << ", " << camera->getLookAt().y << ", " << camera->getLookAt().z << std::endl;
 
         gui.startFrame();
 
@@ -157,29 +170,31 @@ int main() {
             camera->update();
         }
 
-        gui.renderStuff(fb, configuring);
+        config.previousStep = config.step;
+
+        gui.renderStuff(fb, config.configuring);
 
         //TODO
         // resize des framebuffers fixen
         fb.bind();
 
-        if (configuring) {
-            if (gui.getInitial() != initial.getXZ()) { //initial state updated
-                spheres[initial]->color = gui.getDefaultColor();
-                initial.y = topo->getY(gui.getInitial().x, gui.getInitial().y);
-                initial.setXZ(gui.getInitial());
+        if (config.configuring) {
+            if (config.initial != initial.getXZ()) { //initial state updated
+                spheres[initial]->color = config.defaultColor;
+                initial.y = topo->getY(config.initial.x, config.initial.y);
+                initial.setXZ(config.initial);
             }
 
-            if (gui.getGoal() != goal.getXZ()) { //goal state updated
-                spheres[goal]->color = gui.getDefaultColor();
-                goal.y = topo->getY(gui.getGoal().x, gui.getGoal().y);
-                goal.setXZ(gui.getGoal());
+            if (config.goal != goal.getXZ()) { //goal state updated
+                spheres[goal]->color = config.defaultColor;
+                goal.y = topo->getY(config.goal.x, config.goal.y);
+                goal.setXZ(config.goal);
             }
 
             spheres[initial]->color = initialStateColor;
             spheres[goal]->color = goalStateColor;
 
-        } else if (!searching) { //user wants to start search
+        } else if (!config.searching) { //user wants to start search
             p.initial = initial;
             p.goal = goal;
             std::cout << "Starting search..." << std::endl;
@@ -195,21 +210,20 @@ int main() {
                 std::cout << solution->getPath() << std::endl;
                 std::cout << "cost: " << solution->pathCost << " seconds" << std::endl;
             }
-            maxSteps = aStar.allExpanded.size() - 1;
-            gui.setMaxSteps(maxSteps);
-            searching = true;
+            config.maxSteps = aStar.allExpanded.size() - 1;
+            config.searching = true;
         }
 
-        if (searching) {
-            if (gui.getStep() > step) {
-                updateSphereColors(spheres, step++, gui, p, aStar, true);
+        if (config.searching) {
+            if (config.step > config.previousStep) { //forwards step
+                updateSphereColors(spheres, config.step - 1, config, g, p, aStar, true);
             }
-            else if (gui.getStep() < step) {
-                updateSphereColors(spheres, --step, gui, p, aStar, false);
+            else if (config.step < config.previousStep) { // backwards step
+                updateSphereColors(spheres, config.step, config, g, p, aStar, false);
             }
         }
 
-        if (searching && step == maxSteps) {
+        if (config.finished) {
             for (State s : aStar.solutionPath) {
                 if (s != initial && s != goal) {
                     spheres[s]->color = glm::vec3(1.0f, 1.0f, 0.0f);
@@ -223,7 +237,12 @@ int main() {
 
         for (auto& kv : spheres) {
             glm::vec3 color = kv.second->color;
-            if (color.x == 0.0f && color.y == 0.0f && color.z == 0.0f) continue;
+
+            if (color == config.frontierColor && !config.frontierVisible ||
+                color == config.defaultColor && !config.unexploredVisible ||
+                color == config.reachedColor && !config.reachedVisible) 
+                continue;
+
             if (shapeRenderer.getColor() != color) shapeRenderer.setColor(color);
             shapeRenderer.updateUniforms(camera, kv.second->model);
             shapeRenderer.draw(kv.second);

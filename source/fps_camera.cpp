@@ -17,7 +17,7 @@ void FPSCamera::onMouseMoved(float xRel, float yRel) {
 	if (pitch > 89.0f) pitch = 89.0f;
 	if (pitch < -89.0f) pitch = -89.0f;
 
-	glm::vec3 front(0.0f);
+	glm::vec3 front;
 	front.x = cos(glm::radians(pitch)) * cos(glm::radians(yaw));
 	front.y = sin(glm::radians(pitch));
 	front.z = cos(glm::radians(pitch)) * sin(glm::radians(yaw));
@@ -42,10 +42,6 @@ void FPSCamera::move(float forwardAmount, float sidewaysAmount) {
 
 void FPSCamera::moveUp(float amount) {
 	translate(up * amount);
-}
-
-void FPSCamera::rotate(glm::vec2 degrees) {
-	onMouseMoved(degrees.x / mouseSensitivity, degrees.y / mouseSensitivity);
 }
 
 float FPSCamera::getSpeed() {

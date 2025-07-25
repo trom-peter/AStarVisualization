@@ -1,6 +1,6 @@
 #include "shape_renderer.h"
 
-ShapeRenderer::ShapeRenderer() : color(glm::vec3(1.0f)), BaseRenderer() {
+ShapeRenderer::ShapeRenderer() : color(glm::vec3(0.0f)), BaseRenderer() {
     shader = std::unique_ptr<Shader>(new Shader("shaders/3dshape.vert", "shaders/3dshape.frag"));
     shader->bind();
 

@@ -15,13 +15,19 @@ public:
 	void init(Window& window);
 	void processEvent(SDL_Event*);
 	void startFrame();
-	void renderStuff(Framebuffer& fb, bool& configuring);
+	void render();
 	bool wantsMouseInput();
 	bool wantsKeyboardInput();
 	void quit();
 	bool isViewportActive() const;
 	void setViewportActive(bool active);
 	void setSearchConfig(SearchConfiguration* config);
+	bool showUI_EnvironmentConfig();
+	bool showUI_SearchProblemConfig();
+	bool showUI_Searching();
+	bool showUI_Finished();
+	void showUI_Viewport(Framebuffer& fb);
+	void showUI_Visibility();
 
 private:
 	SearchConfiguration* config;

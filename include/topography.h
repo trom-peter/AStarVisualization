@@ -5,6 +5,7 @@
 #include "vertex.h"
 #include "shader.h"
 #include "vertex_array.h"
+#include "search_configuration.h"
 
 struct Shader;
 struct Mesh;
@@ -19,6 +20,8 @@ public:
 	float getMaxY();
 	float getMinY();
 	float getY(int x, int z);
+	int getSeed();
+	void setSeed(int seed);
 
 private:
 	std::vector<Vertex> generateVertices();
@@ -31,6 +34,7 @@ private:
 	float maxHeight;
 	float scale;
 	float spacing;
+	int seed; // the seed for this specific topography
 
 	//non normalized minimum and maximum height of the topography
 	float minY;

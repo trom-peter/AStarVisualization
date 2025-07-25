@@ -1073,6 +1073,12 @@
     <ClInclude Include="include\search_configuration.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\seed_generator.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\visualization_state.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="libs\glm\detail\func_common.inl">

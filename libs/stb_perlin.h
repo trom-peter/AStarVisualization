@@ -77,7 +77,6 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-    extern float hetero_terrain(float x, float y, float z, float lacunarity, float H, float offset, float octaves);
     extern float stb_perlin_noise3(float x, float y, float z, int x_wrap, int y_wrap, int z_wrap);
     extern float stb_perlin_noise3_seed(float x, float y, float z, int x_wrap, int y_wrap, int z_wrap, int seed);
     extern float stb_perlin_ridge_noise3_seed(float x, float y, float z, float lacunarity, float gain, float offset, int octaves, int seed);
@@ -272,55 +271,6 @@ float stb_perlin_noise3_seed(float x, float y, float z, int x_wrap, int y_wrap, 
 {
     return stb_perlin_noise3_internal(x, y, z, x_wrap, y_wrap, z_wrap, (unsigned char)seed);
 }
-
-//float hetero_terrain(float x, float y, float z, float lacunarity, float H, float offset, float octaves) {
-//    double value, increment, frequency, remainder; 
-//    int i; 
-//    static int first = true; 
-//    static double* exponent_array;  
-//    /* precompute and store spectral weights, for efficiency */ 
-//    if (first) { 
-//        /* seize required memory for exponent_array */ 
-//        exponent_array = (double*)malloc((octaves + 1) * sizeof(double)); 
-//        frequency = 1.0; 
-//        for (i = 0; i <= octaves; i++) 
-//        { /* compute weight for each frequency */ 
-//            exponent_array[i] = pow(frequency, -H); 
-//            frequency *= lacunarity; 
-//        }  
-//        first = false;
-//    }  
-//    /* first unscaled octave of function; later octaves are scaled */ 
-//    value = offset + stb_perlin_noise3(x, y, z, 0, 0, 0); 
-//    x *= lacunarity;
-//    y *= lacunarity;
-//    z *= lacunarity;
-//    /* spectral construction inner loop, where the fractal is built */ 
-//    for (i = 1; i < octaves; i++) 
-//    { 
-//        /* obtain displaced noise value */ 
-//        increment = stb_perlin_noise3(x, y, z, 0, 0, 0) + offset;
-//        /* scale amplitude appropriately for this frequency */ 
-//        increment *= exponent_array[i];  
-//        /* scale increment by current “altitude” of function */ 
-//        increment *= value;  /* add increment to “value” */ 
-//        value += increment;  /* raise spatial frequency */ 
-//        x *= lacunarity;
-//        y *= lacunarity;
-//        z *= lacunarity;
-//    } 
-//    /* for */  /* take care of remainder in “octaves” */ 
-//    remainder = octaves - (int)octaves; 
-//    if (remainder) 
-//    { 
-//        /* “i” and spatial freq. are preset in loop above */ 
-//        /* note that the main loop code is made shorter here */ 
-//        /* you may want to make that loop more like this */ 
-//        increment = (stb_perlin_noise3(x, y, z, 0, 0, 0) + offset) * exponent_array[i];
-//        value += remainder * increment * value; 
-//    }  
-//    return(value);
-//}
 
 float stb_perlin_ridge_noise3_seed(float x, float y, float z, float lacunarity, float gain, float offset, int octaves, int seed)
 {

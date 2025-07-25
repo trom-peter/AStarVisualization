@@ -192,6 +192,7 @@
     <ClInclude Include="include\input_handler.h" />
     <ClInclude Include="include\mesh.h" />
     <ClInclude Include="include\search_configuration.h" />
+    <ClInclude Include="include\seed_generator.h" />
     <ClInclude Include="include\shader.h" />
     <ClInclude Include="include\shape.h" />
     <ClInclude Include="include\shape_renderer.h" />
@@ -202,6 +203,7 @@
     <ClInclude Include="include\vertex_array.h" />
     <ClInclude Include="include\vertex_buffer.h" />
     <ClInclude Include="include\vertex_buffer_layout.h" />
+    <ClInclude Include="include\visualization_state.h" />
     <ClInclude Include="include\window.h" />
     <ClInclude Include="libs\glm\common.hpp" />
     <ClInclude Include="libs\glm\detail\compute_common.hpp" />

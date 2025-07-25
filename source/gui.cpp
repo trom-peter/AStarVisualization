@@ -43,13 +43,14 @@ void GUI::startFrame() {
 
 bool GUI::showUI_EnvironmentConfig() {
     bool changedState = false;
+
     //Suchraum
     ImGui::Begin("Suchraum");
-    char buffer[16];
+    char buffer[4];
     sprintf_s(buffer, "%d", config->seed);
     ImGui::Text("Seed");
     if (ImGui::InputText("##seed", buffer, IM_ARRAYSIZE(buffer), ImGuiInputTextFlags_EnterReturnsTrue | ImGuiInputTextFlags_AutoSelectAll) || ImGui::IsItemDeactivatedAfterEdit()) {
-        config->seed = atoi(buffer);
+        config->seed = static_cast<unsigned char>(std::clamp(atoi(buffer), 0, 255));
     }
     if (ImGui::Button("Random")) {
         config->seed = SeedGenerator::getRandomSeed();
@@ -75,6 +76,7 @@ bool GUI::showUI_SearchProblemConfig() {
     // Konfigurationen
     ImGui::Begin("Konfiguration", nullptr, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse);
     ImGui::Text("Startzustand"); ImGui::SameLine(125); ImGui::Text("Zielzustand");
+    ImGui::NewLine();
 
     // Startzustand Konfiguration
     ImGui::BeginGroup();

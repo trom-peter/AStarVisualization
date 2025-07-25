@@ -26,7 +26,7 @@ struct SearchConfiguration {
 		unexploredVisible = true;
 	}
 
-	int seed; // with what seed the topography should be generated
+	unsigned char seed; // with what seed the topography should be generated
 	glm::ivec2 initial;
 	glm::ivec2 goal;
 	int gridSize;

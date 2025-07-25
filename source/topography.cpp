@@ -23,8 +23,6 @@ std::vector<Vertex> Topography::generateVertices() {
         }
     }
 
-    std::cout << "Minimum height: " << minY << std::endl;
-    std::cout << "Maximum height: " << maxY << std::endl;
     this->minY = minY;
     this->maxY = maxY;
 
@@ -32,9 +30,6 @@ std::vector<Vertex> Topography::generateVertices() {
     for (Vertex& v : vertices) {
         v.position.y = ((v.position.y - minY) * maxHeight) / (maxY - minY);
     }
-
-    std::cout << "Normalized Minimum height: " << 0 << std::endl;
-    std::cout << "Normalized Maximum height: " << maxHeight << std::endl;
 
     return vertices;
 }
@@ -112,10 +107,10 @@ float Topography::getMaxY() {
     return maxY;
 }
 
-int Topography::getSeed() {
+unsigned char Topography::getSeed() {
     return seed;
 }
 
-void Topography::setSeed(int seed) {
+void Topography::setSeed(unsigned char seed) {
     this->seed = seed;
 }

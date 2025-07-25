@@ -3,10 +3,10 @@
 #include <random>
 
 struct SeedGenerator {
-    static int getRandomSeed() {
+    static unsigned char getRandomSeed() {
         static std::random_device rd;
         static std::mt19937 mt{ rd() };
-        std::uniform_int_distribution<> dist{ std::numeric_limits<int>::min(), std::numeric_limits<int>::max() };
+        std::uniform_int_distribution<> dist{ std::numeric_limits<unsigned char>::min(), std::numeric_limits<unsigned char>::max() };
         return dist(mt);
     }
 };

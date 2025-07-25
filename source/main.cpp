@@ -105,7 +105,7 @@ int main() {
 
     float width = 7000.0f;
     float length = width;
-    float scale = 0.0001; // je größer, desto größeres gebiet
+    float scale = 0.0005; // je größer, desto größeres gebiet
     Topography* topo = new Topography(width, length, amplitude, scale, 20.0f);
 
     topo->generate();
@@ -223,11 +223,13 @@ int main() {
                         std::cout << "Path found! Cost: " << solution->pathCost << " seconds" << std::endl;
                     }
                     config.maxSteps = aStar.allExpanded.size() - 1;
+                    config.unexploredVisible = false; //unexplored nodes are invisble when in searching mode
                 }
                 break;
 
             case VisualizationState::Searching:
                 stateChanged = gui.showUI_Searching();
+
                 if (config.step > step) { //forwards step
                     updateSphereColors(spheres, config.step - 1, config, g, p, aStar, true);
                 }

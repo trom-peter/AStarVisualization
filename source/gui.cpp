@@ -63,6 +63,8 @@ bool GUI::showUI_EnvironmentConfig() {
         config->gridSize = std::clamp(config->gridSize, 2, 20);
     }
 
+    ImGui::NewLine();
+
     if (ImGui::Button("Fertig")) changedState = true;
 
     ImGui::End();
@@ -73,8 +75,8 @@ bool GUI::showUI_EnvironmentConfig() {
 bool GUI::showUI_SearchProblemConfig() {
     bool changedState = false;
 
-    // Konfigurationen
-    ImGui::Begin("Konfiguration", nullptr, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse);
+    // Suchproblem
+    ImGui::Begin("Suchproblem", nullptr);
     ImGui::Text("Startzustand"); ImGui::SameLine(125); ImGui::Text("Zielzustand");
     ImGui::NewLine();
 
@@ -135,9 +137,23 @@ bool GUI::showUI_Searching() {
     bool changedState = false;
 
     ImGui::Begin("Suche", nullptr);
-    if (ImGui::InputInt("Schritt", &config->step)) {
+
+    ImGui::Text("Schritte pro Sekunde");
+
+    if (ImGui::InputInt("##stepsPerSecond", &config->searchRate, 1, 5)) {
+        config->searchRate = std::clamp(config->searchRate, 0, 60);
+    }
+    ImGui::SameLine();
+    if (ImGui::ArrowButton("play", ImGuiDir_Right)) {
+        config->searchPlaying = true;
+    }
+
+    ImGui::NewLine();
+    ImGui::Text("Schritt");
+    if (ImGui::InputInt("##step", &config->step) || config->searchPlaying) {
         config->step = std::clamp(config->step, 0, config->maxSteps);
-        if (config->step == config->maxSteps) ImGui::OpenPopup("Pfad gefunden!"); //open a pop up when the search is finished (only the first time)
+        if (config->step == config->maxSteps) 
+            ImGui::OpenPopup("Pfad gefunden!"); //open a pop up when the search is finished (only the first time)
     }
 
     if (ImGui::BeginPopupModal("Pfad gefunden!")) {

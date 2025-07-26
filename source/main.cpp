@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <array>
+#include <math.h>
 
 #include "stb_perlin.h"
 #include "framebuffer.h"
@@ -105,7 +106,7 @@ int main() {
 
     float width = 7000.0f;
     float length = width;
-    float scale = 0.0005; // je größer, desto größeres gebiet
+    float scale = 0.0002; // je größer, desto größeres gebiet
     Topography* topo = new Topography(width, length, amplitude, scale, 20.0f);
 
     topo->generate();
@@ -145,6 +146,9 @@ int main() {
     bool running = true;
     bool stateChanged = false;
     int step = 0;
+    float searchTime = 0.0f;
+    int searchRate = 1;
+    float timePerIncrement = 1.0f / searchRate;
 
     VisualizationState state = VisualizationState::ConfiguringSearchEnvironment;
 
@@ -230,6 +234,19 @@ int main() {
             case VisualizationState::Searching:
                 stateChanged = gui.showUI_Searching();
 
+                if (config.searchRate != searchRate) {
+                    searchRate = config.searchRate;
+                    timePerIncrement = 1.0f / searchRate;
+                }
+
+                if (config.searchPlaying) {
+                    searchTime += window.getDelta();
+                    if (searchTime >= timePerIncrement) {
+                        config.step++;
+                        searchTime -= timePerIncrement;
+                    }
+                }
+
                 if (config.step > step) { //forwards step
                     updateSphereColors(spheres, config.step - 1, config, g, p, aStar, true);
                 }
@@ -237,6 +254,7 @@ int main() {
                     updateSphereColors(spheres, config.step, config, g, p, aStar, false);
                 }
                 step = config.step;
+
                 if (stateChanged) state = VisualizationState::Finished;
                 break;
 

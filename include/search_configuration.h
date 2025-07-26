@@ -14,8 +14,9 @@ struct SearchConfiguration {
 		gridSize = 15;
 		stateSpacing = 0;
 		step = 0;
-		previousStep = 0;
 		maxSteps = 0;
+		searchPlaying = false;
+		searchRate = 1;
 		initialStateColor = glm::vec3(0.2f, 1.0f, 0.2f);
 		goalStateColor = glm::vec3(1.0f, 0.2f, 0.2f);
 		defaultColor = glm::vec3(0.0f, 0.0f, 0.0f);
@@ -29,10 +30,11 @@ struct SearchConfiguration {
 	unsigned char seed; // with what seed the topography should be generated
 	glm::ivec2 initial;
 	glm::ivec2 goal;
+	bool searchPlaying;
+	int searchRate;
 	int gridSize;
 	int stateSpacing; // the perpendicular space between all states
 	int step; // step number in search process. measured in number of expanded nodes
-	int previousStep;
 	int maxSteps;
 	glm::vec3 initialStateColor;
 	glm::vec3 goalStateColor;

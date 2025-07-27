@@ -31,12 +31,12 @@ namespace std {
     template <>
     struct hash<State> {
         size_t operator()(const State& state) const {
-            // combine x y z hash
-            size_t h1 = std::hash<int>()(state.x);
-            size_t h2 = std::hash<int>()(state.y);
-            size_t h3 = std::hash<int>()(state.z);
-            //return h1 ^ (h2 << 1);
-            return (h1 ^ (h2 << 1) ^ h3);
+            // combine x and z hash
+            size_t hx = std::hash<int>()(state.x);
+            size_t hy = std::hash<int>()(state.y);
+            size_t hz = std::hash<int>()(state.z);
+            //return hx ^ (hz << 1);
+            return (hx ^ (hy << 1) ^ hz);
         }
     };
 }

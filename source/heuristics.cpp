@@ -1,21 +1,9 @@
 #include "heuristics.h"
 
 std::function<float(State, State)> Heuristics::travelTime = [](State a, State b) {
-    float dx = abs(a.x - b.x);
-    float dh = abs(a.y - b.y);
-    float dz = abs(a.z - b.z);
-
-    float horizontalDistance = sqrt(dx * dx + dz * dz);
-
-    if (horizontalDistance == 0.0f) return 0.0f; // no movement
-
-    float slope = dh / horizontalDistance;
-    float distance = (sqrt(dx * dx + dh * dh + dz * dz));
-    float speed = (6 * exp(-3.5 * fabsf(slope + 0.05)));
-
-    float travelTime = ((distance / 1000) / speed) * 3600; // travel time in seconds
-
-    return travelTime;
+    float distance = sqrt(pow(a.x - b.x, 2) + pow(a.y - b.y, 2) + pow(a.z - b.z, 2));
+    float speed = 5.0f;
+    return ((distance / 1000) / speed) * 3600;
 };
 
 std::function<float(State, State)> Heuristics::travelTime_Overestimated(float weight) {
@@ -28,7 +16,7 @@ std::function<float(State, State)> Heuristics::travelTime_Intersections(Topograp
     return [topo](State a, State b) {
         float h = Heuristics::travelTime(a, b);	    // standard duration
         int intersections = 0;			// number of intersections
-        int t = 10;						// added duration per intersection
+        int t = 50;						// added duration per intersection
 
         glm::vec3 start = glm::vec3(a.x, a.y, a.z);
         glm::vec3 goal = glm::vec3(b.x, b.y, b.z);

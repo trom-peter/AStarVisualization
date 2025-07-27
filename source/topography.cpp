@@ -92,8 +92,8 @@ Mesh* Topography::getMesh() {
 	return mesh;
 }
 
-float Topography::getY(int x, int z) {
-    float y;
+int Topography::getY(int x, int z) {
+    int y;
 
     if (type == 1)
         y = stb_perlin_fbm_noise3_seed(x * scale, z * scale, 0.0f, 2.0f, 0.5f, 4, seed) * maxHeight;

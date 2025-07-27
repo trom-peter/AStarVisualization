@@ -15,7 +15,4 @@ struct Heuristics {
 
     static std::function<float(State, State)> travelTime_WeightedHeights(Topography* topo);
 
-    static const char** getNames();
-
-    static std::function<float(State, State)> getByID(int id, int weight = NULL, Topography* topo = nullptr);
 };

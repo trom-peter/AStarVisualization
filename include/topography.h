@@ -18,7 +18,7 @@ public:
 	Mesh* getMesh();
 	float getMaxY();
 	float getMinY();
-	float getY(int x, int z);
+	int getY(int x, int z);
 	unsigned char getSeed();
 	int getType();
 	float getScale();

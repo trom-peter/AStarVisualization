@@ -130,7 +130,6 @@ int main() {
 
     Problem p(g);
     AStarSearch aStar(p);
-    aStar.setHeuristic(Heuristics::travelTime_Overestimated(0.0f));
 
     Node* solution;
 
@@ -193,8 +192,8 @@ int main() {
                 if (stateChanged) {
                     state = VisualizationState::ConfiguringSearchProblem;
                     g = Graph(config.gridSize, width);
-                    g.init();
                     g.setTopography(topo);
+                    g.init();
                     initial = State(0, topo->getY(0, 0), 0);
                     goal = State(0, topo->getY(0, 0), 0);
                     p.g = g;

@@ -4,6 +4,24 @@
 #include "heuristics.h"
 
 struct Problem {
+
+	float travelTimeActionCost(State a, State b) {
+		float dx = abs(a.x - b.x);
+		float dh = abs(a.y - b.y);
+		float dz = abs(a.z - b.z);
+
+		float horizontalDistance = sqrt(dx * dx + dz * dz);
+
+		if (horizontalDistance == 0.0f) return 0.0f; // no movement
+
+		float slope = dh / horizontalDistance;
+		float distance = (sqrt(dx * dx + dh * dh + dz * dz));
+		float speed = (6 * exp(-3.5 * fabsf(slope + 0.05)));
+		float travelTime = ((distance / 1000) / speed) * 3600; // travel time in seconds
+
+		return travelTime;
+	};
+
 	Problem(Graph& g) : g(g), initial(State(0, 0, 0)), goal(State(0, 0, 0)) {
 		g.init();
 	}
@@ -22,8 +40,9 @@ struct Problem {
 		std::vector<State> neighbours = g.getNeighbours(s0.x, s0.z);
 
 		for (State s1 : neighbours) {
-			g.addEdge(s0.x, s0.z, s1.x, s1.z, Heuristics::travelTime(s0, s1));
-			int pathCost = n->pathCost + g.getWeight(s0.x, s0.z, s1.x, s1.z);
+			int actionCost = travelTimeActionCost(s0, s1);
+			g.addEdge(s0.x, s0.z, s1.x, s1.z, actionCost);
+			int pathCost = n->pathCost + actionCost;
 			nodes.push_back(new Node(s1.x, s1.y, s1.z, n, pathCost));
 		}
 

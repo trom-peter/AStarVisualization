@@ -20,7 +20,11 @@ public:
 	float getMinY();
 	float getY(int x, int z);
 	unsigned char getSeed();
+	int getType();
+	float getScale();
 	void setSeed(unsigned char seed);
+	void setType(int type);
+	void setScale(float scale);
 
 private:
 	std::vector<Vertex> generateVertices();
@@ -34,6 +38,7 @@ private:
 	float scale;
 	float spacing;
 	unsigned char seed; // the seed for this specific topography
+	int type;
 
 	//non normalized minimum and maximum height of the topography
 	float minY;

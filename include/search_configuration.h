@@ -10,6 +10,8 @@ struct SearchConfiguration {
 
 	void reset() {
 		seed = 0;
+		topographyType = 0;
+		terrainScaling = 0.0001f;
 		initial = glm::ivec2(0, 0);
 		goal = glm::ivec2(0, 0);
 		overestimateFactor = 1.0f;
@@ -19,7 +21,7 @@ struct SearchConfiguration {
 		step = 0;
 		maxSteps = 0;
 		searchPlaying = false;
-		searchRate = 30;
+		searchRate = 10;
 		initialStateColor = glm::vec3(0.2f, 1.0f, 0.2f);
 		goalStateColor = glm::vec3(1.0f, 0.2f, 0.2f);
 		defaultColor = glm::vec3(0.0f, 0.0f, 0.0f);
@@ -31,6 +33,8 @@ struct SearchConfiguration {
 	}
 
 	unsigned char seed; // with what seed the topography should be generated
+	int topographyType;
+	float terrainScaling; // the higher this parameter, the larger the terrain area
 	glm::ivec2 initial;
 	glm::ivec2 goal;
 	int heuristic; // what heuristic should be used for searching

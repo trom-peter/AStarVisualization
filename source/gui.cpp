@@ -50,6 +50,7 @@ bool GUI::showUI_EnvironmentConfig() {
 
     //Suchraum
     ImGui::Begin("Suchraum");
+
     char buffer[4];
     sprintf_s(buffer, "%d", config->seed);
     ImGui::Text("Seed");
@@ -58,6 +59,27 @@ bool GUI::showUI_EnvironmentConfig() {
     }
     if (ImGui::Button("Random")) {
         config->seed = SeedGenerator::getRandomSeed();
+    }
+
+    ImGui::NewLine();
+
+    ImGui::Text(u8"Geländetyp");
+    ImGui::RadioButton("1", &config->topographyType, 0); ImGui::SameLine();
+    ImGui::RadioButton("2", &config->topographyType, 1);
+
+    ImGui::NewLine();
+
+    ImGui::Text(u8"Komplexität");
+    if (ImGui::Button("Einfach")) {
+        config->terrainScaling = 0.0001f;
+    }
+
+    if (ImGui::Button("Mittel")) {
+        config->terrainScaling = 0.00015f;
+    }     
+
+    if (ImGui::Button("Hoch")) {
+        config->terrainScaling = 0.0002f;
     }
 
     ImGui::NewLine();

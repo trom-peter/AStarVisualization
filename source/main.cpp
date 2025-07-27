@@ -106,8 +106,8 @@ int main() {
 
     float width = 7000.0f;
     float length = width;
-    float scale = 0.0002; // je größer, desto größeres gebiet
-    Topography* topo = new Topography(width, length, amplitude, scale, 20.0f);
+    float scale = 0.0002f; // je größer, desto größeres gebiet
+    Topography* topo = new Topography(width, length, amplitude, config.terrainScaling, 20.0f);
 
     topo->generate();
     Mesh* mesh = topo->getMesh();
@@ -136,7 +136,7 @@ int main() {
 
     FPSCamera* camera = new FPSCamera(glm::radians(90.0f), window.getWidth(), window.getHeight(), 1500.0f, 0.1f, 10.0f, 20000.0f);
     FPSCameraController* controller = new FPSCameraController(*camera);
-    camera->translate(glm::vec3(width / 2, 10000.0f, length / 2));
+    camera->translate(glm::vec3(width / 2, 10500.0f, length / 2));
     camera->rotate(glm::vec2(0.0f, 90.0f));
     camera->update();
 
@@ -154,7 +154,7 @@ int main() {
 
     VisualizationState state = VisualizationState::ConfiguringSearchEnvironment;
 
-    while (running) {
+    mainLoop: while (running) {
         //std::cout << "x:" << camera->getPosition().x << std::endl;
         //std::cout << "y:" << camera->getPosition().y << std::endl;
         //std::cout << "z:" << camera->getPosition().z << std::endl << std::endl;
@@ -172,19 +172,24 @@ int main() {
             case VisualizationState::ConfiguringSearchEnvironment:
                 stateChanged = gui.showUI_EnvironmentConfig(); //true if state was changed
 
-                if (config.seed != topo->getSeed()) {
-                    topo->setSeed(config.seed);
-                    topo->generate();
-                    spheres.clear();
-                    gridSize = config.gridSize;
-                    updateGrid(spheres, *topo, length, width, gridSize, config.defaultColor);
-                }
-                else if (config.gridSize != gridSize) {
-                    spheres.clear();
-                    gridSize = config.gridSize;
-                    updateGrid(spheres, *topo, length, width, gridSize, config.defaultColor);
-                }
+                 if (config.topographyType != topo->getType() || 
+                     config.seed != topo->getSeed() || 
+                     config.terrainScaling != topo->getScale()) 
+                 {
+                     topo->setType(config.topographyType);
+                     topo->setSeed(config.seed);
+                     topo->setScale(config.terrainScaling);
+                     topo->generate();
+                     spheres.clear();
+                     gridSize = config.gridSize;
+                     updateGrid(spheres, *topo, length, width, gridSize, config.defaultColor);
+                 }
 
+                 if (config.gridSize != gridSize) {
+                     gridSize = config.gridSize;
+                     spheres.clear();
+                     updateGrid(spheres, *topo, length, width, gridSize, config.defaultColor);
+                 }
                 if (stateChanged) {
                     state = VisualizationState::ConfiguringSearchProblem;
                     g = Graph(config.gridSize, width);
@@ -240,11 +245,9 @@ int main() {
                     solution = aStar.search();
                     if (solution == nullptr) {
                         std::cout << "No path found." << std::endl;
-                        break;
-                    }
-                    else {
-                        std::cout << solution->getPath() << std::endl;
-                        std::cout << "Path found! Cost: " << solution->pathCost / 60 << " minutes" << std::endl;
+                        gui.quit();
+                        window.quit();
+                        return 0;
                     }
                     config.step = 0;
                     config.maxSteps = aStar.allExpanded.size() - 1;
@@ -277,7 +280,6 @@ int main() {
                 step = config.step;
 
                 if (stateChanged) state = VisualizationState::Finished;
-
                 break;
 
             case VisualizationState::Finished:

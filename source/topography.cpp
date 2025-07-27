@@ -14,8 +14,11 @@ std::vector<Vertex> Topography::generateVertices() {
     for (double z = 0; z < length; z += spacing) {
         for (double x = 0; x < width; x += spacing) {
             Vertex v;
-            float y = stb_perlin_fbm_noise3_seed(x * scale, z * scale, 0.0f, 2.0f, 0.5f, 4, seed) * maxHeight;
-            //float y = stb_perlin_ridge_noise3_seed(x * scale, z * scale, 0.0f, 2.0f, 0.5f, 1.0f, 4, seed) * maxHeight;
+            float y;
+            if (type == 1) 
+                y = stb_perlin_fbm_noise3_seed(x * scale, z * scale, 0.0f, 2.0f, 0.5f, 4, seed) * maxHeight;
+            else 
+                y = stb_perlin_ridge_noise3_seed(x * scale, z * scale, 0.0f, 2.0f, 0.5f, 1.0f, 4, seed) * maxHeight;
             if (y < minY) minY = y;
             if (y > maxY) maxY = y;
             v.position = glm::vec3(x, y, z);
@@ -82,9 +85,6 @@ void Topography::generate() {
 	std::vector<Vertex> vertices = Topography::generateVertices();
 	std::vector<uint32_t> indices = Topography::generateIndices();
     calculateNormals(vertices, indices);
-    std::cout << "Amount of vertices: " << vertices.size() << std::endl;
-    std::cout << "Amount of indices: " << indices.size() << std::endl;
-
 	mesh = new Mesh(vertices, vertices.size(), indices, indices.size());
 }
 
@@ -93,8 +93,13 @@ Mesh* Topography::getMesh() {
 }
 
 float Topography::getY(int x, int z) {
-    float y = stb_perlin_fbm_noise3_seed(x * scale, z * scale, 0.0f, 2.0f, 0.5f, 4, seed) * maxHeight;
-    //float y = stb_perlin_ridge_noise3_seed(x * scale, z * scale, 0.0f, 2.0f, 0.5f, 1.0f, 4, seed) * maxHeight;
+    float y;
+
+    if (type == 1)
+        y = stb_perlin_fbm_noise3_seed(x * scale, z * scale, 0.0f, 2.0f, 0.5f, 4, seed) * maxHeight;
+    else 
+        y = stb_perlin_ridge_noise3_seed(x * scale, z * scale, 0.0f, 2.0f, 0.5f, 1.0f, 4, seed) * maxHeight;
+
     y = ((y - minY) * maxHeight) / (maxY - minY); //normalize
     return y;
 }
@@ -113,4 +118,20 @@ unsigned char Topography::getSeed() {
 
 void Topography::setSeed(unsigned char seed) {
     this->seed = seed;
+}
+
+int Topography::getType() {
+    return type;
+}
+
+void Topography::setType(int type) {
+    this->type = type;
+}
+
+float Topography::getScale() {
+    return scale;
+}
+
+void Topography::setScale(float scale) {
+    this->scale = scale;
 }

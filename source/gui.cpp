@@ -2,7 +2,7 @@
 #include <algorithm>
 #include "seed_generator.h"
 
-GUI::GUI() : viewportActive(false), config(nullptr) {}
+GUI::GUI() : viewportActive(false), config(nullptr), font(nullptr) {}
 
 void GUI::init(Window& window) {
     // Setup Dear ImGui context
@@ -25,6 +25,9 @@ void GUI::init(Window& window) {
     ImGui_ImplSDL2_InitForOpenGL(window.getWindow(), window.getGLContext());
     ImGui_ImplOpenGL3_Init("#version 450");
 
+    io.Fonts->AddFontDefault();
+    font = io.Fonts->AddFontFromFileTTF("fonts/JetbrainsMonoRegular.ttf", 18.0f);
+
     // Our state
     showDemoWindow = true;
 }
@@ -39,6 +42,7 @@ void GUI::startFrame() {
     ImGui::NewFrame();
     ImGuiDockNodeFlags dockingFlags = ImGuiDockNodeFlags_NoResize | ImGuiDockNodeFlags_PassthruCentralNode;
     ImGui::DockSpaceOverViewport(dockingFlags);
+    ImGui::PushFont(font);
 }
 
 bool GUI::showUI_EnvironmentConfig() {
@@ -58,9 +62,9 @@ bool GUI::showUI_EnvironmentConfig() {
 
     ImGui::NewLine();
 
-    ImGui::Text("Graphgröße");
+    ImGui::Text("Graphdimension");
     if (ImGui::InputInt("##graphsize", &config->gridSize)) {
-        config->gridSize = std::clamp(config->gridSize, 2, 20);
+        config->gridSize = std::clamp(config->gridSize, 2, 30);
     }
 
     ImGui::NewLine();
@@ -125,6 +129,16 @@ bool GUI::showUI_SearchProblemConfig() {
     ImGui::EndGroup();
 
     ImGui::NewLine();
+
+    // Suchverfahren Auswahl
+    const char* items[] = { "Keine", "Wanderdauer", 
+        "Wanderdauer Ueberschaetzt", "Schnittpunkte", "Hoehengewichtung"};
+
+    ImGui::Combo("Heuristik", &config->heuristic, items, IM_ARRAYSIZE(items));
+
+    if (config->heuristic == 2 && ImGui::InputFloat("Faktor", &config->overestimateFactor, 0.1f, 1.0f)) {
+        config->overestimateFactor = std::clamp(config->overestimateFactor, 0.0f, 100.0f);
+    }
 
     if (ImGui::Button("Suche!", ImVec2(80.0f, 40.0f))) changedState = true;
 
@@ -203,6 +217,8 @@ void GUI::showUI_Visibility() {
 }
 
 void GUI::render() {
+    ImGui::PopFont();
+
     ImGui::Render();
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 

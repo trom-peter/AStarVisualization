@@ -164,6 +164,7 @@
     <ClCompile Include="source\fps_camera.cpp" />
     <ClCompile Include="source\fps_camera_controller.cpp" />
     <ClCompile Include="source\gui.cpp" />
+    <ClCompile Include="source\heuristics.cpp" />
     <ClCompile Include="source\input_handler.cpp" />
     <ClCompile Include="source\main.cpp" />
     <ClCompile Include="source\mesh.cpp" />
@@ -188,6 +189,7 @@
     <ClInclude Include="include\fps_camera_controller.h" />
     <ClInclude Include="include\framebuffer.h" />
     <ClInclude Include="include\gui.h" />
+    <ClInclude Include="include\heuristics.h" />
     <ClInclude Include="include\index_buffer.h" />
     <ClInclude Include="include\input_handler.h" />
     <ClInclude Include="include\mesh.h" />

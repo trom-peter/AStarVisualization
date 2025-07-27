@@ -31,7 +31,7 @@ public:
 
 private:
 	SearchConfiguration* config;
-
+	ImFont* font;
 	bool showDemoWindow;
 	bool viewportActive;
 };

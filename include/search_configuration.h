@@ -1,5 +1,6 @@
 #pragma once
 #include "glm/glm.hpp"
+#include "heuristics.h"
 
 struct SearchConfiguration {
 
@@ -11,6 +12,8 @@ struct SearchConfiguration {
 		seed = 0;
 		initial = glm::ivec2(0, 0);
 		goal = glm::ivec2(0, 0);
+		overestimateFactor = 1.0f;
+		heuristic = 0;
 		gridSize = 15;
 		stateSpacing = 0;
 		step = 0;
@@ -30,6 +33,8 @@ struct SearchConfiguration {
 	unsigned char seed; // with what seed the topography should be generated
 	glm::ivec2 initial;
 	glm::ivec2 goal;
+	int heuristic; // what heuristic should be used for searching
+	float overestimateFactor; // by what factor the overestimated heuristic should be multiplied by
 	bool searchPlaying;
 	int searchRate;
 	int gridSize;

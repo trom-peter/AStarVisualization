@@ -89,7 +89,7 @@ int main() {
         return -1;
     }
 
-    float amplitude = 1500.0f;
+    float amplitude = 2000.0f;
 
     TopographyRenderer topoRenderer(amplitude);
     ShapeRenderer shapeRenderer;
@@ -129,7 +129,9 @@ int main() {
     g.setTopography(topo);
 
     Problem p(g);
-    AStarSearch aStar;
+    AStarSearch aStar(p);
+    aStar.setHeuristic(Heuristics::travelTime_Overestimated(0.0f));
+
     Node* solution;
 
     FPSCamera* camera = new FPSCamera(glm::radians(90.0f), window.getWidth(), window.getHeight(), 1500.0f, 0.1f, 10.0f, 20000.0f);
@@ -213,18 +215,36 @@ int main() {
                 spheres[initial]->color = config.initialStateColor;
                 spheres[goal]->color = config.goalStateColor;
 
+                switch (config.heuristic) {
+                    case 0:
+                        aStar.setHeuristic(Heuristics::travelTime_Overestimated(0.0f));
+                        break;
+                    case 1:
+                        aStar.setHeuristic(Heuristics::travelTime);
+                        break;
+                    case 2:
+                        aStar.setHeuristic(Heuristics::travelTime_Overestimated(config.overestimateFactor));
+                        break;
+                    case 3:
+                        aStar.setHeuristic(Heuristics::travelTime_Intersections(topo));
+                        break;
+                    case 4:
+                        aStar.setHeuristic(Heuristics::travelTime_WeightedHeights(topo));
+                        break;
+                }
+
                 if (stateChanged) {
                     state = VisualizationState::Searching;
                     p.initial = initial;
                     p.goal = goal;
-                    solution = aStar.search(p);
+                    solution = aStar.search();
                     if (solution == nullptr) {
                         std::cout << "No path found." << std::endl;
                         break;
                     }
                     else {
                         std::cout << solution->getPath() << std::endl;
-                        std::cout << "Path found! Cost: " << solution->pathCost << " seconds" << std::endl;
+                        std::cout << "Path found! Cost: " << solution->pathCost / 60 << " minutes" << std::endl;
                     }
                     config.maxSteps = aStar.allExpanded.size() - 1;
                     config.unexploredVisible = false; //unexplored nodes are invisble when in searching mode

@@ -1,39 +1,18 @@
 #include "a_star/a_star_search.h"
 
-AStarSearch::AStarSearch() {}
+AStarSearch::AStarSearch(Problem& p) : problem(p) {}
 
-float AStarSearch::euclideanDistanceDuration(State s0, State s1) const {
-	int dx = abs(s0.x - s1.x);
-	int dy = abs(s0.y - s1.y);
-	int dz = abs(s0.z - s1.z);
-	return sqrt(dx * dx + dy * dy + dz * dz) / 1;
+void AStarSearch::setHeuristic(std::function<float(State, State)> h) {
+	this->heuristic = h;
 }
 
-float AStarSearch::travelTime(State s0, State s1, Graph& g) const {
-	float dx = abs(s0.x - s1.x);
-	float dh = abs(s0.y - s1.y);
-	float dz = abs(s0.z - s1.z);
-
-	float horizontalDistance = sqrt(dx * dx + dz * dz);
-
-	if (horizontalDistance == 0.0f) return 0.0f; // no movement
-
-	float slope = dh / horizontalDistance;
-	float distance = (sqrt(dx * dx + dh * dh + dz * dz));
-	float speed = (6 * exp(-3.5 * fabsf(slope + 0.05)));
-
-	float travelTime = ((distance / 1000) / speed) * 3600; // travel time in seconds
-
-	//std::cout << "[" << s0.x << ", " << s0.z << "]	to	[" << s1.x << ", " << s1.z << "]:		" << travelTime << "s	" << distance << "m		" << slope << "d	" << speed << "km/h" << std::endl;
-	return travelTime;
-}
-
-Node* AStarSearch::search(Problem& problem) {
+Node* AStarSearch::search() {
 	int step = 0;
 	Node* initial = new Node(problem.initial, 0);
 
-	auto f = [this, problem](Node* a, Node* b) { 
-		return a->pathCost + travelTime(a->s, problem.goal, problem.g) > b->pathCost + travelTime(b->s, problem.goal, problem.g);
+	auto f = [this](Node* a, Node* b) {
+		return a->pathCost + heuristic(a->s, problem.goal) >
+			b->pathCost + heuristic(b->s, problem.goal);
 		};
 
 	std::priority_queue<Node*, std::vector<Node*>, decltype(f)> frontier(f); //grenzbereich
@@ -54,10 +33,8 @@ Node* AStarSearch::search(Problem& problem) {
 
 		allExpanded.push_back(n->s);
 
-		//std::cout << "Expanded: " << n->s.x << ", " << n->s.y << ", " << n->s.z << " with pathcost " << n->pathCost << std::endl;
-
 		if (problem.isGoal(n->s)) {
-			addToSolution(n);
+			setSolution(n);
 			return n;
 		}
 
@@ -76,10 +53,10 @@ Node* AStarSearch::search(Problem& problem) {
 	return nullptr;
 }
 
-void AStarSearch::addToSolution(Node* n) {
+void AStarSearch::setSolution(Node* n) {
 	if (n == nullptr) return;
 	else {
 		solutionPath.push_back(n->s);
-		addToSolution(n->parent);
+		setSolution(n->parent);
 	}
 }

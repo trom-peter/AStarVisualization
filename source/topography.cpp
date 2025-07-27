@@ -14,8 +14,8 @@ std::vector<Vertex> Topography::generateVertices() {
     for (double z = 0; z < length; z += spacing) {
         for (double x = 0; x < width; x += spacing) {
             Vertex v;
-            //float y = stb_perlin_fbm_noise3_seed(x * scale, z * scale, 0.0f, 2.0f, 0.5f, 4, seed) * maxHeight;
-            float y = stb_perlin_ridge_noise3_seed(x * scale, z * scale, 0.0f, 2.0f, 0.5f, 1.0f, 4, seed) * maxHeight;
+            float y = stb_perlin_fbm_noise3_seed(x * scale, z * scale, 0.0f, 2.0f, 0.5f, 4, seed) * maxHeight;
+            //float y = stb_perlin_ridge_noise3_seed(x * scale, z * scale, 0.0f, 2.0f, 0.5f, 1.0f, 4, seed) * maxHeight;
             if (y < minY) minY = y;
             if (y > maxY) maxY = y;
             v.position = glm::vec3(x, y, z);
@@ -93,8 +93,8 @@ Mesh* Topography::getMesh() {
 }
 
 float Topography::getY(int x, int z) {
-    //float y = stb_perlin_fbm_noise3_seed(x * scale, z * scale, 0.0f, 2.0f, 0.5f, 4, seed) * maxHeight;
-    float y = stb_perlin_ridge_noise3_seed(x * scale, z * scale, 0.0f, 2.0f, 0.5f, 1.0f, 4, seed) * maxHeight;
+    float y = stb_perlin_fbm_noise3_seed(x * scale, z * scale, 0.0f, 2.0f, 0.5f, 4, seed) * maxHeight;
+    //float y = stb_perlin_ridge_noise3_seed(x * scale, z * scale, 0.0f, 2.0f, 0.5f, 1.0f, 4, seed) * maxHeight;
     y = ((y - minY) * maxHeight) / (maxY - minY); //normalize
     return y;
 }

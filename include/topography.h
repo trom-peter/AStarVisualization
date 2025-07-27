@@ -5,7 +5,6 @@
 #include "vertex.h"
 #include "shader.h"
 #include "vertex_array.h"
-#include "search_configuration.h"
 
 struct Shader;
 struct Mesh;

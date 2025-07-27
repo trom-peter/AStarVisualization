@@ -8,6 +8,11 @@ void AStarSearch::setHeuristic(std::function<float(State, State)> h) {
 
 Node* AStarSearch::search() {
 	int step = 0;
+	allFrontiers.clear();
+	allExpanded.clear();
+	solutionPath.clear();
+	consideredNodes = 0;
+
 	Node* initial = new Node(problem.initial, 0);
 
 	auto f = [this](Node* a, Node* b) {
@@ -35,6 +40,7 @@ Node* AStarSearch::search() {
 
 		if (problem.isGoal(n->s)) {
 			setSolution(n);
+			setConsideredNodes();
 			return n;
 		}
 
@@ -58,5 +64,11 @@ void AStarSearch::setSolution(Node* n) {
 	else {
 		solutionPath.push_back(n->s);
 		setSolution(n->parent);
+	}
+}
+
+void AStarSearch::setConsideredNodes() {
+	for (std::vector<State> frontier : allFrontiers) {
+		consideredNodes += frontier.size();
 	}
 }

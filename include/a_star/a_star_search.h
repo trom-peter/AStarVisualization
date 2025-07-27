@@ -16,10 +16,11 @@ public:
 	std::vector<std::vector<State>> allFrontiers;
 	std::vector<State> allExpanded;
 	std::vector<State> solutionPath;
+	int consideredNodes;
 
 private:
 	Problem& problem;
 	std::function<float(State, State)> heuristic;
-
+	void setConsideredNodes();
 	void setSolution(Node* n);
 };

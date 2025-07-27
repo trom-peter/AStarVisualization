@@ -6,6 +6,7 @@
 #include "imgui/imgui_impl_sdl2.h"
 #include "imgui/imgui_impl_opengl3.h"
 #include "search_configuration.h"
+#include "visualization_state.h"
 
 class Window;
 
@@ -25,7 +26,7 @@ public:
 	bool showUI_EnvironmentConfig();
 	bool showUI_SearchProblemConfig();
 	bool showUI_Searching();
-	bool showUI_Finished();
+	VisualizationState showUI_Finished(int solutionNodes, int expandedNodes, int frontierNodes);
 	void showUI_Viewport(Framebuffer& fb);
 	void showUI_Visibility();
 

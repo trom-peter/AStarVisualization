@@ -19,7 +19,7 @@ struct SearchConfiguration {
 		step = 0;
 		maxSteps = 0;
 		searchPlaying = false;
-		searchRate = 1;
+		searchRate = 30;
 		initialStateColor = glm::vec3(0.2f, 1.0f, 0.2f);
 		goalStateColor = glm::vec3(1.0f, 0.2f, 0.2f);
 		defaultColor = glm::vec3(0.0f, 0.0f, 0.0f);

@@ -62,7 +62,7 @@ bool GUI::showUI_EnvironmentConfig() {
 
     ImGui::NewLine();
 
-    ImGui::Text("Graphdimension");
+    ImGui::Text(u8"Gittergröße");
     if (ImGui::InputInt("##graphsize", &config->gridSize)) {
         config->gridSize = std::clamp(config->gridSize, 2, 30);
     }
@@ -132,7 +132,7 @@ bool GUI::showUI_SearchProblemConfig() {
 
     // Suchverfahren Auswahl
     const char* items[] = { "Keine", "Wanderdauer", 
-        "Wanderdauer Ueberschaetzt", "Schnittpunkte", "Hoehengewichtung"};
+        u8"Wanderdauer Überschätzt", "Schnittpunkte", u8"Höhengewichtung"};
 
     ImGui::Combo("Heuristik", &config->heuristic, items, IM_ARRAYSIZE(items));
 
@@ -166,8 +166,10 @@ bool GUI::showUI_Searching() {
     ImGui::Text("Schritt");
     if (ImGui::InputInt("##step", &config->step) || config->searchPlaying) {
         config->step = std::clamp(config->step, 0, config->maxSteps);
-        if (config->step == config->maxSteps) 
+        if (config->step == config->maxSteps) {
+            config->searchPlaying = false;
             ImGui::OpenPopup("Pfad gefunden!"); //open a pop up when the search is finished (only the first time)
+        }
     }
 
     if (ImGui::BeginPopupModal("Pfad gefunden!")) {
@@ -182,11 +184,31 @@ bool GUI::showUI_Searching() {
     return changedState;
 }
 
-bool GUI::showUI_Finished() {
-    bool changedState = false;
+VisualizationState GUI::showUI_Finished(int solutionNodes, int expandedNodes, int frontierNodes) {
+    VisualizationState nextState = VisualizationState::Finished;
     ImGui::Begin("Statistik", nullptr, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse);
+    ImGui::Text("Knoten");
+    ImGui::LabelText(std::to_string(frontierNodes).c_str(), u8"Betrachtet");
+    ImGui::LabelText(std::to_string(expandedNodes).c_str(), "Expandiert");
+    ImGui::LabelText(std::to_string(solutionNodes).c_str(), u8"Lösungpfad");
+    
+    ImGui::NewLine();
+
+    ImGui::Text(u8"Zurück zu:");
+    if (ImGui::Button("Suchproblem")) {
+        nextState = VisualizationState::ConfiguringSearchProblem;
+        config->step = 0;
+        config->maxSteps = 0;
+    }
+    ImGui::SameLine();
+    if (ImGui::Button("Suchumgebung")) {
+        nextState = VisualizationState::ConfiguringSearchEnvironment;
+        config->step = 0;
+        config->maxSteps = 0;
+    }
+
     ImGui::End();
-    return false;
+    return nextState;
 }
 
 void GUI::showUI_Viewport(Framebuffer& fb) {

@@ -246,6 +246,7 @@ int main() {
                         std::cout << solution->getPath() << std::endl;
                         std::cout << "Path found! Cost: " << solution->pathCost / 60 << " minutes" << std::endl;
                     }
+                    config.step = 0;
                     config.maxSteps = aStar.allExpanded.size() - 1;
                     config.unexploredVisible = false; //unexplored nodes are invisble when in searching mode
                 }
@@ -276,15 +277,32 @@ int main() {
                 step = config.step;
 
                 if (stateChanged) state = VisualizationState::Finished;
+
                 break;
 
             case VisualizationState::Finished:
-                stateChanged = gui.showUI_Finished();
+                state = gui.showUI_Finished(
+                    aStar.solutionPath.size(),
+                    aStar.allExpanded.size(),
+                    aStar.consideredNodes);
+
                 for (State s : aStar.solutionPath) {
                     if (s != initial && s != goal) {
                         spheres[s]->color = glm::vec3(1.0f, 1.0f, 0.0f);
                     }
                 }
+
+                if (state == VisualizationState::ConfiguringSearchProblem) {
+                    spheres.clear();
+                    updateGrid(spheres, *topo, length, width, gridSize, config.defaultColor);
+                }
+
+                if (state == VisualizationState::ConfiguringSearchEnvironment) {
+                    spheres.clear();
+                    updateGrid(spheres, *topo, length, width, gridSize, config.defaultColor);
+                    config.reset();
+                }
+
                 break;
         }
 

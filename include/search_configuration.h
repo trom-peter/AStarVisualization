@@ -26,7 +26,7 @@ struct SearchConfiguration {
 		goalStateColor = glm::vec3(1.0f, 0.2f, 0.2f);
 		defaultColor = glm::vec3(0.0f, 0.0f, 0.0f);
 		frontierColor = glm::vec3(1.0f, 1.0f, 1.0f);
-		reachedColor = glm::vec3(0.17f, 0.73f, 1.0f);
+		reachedColor = glm::vec3(0.2f, 0.6f, 1.0f);
 		frontierVisible = true;
 		reachedVisible = true;
 		unexploredVisible = true;

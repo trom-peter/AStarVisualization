@@ -76,7 +76,7 @@ void updateGrid(std::unordered_map<State, Sphere*>& spheres, Topography& topo, i
 }
 
 int main() {
-	Window window(1400, 1000, "Topo2D");
+	Window window(1400, 1000, "A* Visualisierung");
     InputHandler inputHandler;
     GUI gui;
    
@@ -89,7 +89,7 @@ int main() {
         return -1;
     }
 
-    float amplitude = 2000.0f;
+    float amplitude = 500.0f;
 
     TopographyRenderer topoRenderer(amplitude);
     ShapeRenderer shapeRenderer;
@@ -102,7 +102,7 @@ int main() {
     VertexArray* vao = new VertexArray();
     vao->setupVertexLayout();
 
-    topoRenderer.setClearColor(0.5f, 0.3f, 0.3f);
+    topoRenderer.setClearColor(1.3f, 1.3f, 1.3f);
 
     float width = 7000.0f;
     float length = width;
@@ -131,11 +131,11 @@ int main() {
     Problem p(g);
     AStarSearch aStar(p);
 
-    Node* solution;
+    Node* solution = nullptr;
 
     FPSCamera* camera = new FPSCamera(glm::radians(90.0f), window.getWidth(), window.getHeight(), 1500.0f, 0.1f, 10.0f, 20000.0f);
     FPSCameraController* controller = new FPSCameraController(*camera);
-    camera->translate(glm::vec3(width / 2, 10500.0f, length / 2));
+    camera->translate(glm::vec3(width / 2, 10000.0f, length / 2));
     camera->rotate(glm::vec2(0.0f, 90.0f));
     camera->update();
 
@@ -153,7 +153,7 @@ int main() {
 
     VisualizationState state = VisualizationState::ConfiguringSearchEnvironment;
 
-    mainLoop: while (running) {
+    while (running) {
         //std::cout << "x:" << camera->getPosition().x << std::endl;
         //std::cout << "y:" << camera->getPosition().y << std::endl;
         //std::cout << "z:" << camera->getPosition().z << std::endl << std::endl;
@@ -200,6 +200,7 @@ int main() {
                     p.initial = initial;
                     p.goal = goal;
                     config.stateSpacing = g.getSpacing();
+                    config.unexploredVisible = false; //unexplored nodes are invisble when configuring search problem
                 }
                 break;
 
@@ -250,7 +251,6 @@ int main() {
                     }
                     config.step = 0;
                     config.maxSteps = aStar.allExpanded.size() - 1;
-                    config.unexploredVisible = false; //unexplored nodes are invisble when in searching mode
                 }
                 break;
 
@@ -285,7 +285,8 @@ int main() {
                 state = gui.showUI_Finished(
                     aStar.solutionPath.size(),
                     aStar.allExpanded.size(),
-                    aStar.consideredNodes);
+                    aStar.consideredNodes,
+                    solution->pathCost);
 
                 for (State s : aStar.solutionPath) {
                     if (s != initial && s != goal) {

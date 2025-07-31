@@ -44,7 +44,8 @@ std::function<float(State, State)> Heuristics::travelTime_WeightedHeights(Topogr
     return [topo](State a, State b) {
         float h = Heuristics::travelTime(a, b);	// standard duration
         float height = a.y / topo->getMaxY();	// relative height of evaluated state
-        float t = 50.0f;					    // maximum time save
-        return h - std::max((1 - height) * t, 0.0f);
+        float t = 500.0f;					    // maximum time save
+        float timeSave = (1 - height) * t;      // actual time save
+        return std::max(h - timeSave, 0.0f);
     };
 };

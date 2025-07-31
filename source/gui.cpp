@@ -179,19 +179,29 @@ bool GUI::showUI_Searching() {
     if (ImGui::InputInt("##stepsPerSecond", &config->searchRate, 1, 5)) {
         config->searchRate = std::clamp(config->searchRate, 0, 60);
     }
+
     ImGui::SameLine();
-    if (ImGui::ArrowButton("play", ImGuiDir_Right)) {
+
+    if (ImGui::ArrowButton("Play", ImGuiDir_Right)) {
         config->searchPlaying = true;
     }
 
+    if (ImGui::Button("Pause")) {
+        config->searchPlaying = false;
+    }
+
     ImGui::NewLine();
+
+    if (config->searchPlaying) ImGui::BeginDisabled();
     ImGui::Text("Schritt");
     if (ImGui::InputInt("##step", &config->step) || config->searchPlaying) {
         config->step = std::clamp(config->step, 0, config->maxSteps);
-        if (config->step == config->maxSteps) {
-            config->searchPlaying = false;
-            ImGui::OpenPopup("Pfad gefunden!"); //open a pop up when the search is finished (only the first time)
-        }
+    }
+    if (config->searchPlaying) ImGui::EndDisabled();
+
+    if (config->step == config->maxSteps) {
+        config->searchPlaying = false;
+        ImGui::OpenPopup("Pfad gefunden!"); //open a pop up when the search is finished (only the first time)
     }
 
     if (ImGui::BeginPopupModal("Pfad gefunden!")) {
@@ -206,14 +216,20 @@ bool GUI::showUI_Searching() {
     return changedState;
 }
 
-VisualizationState GUI::showUI_Finished(int solutionNodes, int expandedNodes, int frontierNodes) {
+VisualizationState GUI::showUI_Finished(int solutionNodes, int expandedNodes, int frontierNodes, float travelTime) {
     VisualizationState nextState = VisualizationState::Finished;
     ImGui::Begin("Statistik", nullptr, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse);
+    char sTime[100];
+    sprintf_s(sTime, "%.2fh", travelTime / 3600.0f); // save travel time in hours
+    ImGui::LabelText(sTime, u8"Wanderdauer");
+
+    ImGui::NewLine();
+
     ImGui::Text("Knoten");
     ImGui::LabelText(std::to_string(frontierNodes).c_str(), u8"Betrachtet");
     ImGui::LabelText(std::to_string(expandedNodes).c_str(), "Expandiert");
     ImGui::LabelText(std::to_string(solutionNodes).c_str(), u8"Lösungpfad");
-    
+
     ImGui::NewLine();
 
     ImGui::Text(u8"Zurück zu:");
@@ -228,6 +244,9 @@ VisualizationState GUI::showUI_Finished(int solutionNodes, int expandedNodes, in
         config->step = 0;
         config->maxSteps = 0;
     }
+
+    ImGui::NewLine();
+    ImGui::LabelText(std::to_string(config->seed).c_str(), u8"Seed");
 
     ImGui::End();
     return nextState;

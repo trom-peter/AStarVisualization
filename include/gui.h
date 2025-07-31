@@ -26,7 +26,7 @@ public:
 	bool showUI_EnvironmentConfig();
 	bool showUI_SearchProblemConfig();
 	bool showUI_Searching();
-	VisualizationState showUI_Finished(int solutionNodes, int expandedNodes, int frontierNodes);
+	VisualizationState showUI_Finished(int solutionNodes, int expandedNodes, int frontierNodes, float travelTime);
 	void showUI_Viewport(Framebuffer& fb);
 	void showUI_Visibility();
 

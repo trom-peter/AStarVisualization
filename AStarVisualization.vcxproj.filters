@@ -45,9 +45,6 @@
     <ClCompile Include="source\a_star\node.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="source\a_star\problem.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="source\a_star\state.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -55,12 +52,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="source\camera.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="source\fps_camera.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="source\fps_camera_controller.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="source\gui.cpp">
@@ -102,6 +93,12 @@
     <ClCompile Include="source\heuristics.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="source\visualization.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="source\state_grid.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\a_star\a_star_search.h">
@@ -113,7 +110,7 @@
     <ClInclude Include="include\a_star\node.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\a_star\problem.h">
+    <ClInclude Include="include\a_star\search_problem.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\a_star\state.h">
@@ -123,12 +120,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\camera.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\fps_camera.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\fps_camera_controller.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\framebuffer.h">
@@ -1083,6 +1074,15 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\heuristics.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\visualization.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\state_grid.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\search_environment.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

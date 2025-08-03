@@ -35,3 +35,7 @@ void TopographyRenderer::updateUniforms(Camera* camera, glm::mat4 model) {
     shader->setUniformMatrix4fv("u_view", 1, GL_FALSE, view);
     shader->setUniformMatrix4fv("u_projection", 1, GL_FALSE, proj);
 }
+
+void TopographyRenderer::setAmplitude(float amplitude) {
+    this->amplitude = amplitude;
+}

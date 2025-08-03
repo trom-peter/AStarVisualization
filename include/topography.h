@@ -13,15 +13,16 @@ class VertexArray;
 class Topography {
 
 public:
-	Topography(int width, int length, float maxHeight, float scale, float spacing);
+	Topography(unsigned char seed, float scale, bool type);
 	void generate();
 	Mesh* getMesh();
 	float getMaxY();
 	float getMinY();
 	int getY(int x, int z);
 	unsigned char getSeed();
-	int getType();
+	bool getType();
 	float getScale();
+	int getSize();
 	void setSeed(unsigned char seed);
 	void setType(int type);
 	void setScale(float scale);
@@ -32,13 +33,12 @@ private:
 	void calculateNormals(std::vector<Vertex>& vertices, std::vector<uint32_t> indices);
 
 	Mesh* mesh;
-	int width;
-	int length;
+	int size;
 	float maxHeight;
 	float scale;
 	float spacing;
 	unsigned char seed; // the seed for this specific topography
-	int type;
+	bool type;
 
 	//non normalized minimum and maximum height of the topography
 	float minY;

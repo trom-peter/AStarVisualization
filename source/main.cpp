@@ -1,47 +1,36 @@
 #include <iostream>
-#include <vector>
-#include <array>
-#include <math.h>
-
-#include "stb_perlin.h"
-#include "framebuffer.h"
-#include "window.h"
-#include "base_renderer.h"
-#include "topography_renderer.h"
-#include "shape_renderer.h"
-#include "vertex_array.h"
-#include "mesh.h"
-#include "fps_camera.h"
-#include "fps_camera_controller.h"
-#include "shader.h"
-#include "input_handler.h"
-#include "vertex.h"
-#include "topography.h"
-#include "gui.h"
-#include "sphere.h"
-#include "a_star/problem.h"
-#include "a_star/state.h"
-#include "a_star/a_star_search.h"
-#include "search_configuration.h"
-#include "visualization_state.h"
+#include "visualization.h";
 
 #pragma comment(lib, "SDL2.lib")
 #pragma comment(lib, "glew32s.lib")
 #pragma comment(lib, "opengl32.lib")
 
-void updateSphereColors(std::unordered_map<State, Sphere*>& spheres, int step, SearchConfiguration& config, Graph& g, Problem& p, AStarSearch& aStar, bool forwards) {
+int main() {
+    Visualization vis;
+
+    if (!vis.init()) {
+        std::cout << "ERROR: Problem initializing program" << std::endl;
+        return -1;
+    }
+
+    vis.run();
+
+    return vis.quit();
+}
+/*
+void updateSphereColors(std::unordered_map<State, Sphere*>& grid, int step, SearchConfiguration& config, Graph& g, Problem& p, AStarSearch& aStar, bool forwards) {
     State expanded = aStar.allExpanded.at(step);
 
     if (forwards) {
-        spheres[expanded]->color = config.reachedColor;
+        grid[expanded]->color = config.reachedColor;
     }
     else {
-        spheres[expanded]->color = config.frontierColor;
+        grid[expanded]->color = config.frontierColor;
     }
 
     if (forwards) {
         for (State s : aStar.allFrontiers.at(step)) {
-            spheres[s]->color = config.frontierColor;
+            grid[s]->color = config.frontierColor;
         }
     }
     else {
@@ -49,28 +38,28 @@ void updateSphereColors(std::unordered_map<State, Sphere*>& spheres, int step, S
             //check if any neighbour of s is a frontier node
             bool anyNeighbourFrontier = false;
             for (State n : g.getNeighbours(s.x, s.z)) {
-                if (spheres[n]->color == config.reachedColor) {
+                if (grid[n]->color == config.reachedColor) {
                     anyNeighbourFrontier = true;
                     break;
                 }
             }
 
             //only change s to default color if no neighbouring spheres are frontiers
-            if (!anyNeighbourFrontier) spheres[s]->color = config.defaultColor;
+            if (!anyNeighbourFrontier) grid[s]->color = config.defaultColor;
         }
     }
 
-    spheres[p.initial]->color = glm::vec3(0.2f, 1.0f, 0.2f);
+    grid[p.initial]->color = glm::vec3(0.2f, 1.0f, 0.2f);
 
-    spheres[p.goal]->color = glm::vec3(1.0f, 0.2f, 0.2f);
+    grid[p.goal]->color = glm::vec3(1.0f, 0.2f, 0.2f);
 }
 
-void updateGrid(std::unordered_map<State, Sphere*>& spheres, Topography& topo, int length, int width, int gridSize, glm::vec3 color) {
+void updateGrid(std::unordered_map<State, Sphere*>& grid, Topography& topo, int length, int width, int gridSize, glm::vec3 color) {
     for (int z = 0; z <= length; z += length / (gridSize - 1)) {
         for (int x = 0; x <= width; x += width / (gridSize - 1)) {
             float y = topo.getY(x, z);
             State s(x, y, z);
-            spheres[s] = new Sphere(1000.0f / gridSize, 10, 5, glm::vec3(x, y + 40.0f, z), glm::vec3(1.0f), color);
+            grid[s] = new Sphere(1000.0f / gridSize, 10, 5, glm::vec3(x, y + 40.0f, z), glm::vec3(1.0f), color);
         }
     }
 }
@@ -91,7 +80,8 @@ int main() {
 
     float amplitude = 500.0f;
 
-    TopographyRenderer topoRenderer(amplitude);
+    TopographyRenderer topoRenderer;
+    topoRenderer.setAmplitude(500.0f);
     ShapeRenderer shapeRenderer;
     SearchConfiguration config;
 
@@ -107,20 +97,16 @@ int main() {
     float width = 7000.0f;
     float length = width;
     float scale = 0.0002f; // je größer, desto größeres gebiet
-    Topography* topo = new Topography(width, length, amplitude, config.terrainScaling, 20.0f);
+    Topography* topo = new Topography(0, config.terrainScaling, 1);
 
     topo->generate();
-    Mesh* mesh = topo->getMesh();
 
     topoRenderer.setupUniforms();
     shapeRenderer.setupUniforms();
 
-    float minTopoY = topo->getMinY();
-    float maxTopoY = topo->getMaxY();
-
     int gridSize = config.gridSize;
-    std::unordered_map<State, Sphere*> spheres;
-    updateGrid(spheres, *topo, length, width, gridSize, config.defaultColor);
+    std::unordered_map<State, Sphere*> grid;
+    updateGrid(grid, *topo, length, width, gridSize, config.defaultColor);
 
     State initial(0, topo->getY(0, 0), 0);
     State goal(0, topo->getY(0, 0), 0);
@@ -128,24 +114,19 @@ int main() {
     Graph g(gridSize, width);
     g.setTopography(topo);
 
-    Problem p(g);
+    SearchProblem p(g);
     AStarSearch aStar(p);
 
     Node* solution = nullptr;
 
-    FPSCamera* camera = new FPSCamera(glm::radians(90.0f), window.getWidth(), window.getHeight(), 1500.0f, 0.1f, 10.0f, 20000.0f);
-    FPSCameraController* controller = new FPSCameraController(*camera);
+    Camera* camera = new Camera(glm::radians(90.0f), window.getWidth(), window.getHeight(), 10.0f, 20000.0f);
     camera->translate(glm::vec3(width / 2, 10000.0f, length / 2));
-    camera->rotate(glm::vec2(0.0f, 90.0f));
+    camera->rotate(glm::vec2(-90.0f, 90.0f));
     camera->update();
-
-    config.gridSize = gridSize;
-    config.stateSpacing = g.getSpacing();
 
     gui.setSearchConfig(&config);
 
     bool running = true;
-    bool stateChanged = false;
     int step = 0;
     float searchTime = 0.0f;
     int searchRate = 1;
@@ -154,22 +135,36 @@ int main() {
     VisualizationState state = VisualizationState::ConfiguringSearchEnvironment;
 
     while (running) {
-        //std::cout << "x:" << camera->getPosition().x << std::endl;
-        //std::cout << "y:" << camera->getPosition().y << std::endl;
-        //std::cout << "z:" << camera->getPosition().z << std::endl << std::endl;
         gui.startFrame();
 
         inputHandler.handleEvents(running, gui);
-        window.updateState(inputHandler, gui);
 
-        if (window.isActive()) {
-            controller->handleInputs(&inputHandler, window.getDelta());
-            camera->update();
+        fb.bind();
+        //TODO
+        // resize des framebuffers fixen
+
+        topoRenderer.clear();
+        topoRenderer.updateUniforms(camera);
+        topoRenderer.draw(topo);
+
+        for (auto& kv : grid) {
+            glm::vec3 color = kv.second->color;
+
+            if (color == config.frontierColor && !config.frontierVisible ||
+                color == config.defaultColor && !config.unexploredVisible ||
+                color == config.reachedColor && !config.reachedVisible)
+                continue;
+
+            if (shapeRenderer.getColor() != color) shapeRenderer.setColor(color);
+            shapeRenderer.updateUniforms(camera, kv.second->model);
+            shapeRenderer.draw(kv.second);
         }
+
+        fb.unbind();
 
         switch (state) {
             case VisualizationState::ConfiguringSearchEnvironment:
-                stateChanged = gui.showUI_EnvironmentConfig(); //true if state was changed
+                state = gui.showUI_EnvironmentConfig();
 
                  if (config.topographyType != topo->getType() || 
                      config.seed != topo->getSeed() || 
@@ -179,18 +174,17 @@ int main() {
                      topo->setSeed(config.seed);
                      topo->setScale(config.terrainScaling);
                      topo->generate();
-                     spheres.clear();
+                     grid.clear();
                      gridSize = config.gridSize;
-                     updateGrid(spheres, *topo, length, width, gridSize, config.defaultColor);
+                     updateGrid(grid, *topo, length, width, gridSize, config.defaultColor);
                  }
 
                  if (config.gridSize != gridSize) {
                      gridSize = config.gridSize;
-                     spheres.clear();
-                     updateGrid(spheres, *topo, length, width, gridSize, config.defaultColor);
+                     grid.clear();
+                     updateGrid(grid, *topo, length, width, gridSize, config.defaultColor);
                  }
-                if (stateChanged) {
-                    state = VisualizationState::ConfiguringSearchProblem;
+                if (state != VisualizationState::ConfiguringSearchEnvironment) {
                     g = Graph(config.gridSize, width);
                     g.setTopography(topo);
                     g.init();
@@ -199,26 +193,25 @@ int main() {
                     p.g = g;
                     p.initial = initial;
                     p.goal = goal;
-                    config.stateSpacing = g.getSpacing();
                     config.unexploredVisible = false; //unexplored nodes are invisble when configuring search problem
                 }
                 break;
 
             case VisualizationState::ConfiguringSearchProblem:
-                stateChanged = gui.showUI_SearchProblemConfig();
+                state = gui.showUI_SearchProblemConfig(g.getSpacing());
                 if (config.initial != initial.getXZ()) { //initial state updated
-                    spheres[initial]->color = config.defaultColor;
+                    grid[initial]->color = config.defaultColor;
                     initial.y = topo->getY(config.initial.x, config.initial.y);
                     initial.setXZ(config.initial);
                 }
                 if (config.goal != goal.getXZ()) { //goal state updated
-                    spheres[goal]->color = config.defaultColor;
+                    grid[goal]->color = config.defaultColor;
                     goal.y = topo->getY(config.goal.x, config.goal.y);
                     goal.setXZ(config.goal);
                 }
 
-                spheres[initial]->color = config.initialStateColor;
-                spheres[goal]->color = config.goalStateColor;
+                grid[initial]->color = config.initialStateColor;
+                grid[goal]->color = config.goalStateColor;
 
                 switch (config.heuristic) {
                     case 0:
@@ -238,8 +231,7 @@ int main() {
                         break;
                 }
 
-                if (stateChanged) {
-                    state = VisualizationState::Searching;
+                if (state != VisualizationState::ConfiguringSearchProblem) {
                     p.initial = initial;
                     p.goal = goal;
                     solution = aStar.search();
@@ -255,7 +247,7 @@ int main() {
                 break;
 
             case VisualizationState::Searching:
-                stateChanged = gui.showUI_Searching();
+                state = gui.showUI_Searching();
 
                 if (config.searchRate != searchRate) {
                     searchRate = config.searchRate;
@@ -271,14 +263,13 @@ int main() {
                 }
 
                 if (config.step > step) { //forwards step
-                    updateSphereColors(spheres, config.step - 1, config, g, p, aStar, true);
+                    updateSphereColors(grid, config.step - 1, config, g, p, aStar, true);
                 }
                 else if (config.step < step) { // backwards step
-                    updateSphereColors(spheres, config.step, config, g, p, aStar, false);
+                    updateSphereColors(grid, config.step, config, g, p, aStar, false);
                 }
                 step = config.step;
 
-                if (stateChanged) state = VisualizationState::Finished;
                 break;
 
             case VisualizationState::Finished:
@@ -290,18 +281,18 @@ int main() {
 
                 for (State s : aStar.solutionPath) {
                     if (s != initial && s != goal) {
-                        spheres[s]->color = glm::vec3(1.0f, 1.0f, 0.0f);
+                        grid[s]->color = glm::vec3(1.0f, 1.0f, 0.0f);
                     }
                 }
 
                 if (state == VisualizationState::ConfiguringSearchProblem) {
-                    spheres.clear();
-                    updateGrid(spheres, *topo, length, width, gridSize, config.defaultColor);
+                    grid.clear();
+                    updateGrid(grid, *topo, length, width, gridSize, config.defaultColor);
                 }
 
                 if (state == VisualizationState::ConfiguringSearchEnvironment) {
-                    spheres.clear();
-                    updateGrid(spheres, *topo, length, width, gridSize, config.defaultColor);
+                    grid.clear();
+                    updateGrid(grid, *topo, length, width, gridSize, config.defaultColor);
                     config.reset();
                 }
 
@@ -313,29 +304,6 @@ int main() {
 
         gui.render();
 
-        //TODO
-        // resize des framebuffers fixen
-        fb.bind();
-
-        topoRenderer.clear();
-        topoRenderer.updateUniforms(camera);
-        topoRenderer.draw(topo);
-
-        for (auto& kv : spheres) {
-            glm::vec3 color = kv.second->color;
-
-            if (color == config.frontierColor && !config.frontierVisible ||
-                color == config.defaultColor && !config.unexploredVisible ||
-                color == config.reachedColor && !config.reachedVisible) 
-                continue;
-
-            if (shapeRenderer.getColor() != color) shapeRenderer.setColor(color);
-            shapeRenderer.updateUniforms(camera, kv.second->model);
-            shapeRenderer.draw(kv.second);
-        }
-
-        fb.unbind();
-
         window.swapBuffers();
         window.updateTime();
     }
@@ -344,3 +312,4 @@ int main() {
     window.quit();
     return 0;
 }
+*/

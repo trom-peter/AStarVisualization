@@ -27,9 +27,6 @@ void GUI::init(Window& window) {
 
     io.Fonts->AddFontDefault();
     font = io.Fonts->AddFontFromFileTTF("fonts/JetbrainsMonoRegular.ttf", 18.0f);
-
-    // Our state
-    showDemoWindow = true;
 }
 
 void GUI::processEvent(SDL_Event* event) {
@@ -45,8 +42,8 @@ void GUI::startFrame() {
     ImGui::PushFont(font);
 }
 
-bool GUI::showUI_EnvironmentConfig() {
-    bool changedState = false;
+VisualizationState GUI::showUI_EnvironmentConfig() {
+    VisualizationState nextState = VisualizationState::ConfiguringSearchEnvironment;
 
     //Suchraum
     ImGui::Begin("Suchraum");
@@ -57,7 +54,7 @@ bool GUI::showUI_EnvironmentConfig() {
     if (ImGui::InputText("##seed", buffer, IM_ARRAYSIZE(buffer), ImGuiInputTextFlags_EnterReturnsTrue | ImGuiInputTextFlags_AutoSelectAll) || ImGui::IsItemDeactivatedAfterEdit()) {
         config->seed = static_cast<unsigned char>(std::clamp(atoi(buffer), 0, 255));
     }
-    if (ImGui::Button("Random")) {
+    if (ImGui::Button(u8"Zufällig")) {
         config->seed = SeedGenerator::getRandomSeed();
     }
 
@@ -91,15 +88,15 @@ bool GUI::showUI_EnvironmentConfig() {
 
     ImGui::NewLine();
 
-    if (ImGui::Button("Fertig")) changedState = true;
+    if (ImGui::Button("Fertig")) nextState = VisualizationState::ConfiguringSearchProblem;
 
     ImGui::End();
 
-    return changedState;
+    return nextState;
 }
 
-bool GUI::showUI_SearchProblemConfig() {
-    bool changedState = false;
+VisualizationState GUI::showUI_SearchProblemConfig(int stateSpacing) {
+    VisualizationState nextState = VisualizationState::ConfiguringSearchProblem;
 
     // Suchproblem
     ImGui::Begin("Suchproblem", nullptr);
@@ -110,20 +107,20 @@ bool GUI::showUI_SearchProblemConfig() {
     ImGui::BeginGroup();
     ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 25);
     if (ImGui::ArrowButton("##up1", ImGuiDir_Up)) {
-        config->initial.y = std::clamp(config->initial.y - config->stateSpacing, 0, (config->gridSize - 1) * config->stateSpacing);
+        config->initial.y = std::clamp(config->initial.y - stateSpacing, 0, (config->gridSize - 1) * stateSpacing);
     }
     ImGui::BeginGroup();
     if (ImGui::ArrowButton("##left1", ImGuiDir_Left)) {
-        config->initial.x = std::clamp(config->initial.x - config->stateSpacing, 0, (config->gridSize - 1) * config->stateSpacing);
+        config->initial.x = std::clamp(config->initial.x - stateSpacing, 0, (config->gridSize - 1) * stateSpacing);
     }
     ImGui::SameLine(0, 30);
     if (ImGui::ArrowButton("##right1", ImGuiDir_Right)) {
-        config->initial.x = std::clamp(config->initial.x + config->stateSpacing, 0, (config->gridSize - 1) * config->stateSpacing);
+        config->initial.x = std::clamp(config->initial.x + stateSpacing, 0, (config->gridSize - 1) * stateSpacing);
     }
     ImGui::EndGroup();
     ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 25);
     if (ImGui::ArrowButton("##down1", ImGuiDir_Down)) {
-        config->initial.y = std::clamp(config->initial.y + config->stateSpacing, 0, (config->gridSize - 1) * config->stateSpacing);
+        config->initial.y = std::clamp(config->initial.y + stateSpacing, 0, (config->gridSize - 1) * stateSpacing);
     }
     ImGui::EndGroup();
 
@@ -133,20 +130,20 @@ bool GUI::showUI_SearchProblemConfig() {
     ImGui::BeginGroup();
     ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 25);
     if (ImGui::ArrowButton("##up2", ImGuiDir_Up)) {
-        config->goal.y = std::clamp(config->goal.y - config->stateSpacing, 0, (config->gridSize - 1) * config->stateSpacing);
+        config->goal.y = std::clamp(config->goal.y - stateSpacing, 0, (config->gridSize - 1) * stateSpacing);
     }
     ImGui::BeginGroup();
     if (ImGui::ArrowButton("##left2", ImGuiDir_Left)) {
-        config->goal.x = std::clamp(config->goal.x - config->stateSpacing, 0, (config->gridSize - 1) * config->stateSpacing);
+        config->goal.x = std::clamp(config->goal.x - stateSpacing, 0, (config->gridSize - 1) * stateSpacing);
     }
     ImGui::SameLine(0, 30);
     if (ImGui::ArrowButton("##right2", ImGuiDir_Right)) {
-        config->goal.x = std::clamp(config->goal.x + config->stateSpacing, 0, (config->gridSize - 1) * config->stateSpacing);
+        config->goal.x = std::clamp(config->goal.x + stateSpacing, 0, (config->gridSize - 1) * stateSpacing);
     }
     ImGui::EndGroup();
     ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 25);
     if (ImGui::ArrowButton("##down2", ImGuiDir_Down)) {
-        config->goal.y = std::clamp(config->goal.y + config->stateSpacing, 0, (config->gridSize - 1) * config->stateSpacing);
+        config->goal.y = std::clamp(config->goal.y + stateSpacing, 0, (config->gridSize - 1) * stateSpacing);
     }
     ImGui::EndGroup();
 
@@ -162,15 +159,15 @@ bool GUI::showUI_SearchProblemConfig() {
         config->overestimateFactor = std::clamp(config->overestimateFactor, 0.0f, 100.0f);
     }
 
-    if (ImGui::Button("Suche!", ImVec2(80.0f, 40.0f))) changedState = true;
+    if (ImGui::Button("Suche!", ImVec2(80.0f, 40.0f))) nextState = VisualizationState::Searching;
 
     ImGui::End();
 
-    return changedState;
+    return nextState;
 }
 
-bool GUI::showUI_Searching() {
-    bool changedState = false;
+VisualizationState GUI::showUI_Searching() {
+    VisualizationState nextState = VisualizationState::Searching;
 
     ImGui::Begin("Suche", nullptr);
 
@@ -206,18 +203,19 @@ bool GUI::showUI_Searching() {
 
     if (ImGui::BeginPopupModal("Pfad gefunden!")) {
         if (ImGui::Button("Ok", ImVec2(80.0f, 30.0f))) {
-            changedState = true;
+            nextState = VisualizationState::Finished;
             ImGui::CloseCurrentPopup();
         }
         ImGui::EndPopup();
     }
     ImGui::End();
 
-    return changedState;
+    return nextState;
 }
 
 VisualizationState GUI::showUI_Finished(int solutionNodes, int expandedNodes, int frontierNodes, float travelTime) {
     VisualizationState nextState = VisualizationState::Finished;
+
     ImGui::Begin("Statistik", nullptr, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse);
     char sTime[100];
     sprintf_s(sTime, "%.2fh", travelTime / 3600.0f); // save travel time in hours

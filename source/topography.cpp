@@ -4,15 +4,15 @@
 #define STB_PERLIN_IMPLEMENTATION
 #include "stb_perlin.h"
 
-Topography::Topography(int width, int length, float maxHeight, float scale, float spacing) :
-	width(width), length(length), maxHeight(maxHeight), scale(scale), spacing(spacing), mesh(nullptr) {}
+Topography::Topography(unsigned char seed, float scale, bool type) :
+    seed(seed), size(7000.0f), maxHeight(500.0f), scale(scale), spacing(20.0f), type(type) {}
 
 std::vector<Vertex> Topography::generateVertices() {
     std::vector<Vertex> vertices;
     float minY = FLT_MAX;
     float maxY = -FLT_MAX;
-    for (double z = 0; z < length; z += spacing) {
-        for (double x = 0; x < width; x += spacing) {
+    for (double z = 0; z < size; z += spacing) {
+        for (double x = 0; x < size; x += spacing) {
             Vertex v;
             float y;
             if (type == 1) 
@@ -39,8 +39,8 @@ std::vector<Vertex> Topography::generateVertices() {
 
 std::vector<uint32_t> Topography::generateIndices() {
     std::vector<uint32_t> indices;
-    int lastX = width / spacing - 1;
-    int lastZ = length / spacing - 1;
+    int lastX = size / spacing - 1;
+    int lastZ = size / spacing - 1;
     for (int z = 0; z < lastZ; z++) {
         for (int x = 0; x < lastX; x++) {
             int topLeft = (z + 1) * (lastX + 1) + x;
@@ -120,7 +120,7 @@ void Topography::setSeed(unsigned char seed) {
     this->seed = seed;
 }
 
-int Topography::getType() {
+bool Topography::getType() {
     return type;
 }
 
@@ -130,6 +130,10 @@ void Topography::setType(int type) {
 
 float Topography::getScale() {
     return scale;
+}
+
+int Topography::getSize() {
+    return size;
 }
 
 void Topography::setScale(float scale) {

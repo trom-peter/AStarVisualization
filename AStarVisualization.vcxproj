@@ -157,12 +157,9 @@
     <ClCompile Include="libs\imgui\imgui_widgets.cpp" />
     <ClCompile Include="source\a_star\a_star_search.cpp" />
     <ClCompile Include="source\a_star\node.cpp" />
-    <ClCompile Include="source\a_star\problem.cpp" />
     <ClCompile Include="source\a_star\state.cpp" />
     <ClCompile Include="source\base_renderer.cpp" />
     <ClCompile Include="source\camera.cpp" />
-    <ClCompile Include="source\fps_camera.cpp" />
-    <ClCompile Include="source\fps_camera_controller.cpp" />
     <ClCompile Include="source\gui.cpp" />
     <ClCompile Include="source\heuristics.cpp" />
     <ClCompile Include="source\input_handler.cpp" />
@@ -176,17 +173,17 @@
     <ClCompile Include="source\topography_renderer.cpp" />
     <ClCompile Include="source\vertex_array.cpp" />
     <ClCompile Include="source\window.cpp" />
+    <ClCompile Include="source\visualization.cpp" />
+    <ClCompile Include="source\state_grid.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\a_star\a_star_search.h" />
     <ClInclude Include="include\a_star\graph.h" />
     <ClInclude Include="include\a_star\node.h" />
-    <ClInclude Include="include\a_star\problem.h" />
+    <ClInclude Include="include\a_star\search_problem.h" />
     <ClInclude Include="include\a_star\state.h" />
     <ClInclude Include="include\base_renderer.h" />
     <ClInclude Include="include\camera.h" />
-    <ClInclude Include="include\fps_camera.h" />
-    <ClInclude Include="include\fps_camera_controller.h" />
     <ClInclude Include="include\framebuffer.h" />
     <ClInclude Include="include\gui.h" />
     <ClInclude Include="include\heuristics.h" />
@@ -505,6 +502,9 @@
     <ClInclude Include="libs\imgui\imstb_textedit.h" />
     <ClInclude Include="libs\imgui\imstb_truetype.h" />
     <ClInclude Include="libs\stb_perlin.h" />
+    <ClInclude Include="include\visualization.h" />
+    <ClInclude Include="include\state_grid.h" />
+    <ClInclude Include="include\search_environment.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="imgui.ini" />

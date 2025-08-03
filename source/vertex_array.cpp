@@ -2,6 +2,7 @@
 
 VertexArray::VertexArray() {
 	glGenVertexArrays(1, &vaoId);
+	setupVertexLayout();
 }
 
 VertexArray::~VertexArray() {

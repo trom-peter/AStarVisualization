@@ -8,7 +8,6 @@ class Graph {
 public:
 	Graph(int nodes, int size) : n(nodes), size(size) {
 		spacing = size / (nodes - 1);
-		std::cout << "created graph with spacing: " << spacing << std::endl;
 		int totalNodes = n * n;
 		adjMatrix.resize(totalNodes, std::vector<int>(totalNodes, 0));
 	}

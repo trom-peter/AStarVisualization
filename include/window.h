@@ -27,10 +27,6 @@ public:
 
     float getDelta();
 
-    bool isActive();
-
-    void updateState(const InputHandler& ih, GUI& gui);
-
     float getTime();
 
     SDL_Window* getWindow();
@@ -43,7 +39,6 @@ private:
 
     const char* title;
     int width, height;
-    bool active; //is this window being used
     SDL_Window* window;
     SDL_GLContext glContext;
     uint64_t perfCounterFrequency;

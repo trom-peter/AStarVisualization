@@ -2,7 +2,7 @@
 #define SDL_MAIN_HANDLED
 //#define SHOW_FPS
 
-Window::Window(int width, int height, const char* title) : title(title), active(false), window(nullptr), glContext(nullptr) {
+Window::Window(int width, int height, const char* title) : title(title), window(nullptr), glContext(nullptr) {
     this->width = width;
     this->height = height;
 }
@@ -88,17 +88,6 @@ void Window::updateTime() {
     time += delta;
 }
 
-void Window::updateState(const InputHandler& ih, GUI& gui) {
-    if (ih.isKeyPressed(SDL_SCANCODE_ESCAPE) && active) {
-        SDL_SetRelativeMouseMode(SDL_FALSE);
-        active = false;
-    }
-    else if (ih.isButtonPressed(SDL_BUTTON_LEFT) && !active && gui.isViewportActive()) {
-        SDL_SetRelativeMouseMode(SDL_TRUE);
-        active = true;
-    }
-}
-
 int Window::getWidth() {
     return width;
 }
@@ -121,8 +110,4 @@ SDL_Window* Window::getWindow() {
 
 SDL_GLContext Window::getGLContext() {
     return glContext;
-}
-
-bool Window::isActive() {
-    return active;
 }

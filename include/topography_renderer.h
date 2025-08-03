@@ -17,6 +17,7 @@ public:
 
     void draw(Topography* mesh);
 
+    void setAmplitude(float amplitude);
 private:
     float amplitude;
 };

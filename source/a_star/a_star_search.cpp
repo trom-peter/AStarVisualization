@@ -1,6 +1,6 @@
 #include "a_star/a_star_search.h"
 
-AStarSearch::AStarSearch(Problem& p) : problem(p) {}
+AStarSearch::AStarSearch(SearchProblem& p) : problem(p) {}
 
 void AStarSearch::setHeuristic(std::function<float(State, State)> h) {
 	this->heuristic = h;
@@ -77,4 +77,8 @@ void AStarSearch::setConsideredNodes() {
 	for (std::vector<State> frontier : allFrontiers) {
 		consideredNodes += frontier.size();
 	}
+}
+
+SearchProblem AStarSearch::getProblem() {
+	return problem;
 }

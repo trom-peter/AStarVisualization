@@ -17,7 +17,6 @@ struct SearchConfiguration {
 		overestimateFactor = 1.0f;
 		heuristic = 0;
 		gridSize = 15;
-		stateSpacing = 0;
 		step = 0;
 		maxSteps = 0;
 		searchPlaying = false;
@@ -42,7 +41,6 @@ struct SearchConfiguration {
 	bool searchPlaying;
 	int searchRate;
 	int gridSize;
-	int stateSpacing; // the perpendicular space between all states
 	int step; // step number in search process. measured in number of expanded nodes
 	int maxSteps;
 	glm::vec3 initialStateColor;

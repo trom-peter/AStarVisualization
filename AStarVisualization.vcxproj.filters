@@ -1507,4 +1507,8 @@
     <None Include="shaders\topography.frag" />
     <None Include="imgui.ini" />
   </ItemGroup>
+  <ItemGroup>
+    <Library Include="dependencies\SDL2-2.30.6\lib\x86\SDL2.lib" />
+    <Library Include="dependencies\glew-2.1.0\lib\Release\x64\glew32s.lib" />
+  </ItemGroup>
 </Project>

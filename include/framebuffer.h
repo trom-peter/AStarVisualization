@@ -32,6 +32,8 @@ struct Framebuffer {
 
 	virtual ~Framebuffer() {
 		glDeleteFramebuffers(1, &framebufferId);
+		glDeleteTextures(1, &colorTextureId);
+		glDeleteRenderbuffers(1, &renderbufferId);
 	}
 
 	void bind() {
@@ -49,10 +51,10 @@ struct Framebuffer {
 		bind();
 
 		glBindTexture(GL_TEXTURE_2D, colorTextureId);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
 		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, colorTextureId, 0);
+
+		glDeleteRenderbuffers(1, &renderbufferId);
 
 		glGenRenderbuffers(1, &renderbufferId);
 		glBindRenderbuffer(GL_RENDERBUFFER, renderbufferId);

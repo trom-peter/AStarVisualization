@@ -8,6 +8,8 @@ public:
 
 	Camera(float fov, float width, float height, float nearPlane, float farPlane);
 
+	void resizeProj(float width, float height);
+
 	glm::mat4 getProj();
 
 	glm::mat4 getView();

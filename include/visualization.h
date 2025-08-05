@@ -42,7 +42,7 @@ private:
     SearchConfiguration config;
     Framebuffer* fb; // framebuffer where visualization (not gui) is drawn to
     VertexArray* vao;
-    Camera camera;
+    Camera* camera;
     bool running;
     int step;
     float searchTime = 0.0f;

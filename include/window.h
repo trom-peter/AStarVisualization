@@ -11,7 +11,7 @@ class GUI;
 
 class Window {
 public:
-    Window(int width, int height, const char* title);
+    Window(const char* title);
 
     bool init();
 

@@ -11,6 +11,11 @@ Camera::Camera(float fov, float width, float height, float nearPlane, float farP
 	update();
 }
 
+void Camera::resizeProj(float width, float height) {
+	projection = glm::perspective(fov / 2.0f, width / height, 10.0f, 20000.0f);
+	update();
+}
+
 glm::mat4 Camera::getProj() {
 	return projection;
 }

@@ -2,7 +2,7 @@
 #include <algorithm>
 #include "seed_generator.h"
 
-GUI::GUI() : viewportActive(false), config(nullptr), font(nullptr) {}
+GUI::GUI() : config(nullptr), font(nullptr) {}
 
 void GUI::init(Window& window) {
     // Setup Dear ImGui context
@@ -38,6 +38,7 @@ void GUI::startFrame() {
     ImGui_ImplSDL2_NewFrame();
     ImGui::NewFrame();
     ImGuiDockNodeFlags dockingFlags = ImGuiDockNodeFlags_NoResize | ImGuiDockNodeFlags_PassthruCentralNode;
+    windowFlags = ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse;
     ImGui::DockSpaceOverViewport(dockingFlags);
     ImGui::PushFont(font);
 }
@@ -46,7 +47,7 @@ VisualizationState GUI::showUI_EnvironmentConfig() {
     VisualizationState nextState = VisualizationState::ConfiguringSearchEnvironment;
 
     //Suchraum
-    ImGui::Begin("Suchraum");
+    ImGui::Begin("Suchraum", nullptr, windowFlags);
 
     char buffer[4];
     sprintf_s(buffer, "%d", config->seed);
@@ -99,7 +100,7 @@ VisualizationState GUI::showUI_SearchProblemConfig(int stateSpacing) {
     VisualizationState nextState = VisualizationState::ConfiguringSearchProblem;
 
     // Suchproblem
-    ImGui::Begin("Suchproblem", nullptr);
+    ImGui::Begin("Suchproblem", nullptr, windowFlags);
     ImGui::Text("Startzustand"); ImGui::SameLine(125); ImGui::Text("Zielzustand");
     ImGui::NewLine();
 
@@ -169,7 +170,7 @@ VisualizationState GUI::showUI_SearchProblemConfig(int stateSpacing) {
 VisualizationState GUI::showUI_Searching() {
     VisualizationState nextState = VisualizationState::Searching;
 
-    ImGui::Begin("Suche", nullptr);
+    ImGui::Begin("Suche", nullptr, windowFlags);
 
     ImGui::Text("Schritte pro Sekunde");
 
@@ -216,7 +217,7 @@ VisualizationState GUI::showUI_Searching() {
 VisualizationState GUI::showUI_Finished(int solutionNodes, int expandedNodes, int frontierNodes, float travelTime) {
     VisualizationState nextState = VisualizationState::Finished;
 
-    ImGui::Begin("Statistik", nullptr, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse);
+    ImGui::Begin("Statistik", nullptr, windowFlags);
     char sTime[100];
     sprintf_s(sTime, "%.2fh", travelTime / 3600.0f); // save travel time in hours
     ImGui::LabelText(sTime, u8"Wanderdauer");
@@ -252,25 +253,20 @@ VisualizationState GUI::showUI_Finished(int solutionNodes, int expandedNodes, in
 
 void GUI::showUI_Viewport(Framebuffer& fb) {
     // viewport
-    ImGui::Begin("Visualisierung", nullptr, ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoCollapse);
+    ImGui::Begin("Visualisierung", nullptr, windowFlags);
     {
         ImGui::BeginChild("Viewport");
 
-        // check if viewport window is active
-        if (ImGui::IsWindowHovered() && ImGui::IsMouseClicked(ImGuiMouseButton_Left) && !viewportActive)
-            viewportActive = true;
-        else
-            viewportActive = false;
+        viewportSize = ImGui::GetContentRegionAvail();
 
-        ImVec2 wsize = ImGui::GetWindowSize();
-        ImGui::Image((ImTextureID)fb.colorTextureId, wsize, ImVec2(0, 1), ImVec2(1, 0));
+        ImGui::Image((ImTextureID)(intptr_t)fb.colorTextureId, viewportSize, ImVec2(0, 1), ImVec2(1, 0));
         ImGui::EndChild();
     }
     ImGui::End();
 }
 
 void GUI::showUI_Visibility() {
-    ImGui::Begin("Sichtbarkeit");
+    ImGui::Begin("Sichtbarkeit", nullptr, windowFlags);
     ImGui::Checkbox("Unbesucht", &config->unexploredVisible);
     ImGui::Checkbox("Grenzbereich", &config->frontierVisible);
     ImGui::Checkbox("Reached", &config->reachedVisible);
@@ -294,26 +290,14 @@ void GUI::render() {
     }
 }
 
-bool GUI::wantsMouseInput() {
-    return ImGui::GetIO().WantCaptureMouse;
-}
-
-bool GUI::wantsKeyboardInput() {
-    return ImGui::GetIO().WantCaptureKeyboard;
+ImVec2 GUI::getViewportSize() {
+    return viewportSize;
 }
 
 void GUI::quit() {
     ImGui_ImplOpenGL3_Shutdown();
     ImGui_ImplSDL2_Shutdown();
     ImGui::DestroyContext();
-}
-
-bool GUI::isViewportActive() const {
-    return viewportActive;
-}
-
-void GUI::setViewportActive(bool active) {
-    viewportActive = active;
 }
 
 void GUI::setSearchConfig(SearchConfiguration* config) {

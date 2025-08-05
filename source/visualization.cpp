@@ -1,10 +1,13 @@
 #include "visualization.h"
 
-Visualization::Visualization() : window(1400, 1000, "A* Visualisierung"),
-	camera(Camera(glm::radians(90.0f), window.getWidth(), window.getHeight(), 10.0f, 20000.0f)) {}
+Visualization::Visualization() : window("A* Visualisierung") {}
 
 bool Visualization::init() {
-	if (!window.init() || !BaseRenderer::init()) {
+	if (!window.init()) {
+		return false;
+	}
+
+	if (!BaseRenderer::init()) {
 		return false;
 	}
 
@@ -16,14 +19,15 @@ bool Visualization::init() {
 	topoRenderer = new TopographyRenderer(500.0f);
 	shapeRenderer = new ShapeRenderer();
 	topoRenderer->setupUniforms();
-	topoRenderer->setClearColor(1.0f, 1.0f, 1.0f);
+	topoRenderer->setClearColor(0.1f, 0.1f, 0.1f);
 	shapeRenderer->setupUniforms();
-	fb = new Framebuffer(window.getWidth(), window.getHeight());
+	fb = new Framebuffer(window.getWidth() , window.getHeight());
 	vao = new VertexArray();
-	camera.translate(glm::vec3(environment->topography.getSize() / 2, 10000.0f, 
+	camera = new Camera(glm::radians(90.0f), window.getWidth(), window.getHeight(), 10.0f, 20000.0f);
+	camera->translate(glm::vec3(environment->topography.getSize() / 2, 10000.0f, 
 		environment->topography.getSize() / 2));
-	camera.rotate(glm::vec2(-90.0f, 90.0f));
-	camera.update();
+	camera->rotate(glm::vec2(-90.0f, 90.0f));
+	camera->update();
 	running = true;
 	environment->resetGrid(config.gridSize);
 }
@@ -70,8 +74,10 @@ void Visualization::run() {
 		}
 
 		fb->bind();
+		glViewport(0, 0, (int)fb->width, (int)fb->height);
+		camera->resizeProj(fb->width, fb->height);
 		topoRenderer->clear();
-		topoRenderer->updateUniforms(&camera);
+		topoRenderer->updateUniforms(camera);
 		topoRenderer->draw(&environment->topography);
 		//TODO visible dinger ins stategrid? als struct?
 		for (auto& kv : environment->stateGrid->grid) {
@@ -83,7 +89,7 @@ void Visualization::run() {
 				continue;
 
 			if (shapeRenderer->getColor() != color) shapeRenderer->setColor(color);
-			shapeRenderer->updateUniforms(&camera, kv.second->model);
+			shapeRenderer->updateUniforms(camera, kv.second->model);
 			shapeRenderer->draw(kv.second);
 		}
 
@@ -92,6 +98,8 @@ void Visualization::run() {
 		gui.showUI_Viewport(*fb);
 
 		gui.render();
+
+		fb->resize(gui.getViewportSize().x, gui.getViewportSize().y);
 
 		window.swapBuffers();
 		window.updateTime();

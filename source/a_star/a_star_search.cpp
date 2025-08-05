@@ -36,11 +36,11 @@ Node* AStarSearch::search() {
 			continue;
 		}
 
-		std::cout << "STEP: " << step << 
-			" COORDS: " << n->s.x << ", " << n->s.y << ", " << n->s.z <<
-			" HEURISTIC:" << heuristic(n->s, problem.goal) << 
-			" COST:" << n->pathCost << +
-			" F-COST: " << n->pathCost + heuristic(n->s, problem.goal) << std::endl;
+		//std::cout << "STEP: " << step << 
+		//	" COORDS: " << n->s.x << ", " << n->s.y << ", " << n->s.z <<
+		//	" HEURISTIC:" << heuristic(n->s, problem.goal) << 
+		//	" COST:" << n->pathCost << +
+		//	" F-COST: " << n->pathCost + heuristic(n->s, problem.goal) << std::endl;
 
 		allExpanded.push_back(n->s);
 

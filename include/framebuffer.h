@@ -3,8 +3,10 @@
 #include <cstdint>
 
 struct Framebuffer {
-public:
 	Framebuffer(uint32_t width, uint32_t height) {
+		this->width = width;
+		this->height = height;
+
 		glGenFramebuffers(1, &framebufferId);
 		glBindFramebuffer(GL_FRAMEBUFFER, framebufferId);
 
@@ -41,18 +43,27 @@ public:
 	}
 
 	void resize(uint32_t width, uint32_t height) {
+		this->width = width;
+		this->height = height;
+
+		bind();
+
 		glBindTexture(GL_TEXTURE_2D, colorTextureId);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
 		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, colorTextureId, 0);
 
+		glGenRenderbuffers(1, &renderbufferId);
 		glBindRenderbuffer(GL_RENDERBUFFER, renderbufferId);
 		glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, width, height);
-		glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, renderbufferId);
+		glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, renderbufferId);
+		glBindRenderbuffer(GL_RENDERBUFFER, 0);
+
+		unbind();
 	}
 
-//private:
+	float width, height;
 	GLuint framebufferId;
 	GLuint colorTextureId;
 	GLuint renderbufferId;

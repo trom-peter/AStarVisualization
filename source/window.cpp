@@ -2,16 +2,21 @@
 #define SDL_MAIN_HANDLED
 //#define SHOW_FPS
 
-Window::Window(int width, int height, const char* title) : title(title), window(nullptr), glContext(nullptr) {
-    this->width = width;
-    this->height = height;
-}
+Window::Window(const char* title) : title(title), window(nullptr), glContext(nullptr) {}
 
 bool Window::init() {
+    SDL_DisplayMode dm;
     if (SDL_Init(SDL_INIT_EVERYTHING) < 0) {
         std::cout << "Failed to initialize SDL: " << SDL_GetError() << std::endl;
-        return false;
     }
+    if (SDL_GetCurrentDisplayMode(0, &dm) != 0) {
+        std::cerr << "Error at SDL_GetCurrentDisplayMode: " << SDL_GetError() << std::endl;
+    }
+
+    int screenWidth = dm.w;
+    int screenHeight = dm.h;
+    this->width = screenWidth * 0.6f;
+    this->height = screenHeight * 0.8f;
 
     setupOpenGLAttributes();
 
@@ -22,8 +27,10 @@ bool Window::init() {
     SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
     SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 4); // 4x Multisampling
 
-    SDL_WindowFlags window_flags = (SDL_WindowFlags)(SDL_WINDOW_OPENGL | SDL_WINDOW_ALLOW_HIGHDPI);
-    window = SDL_CreateWindow(title, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, window_flags);
+
+    SDL_WindowFlags window_flags = (SDL_WindowFlags)(SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE);
+    window = SDL_CreateWindow(title, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 
+        width, height, window_flags);
     if (!window) {
         std::cout << "Failed to create window: " << SDL_GetError() << std::endl;
         return false;
@@ -32,7 +39,6 @@ bool Window::init() {
     glContext = SDL_GL_CreateContext(window);
     SDL_GL_MakeCurrent(window, glContext);
     SDL_GL_SetSwapInterval(1); // Activate V-Sync
-
     return true;
 }
 

@@ -16,11 +16,8 @@ public:
 	void processEvent(SDL_Event*);
 	void startFrame();
 	void render();
-	bool wantsMouseInput();
-	bool wantsKeyboardInput();
+	ImVec2 getViewportSize();
 	void quit();
-	bool isViewportActive() const;
-	void setViewportActive(bool active);
 	void setSearchConfig(SearchConfiguration* config);
 	VisualizationState showUI_EnvironmentConfig();
 	VisualizationState showUI_SearchProblemConfig(int stateSpacing);
@@ -32,5 +29,6 @@ public:
 private:
 	SearchConfiguration* config;
 	ImFont* font;
-	bool viewportActive;
+	ImVec2 viewportSize;
+	ImGuiWindowFlags windowFlags;
 };

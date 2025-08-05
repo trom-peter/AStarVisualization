@@ -5,7 +5,7 @@
 #include "stb_perlin.h"
 
 Topography::Topography(unsigned char seed, float scale, bool type) :
-    seed(seed), size(7000.0f), maxHeight(500.0f), scale(scale), spacing(20.0f), type(type) {}
+    seed(seed), size(7200.0f), maxHeight(500.0f), scale(scale), spacing(20.0f), type(type) {}
 
 std::vector<Vertex> Topography::generateVertices() {
     std::vector<Vertex> vertices;

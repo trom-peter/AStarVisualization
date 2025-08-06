@@ -26,7 +26,7 @@ void GUI::init(Window& window) {
     ImGui_ImplOpenGL3_Init("#version 450");
 
     io.Fonts->AddFontDefault();
-    font = io.Fonts->AddFontFromFileTTF("fonts/JetbrainsMonoRegular.ttf", 17.0f);
+    font = io.Fonts->AddFontFromFileTTF("fonts/JetbrainsMonoRegular.ttf", 18.0f);
 }
 
 void GUI::processEvent(SDL_Event* event) {

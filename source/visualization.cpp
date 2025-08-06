@@ -1,5 +1,6 @@
 #include "visualization.h"
 
+
 Visualization::Visualization() : window("A* Visualisierung") {}
 
 bool Visualization::init() {
@@ -24,12 +25,13 @@ bool Visualization::init() {
 	fb = new Framebuffer(window.getWidth() , window.getHeight());
 	vao = new VertexArray();
 	camera = new Camera(glm::radians(90.0f), window.getWidth(), window.getHeight(), 10.0f, 20000.0f);
-	camera->translate(glm::vec3(environment->topography.getSize() / 2, 10000.0f, 
+	camera->translate(glm::vec3(
+		environment->topography.getSize() / 2,
+		10000.0f, 
 		environment->topography.getSize() / 2));
+
 	camera->rotate(glm::vec2(-90.0f, 90.0f));
-	camera->update();
 	running = true;
-	environment->resetGrid(config.gridSize);
 }
 
 void Visualization::run() {

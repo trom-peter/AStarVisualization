@@ -2,7 +2,7 @@
 
 std::function<float(State, State)> Heuristics::travelTime = [](State a, State b) {
     float distance = sqrt(pow(a.x - b.x, 2) + pow(a.y - b.y, 2) + pow(a.z - b.z, 2));
-    float speed = 5.0f;
+    float speed = 6.0f;
     return ((distance / 1000) / speed) * 3600;
 };
 

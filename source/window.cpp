@@ -15,8 +15,8 @@ bool Window::init() {
 
     int screenWidth = dm.w;
     int screenHeight = dm.h;
-    this->width = screenWidth * 0.6f;
-    this->height = screenHeight * 0.8f;
+    this->width = screenWidth * 1.0f;
+    this->height = screenHeight * 1.0f;
 
     setupOpenGLAttributes();
 
@@ -28,9 +28,12 @@ bool Window::init() {
     SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 4); // 4x Multisampling
 
 
-    SDL_WindowFlags window_flags = (SDL_WindowFlags)(SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE);
+    SDL_WindowFlags window_flags = (SDL_WindowFlags)
+        (SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE | SDL_WINDOW_MAXIMIZED);
+
     window = SDL_CreateWindow(title, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 
         width, height, window_flags);
+
     if (!window) {
         std::cout << "Failed to create window: " << SDL_GetError() << std::endl;
         return false;

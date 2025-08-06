@@ -651,10 +651,6 @@
     <None Include="shaders\topography.frag" />
     <None Include="shaders\topography.vert" />
   </ItemGroup>
-  <ItemGroup>
-    <Library Include="dependencies\glew-2.1.0\lib\Release\x64\glew32s.lib" />
-    <Library Include="dependencies\SDL2-2.30.6\lib\x86\SDL2.lib" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

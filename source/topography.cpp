@@ -1,11 +1,11 @@
 #include "topography.h"
 #include <limits>
-
 #define STB_PERLIN_IMPLEMENTATION
 #include "stb_perlin.h"
 
 Topography::Topography(unsigned char seed, float scale, bool type) :
-    seed(seed), size(7200.0f), maxHeight(500.0f), scale(scale), spacing(20.0f), type(type) {}
+    seed(seed), size(7200.0f), maxHeight(500.0f), scale(scale), 
+    spacing(20.0f), type(type), mesh(nullptr) {}
 
 std::vector<Vertex> Topography::generateVertices() {
     std::vector<Vertex> vertices;
@@ -82,10 +82,11 @@ void Topography::calculateNormals(std::vector<Vertex>& vertices, std::vector<uin
 }
 
 void Topography::generate() {
-	std::vector<Vertex> vertices = Topography::generateVertices();
-	std::vector<uint32_t> indices = Topography::generateIndices();
+    if (mesh != nullptr) delete mesh;
+    std::vector<Vertex> vertices = Topography::generateVertices();
+    std::vector<uint32_t> indices = Topography::generateIndices();
     calculateNormals(vertices, indices);
-	mesh = new Mesh(vertices, vertices.size(), indices, indices.size());
+    mesh = new Mesh(vertices, vertices.size(), indices, indices.size());
 }
 
 Mesh* Topography::getMesh() {

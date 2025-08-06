@@ -15,7 +15,7 @@ public:
 
     void updateUniforms(Camera* camera, glm::mat4 model = glm::mat4(1.0f)) override;
 
-    void draw(Topography* mesh);
+    void draw(Topography* topography);
 
     void setAmplitude(float amplitude);
 private:

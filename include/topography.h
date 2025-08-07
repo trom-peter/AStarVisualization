@@ -1,10 +1,11 @@
 #pragma once
 
 #include <vector>
-#include "mesh.h"
-#include "vertex.h"
-#include "shader.h"
-#include "vertex_array.h"
+#include <limits>
+#include "opengl/mesh.h"
+#include "opengl/vertex.h"
+#include "opengl/shader.h"
+#include "opengl/vertex_array.h"
 
 struct Shader;
 struct Mesh;
@@ -13,7 +14,7 @@ class VertexArray;
 class Topography {
 
 public:
-	Topography(unsigned char seed, float scale, bool type);
+	Topography(unsigned char seed, float scale, bool type, int size, int amplitude);
 	void generate();
 	Mesh* getMesh();
 	float getMaxY();
@@ -34,13 +35,13 @@ private:
 
 	Mesh* mesh;
 	int size;
-	float maxHeight;
+	int amplitude;
 	float scale;
 	float spacing;
 	unsigned char seed; // the seed for this specific topography
 	bool type;
 
-	//non normalized minimum and maximum height of the topography
-	float minY;
+	
+	float minY; //non normalized minimum and maximum height of the topography
 	float maxY;
 };

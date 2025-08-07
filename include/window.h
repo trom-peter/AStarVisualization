@@ -3,8 +3,7 @@
 
 #include <iostream>
 #include <SDL.h>
-#include "input_handler.h"
-#include "gui.h"
+#include "visualization/gui.h"
 
 class InputHandler;
 class GUI;
@@ -14,6 +13,8 @@ public:
     Window(const char* title);
 
     bool init();
+
+    void handleInputs(bool& running, GUI& gui);
 
     void swapBuffers();
 

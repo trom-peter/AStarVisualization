@@ -1,18 +1,23 @@
 #pragma once
-#include <queue>
-#include <unordered_map>
-#include <set>
-#include <functional>
+#include "a_star/heuristic.h"
 #include "a_star/search_problem.h"
 #include "a_star/node.h"
-#include "topography.h"
+
+struct SearchProblem;
+struct ProblemConfig;
+struct Node;
+struct Heuristic;
 
 class AStarSearch {
 public:
-	AStarSearch(SearchProblem& p);
+	AStarSearch(SearchProblem& p, ProblemConfig& config, Topography* topo);
+	~AStarSearch();
+
 	Node* search();
-	void setHeuristic(std::function<float(State, State)> h);
 	SearchProblem getProblem();
+	Heuristic getHeuristic();
+	Node* getSolution();
+	void setHeuristic(int heuristicId, float overestimateFactor = 1.0f);
 
 	std::vector<std::vector<State>> allFrontiers;
 	std::vector<State> allExpanded;
@@ -20,8 +25,9 @@ public:
 	int consideredNodes;
 
 private:
+	Node* solution;
 	SearchProblem& problem;
-	std::function<float(State, State)> heuristic;
+	Heuristic heuristic;
 	void setConsideredNodes();
-	void setSolution(Node* n);
+	void setSolutionPath(Node* n);
 };

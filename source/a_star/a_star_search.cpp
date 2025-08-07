@@ -1,9 +1,17 @@
 #include "a_star/a_star_search.h"
 
-AStarSearch::AStarSearch(SearchProblem& p) : problem(p) {}
+#include <queue>
+#include <unordered_map>
+#include <set>
+#include <functional>
+#include "topography.h"
+#include "configurations/problem_configuration.h"
 
-void AStarSearch::setHeuristic(std::function<float(State, State)> h) {
-	this->heuristic = h;
+AStarSearch::AStarSearch(SearchProblem& p, ProblemConfig& config, Topography* topo) :
+	problem(p), heuristic(Heuristic(topo, config.heuristic, config.overestimateFactor)), solution(nullptr) {}
+
+AStarSearch::~AStarSearch() {
+	delete solution;
 }
 
 Node* AStarSearch::search() {
@@ -16,15 +24,15 @@ Node* AStarSearch::search() {
 	Node* initial = new Node(problem.initial, 0);
 
 	auto f = [this](Node* a, Node* b) {
-		return a->pathCost + heuristic(a->s, problem.goal) >
-			b->pathCost + heuristic(b->s, problem.goal);
+		return a->pathCost + heuristic.getFunction()(a->s, problem.goal) >
+			b->pathCost + heuristic.getFunction()(b->s, problem.goal);
 		};
 
 	std::priority_queue<Node*, std::vector<Node*>, decltype(f)> frontier(f); //grenzbereich
 	frontier.push(initial);
 	allFrontiers.push_back({ initial->s });
 
-	std::unordered_map<State, Node*> reached; // bester pfad pro state
+	std::unordered_map<State, Node*, StateHash> reached; // bester pfad pro state
 	reached.insert({ problem.initial, initial });
 
 	while (!frontier.empty()) {
@@ -36,16 +44,11 @@ Node* AStarSearch::search() {
 			continue;
 		}
 
-		//std::cout << "STEP: " << step << 
-		//	" COORDS: " << n->s.x << ", " << n->s.y << ", " << n->s.z <<
-		//	" HEURISTIC:" << heuristic(n->s, problem.goal) << 
-		//	" COST:" << n->pathCost << +
-		//	" F-COST: " << n->pathCost + heuristic(n->s, problem.goal) << std::endl;
-
 		allExpanded.push_back(n->s);
 
 		if (problem.isGoal(n->s)) {
-			setSolution(n);
+			solution = n;
+			setSolutionPath(n);
 			setConsideredNodes();
 			return n;
 		}
@@ -65,11 +68,11 @@ Node* AStarSearch::search() {
 	return nullptr;
 }
 
-void AStarSearch::setSolution(Node* n) {
+void AStarSearch::setSolutionPath(Node* n) {
 	if (n == nullptr) return;
 	else {
 		solutionPath.push_back(n->s);
-		setSolution(n->parent);
+		setSolutionPath(n->parent);
 	}
 }
 
@@ -81,4 +84,17 @@ void AStarSearch::setConsideredNodes() {
 
 SearchProblem AStarSearch::getProblem() {
 	return problem;
+}
+
+void AStarSearch::setHeuristic(int heuristicId, float overestimateFactor) {
+	heuristic.heuristicId = heuristicId;
+	heuristic.overestimateFactor = overestimateFactor;
+}
+
+Heuristic AStarSearch::getHeuristic() {
+	return heuristic;
+}
+
+Node* AStarSearch::getSolution() {
+	return solution;
 }

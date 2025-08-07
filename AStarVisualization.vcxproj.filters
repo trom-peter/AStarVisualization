@@ -42,37 +42,28 @@
     <ClCompile Include="source\a_star\a_star_search.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="source\a_star\node.cpp">
+    <ClCompile Include="source\opengl\base_renderer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="source\a_star\state.cpp">
+    <ClCompile Include="source\opengl\camera.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="source\base_renderer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="source\camera.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="source\gui.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="source\input_handler.cpp">
+    <ClCompile Include="source\visualization\gui.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="source\main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="source\mesh.cpp">
+    <ClCompile Include="source\opengl\mesh.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="source\shader.cpp">
+    <ClCompile Include="source\opengl\shader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="source\shape.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="source\shape_renderer.cpp">
+    <ClCompile Include="source\opengl\shape_renderer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="source\sphere.cpp">
@@ -81,22 +72,46 @@
     <ClCompile Include="source\topography.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="source\topography_renderer.cpp">
+    <ClCompile Include="source\opengl\topography_renderer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="source\vertex_array.cpp">
+    <ClCompile Include="source\opengl\vertex_array.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="source\window.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="source\heuristics.cpp">
+    <ClCompile Include="source\a_star\heuristic.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="source\visualization.cpp">
+    <ClCompile Include="source\visualization\visualization.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="source\state_grid.cpp">
+    <ClCompile Include="source\a_star\state_grid.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="source\configurations\environment_configuration.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="source\configurations\playback_configuration.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="source\configurations\problem_configuration.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="source\configurations\stategrid_configuration.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="source\a_star\search_environment.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="source\a_star\search_problem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="source\a_star\graph.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="source\a_star\node.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -116,34 +131,31 @@
     <ClInclude Include="include\a_star\state.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\base_renderer.h">
+    <ClInclude Include="include\opengl\base_renderer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\camera.h">
+    <ClInclude Include="include\opengl\camera.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\framebuffer.h">
+    <ClInclude Include="include\opengl\framebuffer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\gui.h">
+    <ClInclude Include="include\visualization\gui.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\index_buffer.h">
+    <ClInclude Include="include\opengl\index_buffer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\input_handler.h">
+    <ClInclude Include="include\opengl\mesh.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\mesh.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\shader.h">
+    <ClInclude Include="include\opengl\shader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\shape.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\shape_renderer.h">
+    <ClInclude Include="include\opengl\shape_renderer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\sphere.h">
@@ -152,19 +164,19 @@
     <ClInclude Include="include\topography.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\topography_renderer.h">
+    <ClInclude Include="include\opengl\topography_renderer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\vertex.h">
+    <ClInclude Include="include\opengl\vertex.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\vertex_array.h">
+    <ClInclude Include="include\opengl\vertex_array.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\vertex_buffer.h">
+    <ClInclude Include="include\opengl\vertex_buffer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\vertex_buffer_layout.h">
+    <ClInclude Include="include\opengl\vertex_buffer_layout.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\window.h">
@@ -1064,25 +1076,34 @@
     <ClInclude Include="libs\stb_perlin.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\search_configuration.h">
+    <ClInclude Include="include\configurations\environment_configuration.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\seed_generator.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\visualization_state.h">
+    <ClInclude Include="include\visualization\visualization_state.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\heuristics.h">
+    <ClInclude Include="include\a_star\heuristic.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\visualization.h">
+    <ClInclude Include="include\visualization\visualization.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\state_grid.h">
+    <ClInclude Include="include\a_star\state_grid.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\search_environment.h">
+    <ClInclude Include="include\a_star\search_environment.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\configurations\playback_configuration.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\configurations\problem_configuration.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\configurations\stategrid_configuration.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

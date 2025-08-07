@@ -2,7 +2,7 @@
 #include <math.h>
 
 #include <vector>
-#include "vertex.h"
+#include "opengl/vertex.h"
 #include "shape.h"
 
 struct Sphere : Shape {

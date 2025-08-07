@@ -1,5 +1,4 @@
 #include "window.h"
-#define SDL_MAIN_HANDLED
 //#define SHOW_FPS
 
 Window::Window(const char* title) : title(title), window(nullptr), glContext(nullptr) {}
@@ -43,6 +42,10 @@ bool Window::init() {
     SDL_GL_MakeCurrent(window, glContext);
     SDL_GL_SetSwapInterval(1); // Activate V-Sync
     return true;
+}
+
+void Window::handleInputs(bool& running, GUI& gui) {
+
 }
 
 void Window::swapBuffers() {

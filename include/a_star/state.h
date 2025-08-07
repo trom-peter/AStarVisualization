@@ -1,5 +1,6 @@
 #pragma once
 #include <glm/glm.hpp>
+#include <functional>
 
 struct State {
 	State(int x, int y, int z) : x(x), y(y), z(z) {}
@@ -27,16 +28,13 @@ struct State {
     int z;
 };
 
-namespace std {
-    template <>
-    struct hash<State> {
-        size_t operator()(const State& state) const {
-            // combine x and z hash
-            size_t hx = std::hash<int>()(state.x);
-            size_t hy = std::hash<int>()(state.y);
-            size_t hz = std::hash<int>()(state.z);
-            //return hx ^ (hz << 1);
-            return (hx ^ (hy << 1) ^ hz);
-        }
-    };
-}
+struct StateHash {
+    size_t operator()(const State& state) const {
+        // combine x y z hash
+        size_t hx = std::hash<int>()(state.x);
+        size_t hy = std::hash<int>()(state.y);
+        size_t hz = std::hash<int>()(state.z);
+        return (hx ^ (hy << 1) ^ hz);
+    }
+};
+

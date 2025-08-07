@@ -1,7 +1,7 @@
 #pragma once
-#include "glm/glm.hpp"
-#include "mesh.h"
 #include <string>
+#include "glm/glm.hpp"
+#include "opengl/mesh.h"
 
 struct Mesh;
 

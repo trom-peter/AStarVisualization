@@ -1,10 +1,10 @@
 #include "topography.h"
-#include <limits>
+
 #define STB_PERLIN_IMPLEMENTATION
 #include "stb_perlin.h"
 
-Topography::Topography(unsigned char seed, float scale, bool type) :
-    seed(seed), size(7200.0f), maxHeight(500.0f), scale(scale), 
+Topography::Topography(unsigned char seed, float scale, bool type, int size, int amplitude) :
+    seed(seed), size(size), amplitude(500), scale(scale),
     spacing(20.0f), type(type), mesh(nullptr) {}
 
 std::vector<Vertex> Topography::generateVertices() {
@@ -16,9 +16,9 @@ std::vector<Vertex> Topography::generateVertices() {
             Vertex v;
             float y;
             if (type == 1) 
-                y = stb_perlin_fbm_noise3_seed(x * scale, z * scale, 0.0f, 2.0f, 0.5f, 4, seed) * maxHeight;
+                y = stb_perlin_fbm_noise3_seed(x * scale, z * scale, 0.0f, 2.0f, 0.5f, 4, seed) * amplitude;
             else 
-                y = stb_perlin_ridge_noise3_seed(x * scale, z * scale, 0.0f, 2.0f, 0.5f, 1.0f, 4, seed) * maxHeight;
+                y = stb_perlin_ridge_noise3_seed(x * scale, z * scale, 0.0f, 2.0f, 0.5f, 1.0f, 4, seed) * amplitude;
             if (y < minY) minY = y;
             if (y > maxY) maxY = y;
             v.position = glm::vec3(x, y, z);
@@ -31,7 +31,7 @@ std::vector<Vertex> Topography::generateVertices() {
 
     //normalize all vertex heights from 0 to maxHeight
     for (Vertex& v : vertices) {
-        v.position.y = ((v.position.y - minY) * maxHeight) / (maxY - minY);
+        v.position.y = ((v.position.y - minY) * amplitude) / (maxY - minY);
     }
 
     return vertices;
@@ -97,11 +97,11 @@ int Topography::getY(int x, int z) {
     int y;
 
     if (type == 1)
-        y = stb_perlin_fbm_noise3_seed(x * scale, z * scale, 0.0f, 2.0f, 0.5f, 4, seed) * maxHeight;
+        y = stb_perlin_fbm_noise3_seed(x * scale, z * scale, 0.0f, 2.0f, 0.5f, 4, seed) * amplitude;
     else 
-        y = stb_perlin_ridge_noise3_seed(x * scale, z * scale, 0.0f, 2.0f, 0.5f, 1.0f, 4, seed) * maxHeight;
+        y = stb_perlin_ridge_noise3_seed(x * scale, z * scale, 0.0f, 2.0f, 0.5f, 1.0f, 4, seed) * amplitude;
 
-    y = ((y - minY) * maxHeight) / (maxY - minY); //normalize
+    y = ((y - minY) * amplitude) / (maxY - minY); //normalize
     return y;
 }
 

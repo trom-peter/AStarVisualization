@@ -94,13 +94,13 @@ void Visualization::run() {
 
 		//draw stategrid
 		for (std::pair<const State, Sphere*> kv : environment->stateGrid.grid) {
-			glm::vec3 color = kv.second->color;
+			glm::vec3 stateColor = kv.second->color;
 
-			if (!environment->stateGrid.isVisible(color)) 
+			if (!environment->stateGrid.isVisible(stateColor)) // only draw visible states
 				continue;
 
-			if (shapeRenderer->getColor() != color) 
-				shapeRenderer->setColor(color);
+			if (shapeRenderer->getColor() != stateColor)
+				shapeRenderer->setColor(stateColor);
 
 			shapeRenderer->updateUniforms(camera, kv.second->model);
 			shapeRenderer->draw(kv.second);

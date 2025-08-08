@@ -228,7 +228,7 @@ void Visualization::inFinished() {
 
 void Visualization::finishedToEnvironment() {
 	environment->resetGrid(environment->stateGrid.gridSize);
-	environment->stateGrid.defaultVisible = true;
+	config_Stategrid.defaultVisible = true;
 	config_Problem.init();
 	config_Playback.step = 0;
 	config_Playback.maxSteps = 0;

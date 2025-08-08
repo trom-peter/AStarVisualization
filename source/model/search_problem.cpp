@@ -1,7 +1,7 @@
-#include "a_star/search_problem.h"
-#include "a_star/search_environment.h"
+#include "model/search_problem.h"
+#include "model/search_environment.h"
+#include "model/node.h"
 #include "configurations/problem_configuration.h"
-#include "a_star/node.h"
 
 SearchProblem::SearchProblem(SearchEnvironment& environment, ProblemConfig problemConfig) :
 	graph(environment.graph),

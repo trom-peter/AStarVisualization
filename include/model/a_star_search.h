@@ -1,7 +1,7 @@
 #pragma once
-#include "a_star/heuristic.h"
-#include "a_star/search_problem.h"
-#include "a_star/node.h"
+#include "model/heuristic.h"
+#include "model/search_problem.h"
+#include "model/node.h"
 
 struct SearchProblem;
 struct ProblemConfig;

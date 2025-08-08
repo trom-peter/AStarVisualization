@@ -5,6 +5,7 @@
 #pragma comment(lib, "glew32s.lib")
 #pragma comment(lib, "opengl32.lib")
 
+
 int main() {
     Visualization vis;
 

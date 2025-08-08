@@ -44,10 +44,6 @@ bool Window::init() {
     return true;
 }
 
-void Window::handleInputs(bool& running, GUI& gui) {
-
-}
-
 void Window::swapBuffers() {
     SDL_GL_SwapWindow(window);
 }

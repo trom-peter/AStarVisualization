@@ -15,6 +15,8 @@ class Topography {
 
 public:
 	Topography(unsigned char seed, float scale, bool type, int size, int amplitude);
+	~Topography();
+
 	void generate();
 	Mesh* getMesh();
 	float getMaxY();

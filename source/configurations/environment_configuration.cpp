@@ -9,3 +9,7 @@ void EnvironmentConfig::init() {
 	topographyAmplitude = 500;
 	stateSpacing = topographySize / (gridSize - 1);
 }
+
+void EnvironmentConfig::updateStateSpacing() {
+	this->stateSpacing = topographySize / (gridSize - 1);
+}

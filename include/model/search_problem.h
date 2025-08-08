@@ -1,6 +1,6 @@
 #pragma once
-#include "a_star/graph.h"
-#include "a_star/state.h"
+#include "model/graph.h"
+#include "model/state.h"
 
 struct SearchEnvironment;
 struct ProblemConfig;

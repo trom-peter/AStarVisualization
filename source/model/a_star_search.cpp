@@ -1,4 +1,4 @@
-#include "a_star/a_star_search.h"
+#include "model/a_star_search.h"
 
 #include <queue>
 #include <unordered_map>

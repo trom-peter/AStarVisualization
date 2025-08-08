@@ -39,7 +39,7 @@
     <ClCompile Include="libs\imgui\imgui_widgets.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="source\a_star\a_star_search.cpp">
+    <ClCompile Include="source\model\a_star_search.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="source\opengl\base_renderer.cpp">
@@ -60,16 +60,16 @@
     <ClCompile Include="source\opengl\shader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="source\shape.cpp">
+    <ClCompile Include="source\model\shape.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="source\opengl\shape_renderer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="source\sphere.cpp">
+    <ClCompile Include="source\model\sphere.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="source\topography.cpp">
+    <ClCompile Include="source\model\topography.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="source\opengl\topography_renderer.cpp">
@@ -81,13 +81,13 @@
     <ClCompile Include="source\window.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="source\a_star\heuristic.cpp">
+    <ClCompile Include="source\model\heuristic.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="source\visualization\visualization.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="source\a_star\state_grid.cpp">
+    <ClCompile Include="source\model\state_grid.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="source\configurations\environment_configuration.cpp">
@@ -102,33 +102,33 @@
     <ClCompile Include="source\configurations\stategrid_configuration.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="source\a_star\search_environment.cpp">
+    <ClCompile Include="source\model\search_environment.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="source\a_star\search_problem.cpp">
+    <ClCompile Include="source\model\search_problem.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="source\a_star\graph.cpp">
+    <ClCompile Include="source\model\graph.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="source\a_star\node.cpp">
+    <ClCompile Include="source\model\node.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\a_star\a_star_search.h">
+    <ClInclude Include="include\model\a_star_search.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\a_star\graph.h">
+    <ClInclude Include="include\model\graph.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\a_star\node.h">
+    <ClInclude Include="include\model\node.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\a_star\search_problem.h">
+    <ClInclude Include="include\model\search_problem.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\a_star\state.h">
+    <ClInclude Include="include\model\state.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\opengl\base_renderer.h">
@@ -1085,16 +1085,16 @@
     <ClInclude Include="include\visualization\visualization_state.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\a_star\heuristic.h">
+    <ClInclude Include="include\model\heuristic.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\visualization\visualization.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\a_star\state_grid.h">
+    <ClInclude Include="include\model\state_grid.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\a_star\search_environment.h">
+    <ClInclude Include="include\model\search_environment.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\configurations\playback_configuration.h">

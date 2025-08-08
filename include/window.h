@@ -13,25 +13,14 @@ public:
     Window(const char* title);
 
     bool init();
-
-    void handleInputs(bool& running, GUI& gui);
-
     void swapBuffers();
-
     void quit();
-
     void updateTime();
-
     int getWidth();
-
     int getHeight();
-
     float getDelta();
-
     float getTime();
-
     SDL_Window* getWindow();
-
     SDL_GLContext getGLContext();
 
 private:

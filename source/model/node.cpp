@@ -1,6 +1,6 @@
-#include "a_star/node.h"
+#include "model/node.h"
 #include <string>
-#include "a_star/state.h"
+#include "model/state.h"
 
 Node::Node(int x, int y, int z, int pathCost, Node* parent) :
 	s(State(x, y, z)), parent(parent), pathCost(pathCost) {

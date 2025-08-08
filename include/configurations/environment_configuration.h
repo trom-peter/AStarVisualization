@@ -4,6 +4,7 @@
 struct EnvironmentConfig {
 
 	void init();
+	void updateStateSpacing();
 
 	unsigned char seed; // with what seed the topography should be generated
 	int topographyType;

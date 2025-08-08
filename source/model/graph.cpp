@@ -1,6 +1,6 @@
-#include "a_star/graph.h"
+#include "model/graph.h"
 #include <iostream>
-#include "a_star/state.h"
+#include "model/state.h"
 
 Graph::Graph(int nodes, int size) : n(nodes), size(size) {
 	spacing = size / (nodes - 1);

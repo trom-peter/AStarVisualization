@@ -1,7 +1,7 @@
 #pragma once
-#include "a_star/state_grid.h"
+#include "model/state_grid.h"
 #include "topography.h"
-#include "a_star/graph.h"
+#include "model/graph.h"
 
 struct EnvironmentConfig;
 struct StateGridConfig;

@@ -1,5 +1,5 @@
-#include "a_star/heuristic.h"
-#include "a_star/state.h"
+#include "model/heuristic.h"
+#include "model/state.h"
 #include "topography.h"
 
 Heuristic::Heuristic(Topography* topo, int heuristicId, float overestimateFactor) : 

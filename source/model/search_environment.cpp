@@ -1,5 +1,5 @@
-#include "a_star/search_environment.h"
-#include "a_star/state_grid.h"
+#include "model/search_environment.h"
+#include "model/state_grid.h"
 #include "configurations/environment_configuration.h"
 #include "configurations/stategrid_configuration.h"
 
@@ -13,14 +13,13 @@ SearchEnvironment::SearchEnvironment(EnvironmentConfig& envConfig, StategridConf
 	topography.generate();
 	graph.init();
 	graph.setTopography(&topography);
-	resetGrid(envConfig.gridSize);
+	stateGrid.initGrid(&topography);
 }
 
 void SearchEnvironment::resetGrid(int gridSize) {
-	stateGrid.grid.clear();
+	stateGrid.clearGrid();
 	stateGrid.gridSize = gridSize;
 	stateGrid.initGrid(&topography);
-	stateGrid.defaultVisible = true;
 }
 
 void SearchEnvironment::resetTopography(unsigned char seed, float scale, bool type) {

@@ -3,16 +3,16 @@
 #include "opengl/topography_renderer.h"
 #include "opengl/shape_renderer.h"
 #include "opengl/framebuffer.h"
-#include "a_star/state_grid.h"
-#include "a_star/search_problem.h"
-#include "a_star/search_environment.h"
+#include "model/state_grid.h"
+#include "model/search_problem.h"
+#include "model/search_environment.h"
 #include "visualization/gui.h"
 #include "configurations/environment_configuration.h"
 #include "configurations/playback_configuration.h"
 #include "configurations/stategrid_configuration.h"
 #include "configurations/problem_configuration.h"
 #include "window.h"
-#include "a_star/a_star_search.h"
+#include "model/a_star_search.h"
 
 class Visualization {
 public:

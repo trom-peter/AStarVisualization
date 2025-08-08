@@ -1,6 +1,6 @@
 #pragma once
 #include <string>
-#include "a_star/state.h"
+#include "model/state.h"
 
 struct Node {
 

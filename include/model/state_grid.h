@@ -1,6 +1,6 @@
 #pragma once
 #include "topography.h"
-#include "a_star/state.h"
+#include "model/state.h"
 
 class AStarSearch;
 struct StategridConfig;
@@ -14,12 +14,14 @@ struct SearchProblem;
 class Stategrid {
 public:
 	Stategrid(int gridSize, StategridConfig& config);
+	~Stategrid();
 
 	void updateToStep(int step, Graph& g, AStarSearch& aStar, bool forwards);
 	void initGrid(Topography* topo);
 	void updateVisibility(StategridConfig& config);
 	void showSolutionPath(std::vector<State> solutionPath, SearchProblem& problem);
 	bool isVisible(glm::vec3 color) const;
+	void clearGrid();
 
 	std::unordered_map<State, Sphere*, StateHash> grid;
 	int gridSize;

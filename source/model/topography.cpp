@@ -7,6 +7,10 @@ Topography::Topography(unsigned char seed, float scale, bool type, int size, int
     seed(seed), size(size), amplitude(500), scale(scale),
     spacing(20.0f), type(type), mesh(nullptr) {}
 
+Topography::~Topography() {
+    delete mesh;
+}
+
 std::vector<Vertex> Topography::generateVertices() {
     std::vector<Vertex> vertices;
     float minY = FLT_MAX;

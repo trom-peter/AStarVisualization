@@ -2,14 +2,14 @@
 #include <algorithm>
 #include "window.h"
 #include "opengl/framebuffer.h"
-#include "a_star/state_grid.h"
+#include "model/state_grid.h"
 #include "configurations/environment_configuration.h"
 #include "configurations/playback_configuration.h"
 #include "configurations/stategrid_configuration.h"
 #include "configurations/problem_configuration.h"
 #include "seed_generator.h"
-#include "a_star/a_star_search.h"
-#include "a_star/node.h"
+#include "model/a_star_search.h"
+#include "model/node.h"
 
 GUI::GUI() : font(nullptr) {}
 
@@ -52,17 +52,17 @@ void GUI::startFrame() {
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplSDL2_NewFrame();
     ImGui::NewFrame();
+    ImGui::PushFont(font);
     ImGuiDockNodeFlags dockingFlags = ImGuiDockNodeFlags_NoResize | ImGuiDockNodeFlags_PassthruCentralNode;
     windowFlags = ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoMove;
     ImGui::DockSpaceOverViewport(dockingFlags);
-    ImGui::PushFont(font);
 }
 
 VisualizationState GUI::showUI_EnvironmentConfig(EnvironmentConfig& envConfig) {
     VisualizationState nextState = VisualizationState::ConfiguringSearchEnvironment;
 
     //Suchraum
-    ImGui::Begin("Suchraum", nullptr, windowFlags);
+    ImGui::Begin("Konfiguration des Suchraums", nullptr, windowFlags);
 
     char buffer[4];
     sprintf_s(buffer, "%d", envConfig.seed);
@@ -99,7 +99,8 @@ VisualizationState GUI::showUI_EnvironmentConfig(EnvironmentConfig& envConfig) {
 
     ImGui::Text(u8"Gittergröße");
     if (ImGui::InputInt("##graphsize", &envConfig.gridSize)) {
-        envConfig.gridSize = std::clamp(envConfig.gridSize, 2, 30);
+        envConfig.gridSize = std::clamp(envConfig.gridSize, 5, 30);
+        envConfig.updateStateSpacing();
     }
 
     ImGui::NewLine();
@@ -115,7 +116,7 @@ VisualizationState GUI::showUI_SearchProblemConfig(ProblemConfig& problemConfig,
     VisualizationState nextState = VisualizationState::ConfiguringSearchProblem;
 
     // Suchproblem
-    ImGui::Begin("Suchproblem", nullptr, windowFlags);
+    ImGui::Begin("Konfiguration des Suchproblems", nullptr, windowFlags);
     ImGui::Text("Startzustand"); ImGui::SameLine(125); ImGui::Text("Zielzustand");
     ImGui::NewLine();
 

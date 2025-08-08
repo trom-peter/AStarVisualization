@@ -155,11 +155,11 @@
     <ClCompile Include="libs\imgui\imgui_impl_sdl2.cpp" />
     <ClCompile Include="libs\imgui\imgui_tables.cpp" />
     <ClCompile Include="libs\imgui\imgui_widgets.cpp" />
-    <ClCompile Include="source\a_star\a_star_search.cpp" />
-    <ClCompile Include="source\a_star\graph.cpp" />
-    <ClCompile Include="source\a_star\node.cpp" />
-    <ClCompile Include="source\a_star\search_environment.cpp" />
-    <ClCompile Include="source\a_star\search_problem.cpp" />
+    <ClCompile Include="source\model\a_star_search.cpp" />
+    <ClCompile Include="source\model\graph.cpp" />
+    <ClCompile Include="source\model\node.cpp" />
+    <ClCompile Include="source\model\search_environment.cpp" />
+    <ClCompile Include="source\model\search_problem.cpp" />
     <ClCompile Include="source\configurations\environment_configuration.cpp" />
     <ClCompile Include="source\configurations\playback_configuration.cpp" />
     <ClCompile Include="source\configurations\problem_configuration.cpp" />
@@ -167,26 +167,26 @@
     <ClCompile Include="source\opengl\base_renderer.cpp" />
     <ClCompile Include="source\opengl\camera.cpp" />
     <ClCompile Include="source\visualization\gui.cpp" />
-    <ClCompile Include="source\a_star\heuristic.cpp" />
+    <ClCompile Include="source\model\heuristic.cpp" />
     <ClCompile Include="source\main.cpp" />
     <ClCompile Include="source\opengl\mesh.cpp" />
     <ClCompile Include="source\opengl\shader.cpp" />
-    <ClCompile Include="source\shape.cpp" />
+    <ClCompile Include="source\model\shape.cpp" />
     <ClCompile Include="source\opengl\shape_renderer.cpp" />
-    <ClCompile Include="source\sphere.cpp" />
-    <ClCompile Include="source\topography.cpp" />
+    <ClCompile Include="source\model\sphere.cpp" />
+    <ClCompile Include="source\model\topography.cpp" />
     <ClCompile Include="source\opengl\topography_renderer.cpp" />
     <ClCompile Include="source\opengl\vertex_array.cpp" />
     <ClCompile Include="source\window.cpp" />
     <ClCompile Include="source\visualization\visualization.cpp" />
-    <ClCompile Include="source\a_star\state_grid.cpp" />
+    <ClCompile Include="source\model\state_grid.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\a_star\a_star_search.h" />
-    <ClInclude Include="include\a_star\graph.h" />
-    <ClInclude Include="include\a_star\node.h" />
-    <ClInclude Include="include\a_star\search_problem.h" />
-    <ClInclude Include="include\a_star\state.h" />
+    <ClInclude Include="include\model\a_star_search.h" />
+    <ClInclude Include="include\model\graph.h" />
+    <ClInclude Include="include\model\node.h" />
+    <ClInclude Include="include\model\search_problem.h" />
+    <ClInclude Include="include\model\state.h" />
     <ClInclude Include="include\configurations\playback_configuration.h" />
     <ClInclude Include="include\configurations\problem_configuration.h" />
     <ClInclude Include="include\configurations\stategrid_configuration.h" />
@@ -194,7 +194,7 @@
     <ClInclude Include="include\opengl\camera.h" />
     <ClInclude Include="include\opengl\framebuffer.h" />
     <ClInclude Include="include\visualization\gui.h" />
-    <ClInclude Include="include\a_star\heuristic.h" />
+    <ClInclude Include="include\model\heuristic.h" />
     <ClInclude Include="include\opengl\index_buffer.h" />
     <ClInclude Include="include\opengl\mesh.h" />
     <ClInclude Include="include\configurations\environment_configuration.h" />
@@ -510,8 +510,8 @@
     <ClInclude Include="libs\imgui\imstb_truetype.h" />
     <ClInclude Include="libs\stb_perlin.h" />
     <ClInclude Include="include\visualization\visualization.h" />
-    <ClInclude Include="include\a_star\state_grid.h" />
-    <ClInclude Include="include\a_star\search_environment.h" />
+    <ClInclude Include="include\model\state_grid.h" />
+    <ClInclude Include="include\model\search_environment.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="imgui.ini" />

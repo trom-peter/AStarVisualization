@@ -1,5 +1,5 @@
 #include "visualization/visualization.h"
-#include "a_star/state.h"
+#include "model/state.h"
 #include "sphere.h"
 #include "opengl/camera.h"
 
@@ -39,6 +39,7 @@ bool Visualization::init() {
 	camera->rotate(glm::vec2(-90.0f, 90.0f));
 	step = 0;
 	running = true;
+	return true;
 }
 
 void Visualization::run() {
@@ -227,6 +228,7 @@ void Visualization::inFinished() {
 
 void Visualization::finishedToEnvironment() {
 	environment->resetGrid(environment->stateGrid.gridSize);
+	environment->stateGrid.defaultVisible = true;
 	config_Problem.init();
 	config_Playback.step = 0;
 	config_Playback.maxSteps = 0;

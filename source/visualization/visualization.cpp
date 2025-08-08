@@ -23,7 +23,7 @@ bool Visualization::init() {
 	environment = new SearchEnvironment(config_Environment, config_Stategrid);
 	problem = new SearchProblem(*environment, config_Problem);
 	aStar = new AStarSearch(*problem, config_Problem, &environment->topography);
-	topoRenderer = new TopographyRenderer(config_Environment.topographyAmplitude);
+	topoRenderer = new TopographyRenderer(environment->topography);
 	shapeRenderer = new ShapeRenderer();
 	topoRenderer->setupUniforms();
 	topoRenderer->setClearColor(0.1f, 0.1f, 0.1f);
@@ -91,7 +91,7 @@ void Visualization::run() {
 		//draw topography
 		topoRenderer->clear();
 		topoRenderer->updateUniforms(camera);
-		topoRenderer->draw(&environment->topography);
+		topoRenderer->draw();
 
 		//draw stategrid
 		for (std::pair<const State, Sphere*> kv : environment->stateGrid.grid) {
@@ -148,6 +148,8 @@ void Visualization::inEnvironment() {
 			config_Environment.topographyType);
 
 		environment->resetGrid(config_Environment.gridSize);
+
+		topoRenderer->setTopography(environment->topography);
 	}
 
 	if (config_Environment.gridSize != environment->stateGrid.gridSize) {

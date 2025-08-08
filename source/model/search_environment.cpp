@@ -10,7 +10,7 @@ SearchEnvironment::SearchEnvironment(EnvironmentConfig& envConfig, StategridConf
 	graph(Graph(envConfig.gridSize, envConfig.topographySize)),
 	stateGrid(Stategrid(envConfig.gridSize, stateConfig))
 {
-	topography.generate();
+	topography.setMinMaxHeight();
 	graph.init();
 	graph.setTopography(&topography);
 	stateGrid.initGrid(&topography);
@@ -26,5 +26,5 @@ void SearchEnvironment::resetTopography(unsigned char seed, float scale, bool ty
 	topography.setSeed(seed);
 	topography.setType(type);
 	topography.setScale(scale);
-	topography.generate();
+	topography.setMinMaxHeight();
 }

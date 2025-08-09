@@ -1,11 +1,12 @@
-#include "topography.h"
+#include "model/topography.h"
+#include <iostream>
 
 #define STB_PERLIN_IMPLEMENTATION
 #include "stb_perlin.h"
 
 Topography::Topography(unsigned char seed, float scale, int type, int size, int amplitude) :
     seed(seed), size(size), amplitude(500), scale(scale),
-    spacing(20.0f), type(type) 
+    spacing(50.0f), type(type) 
 {
     setMinMaxHeight();
 }
@@ -83,4 +84,8 @@ int Topography::getAmplitude() {
 
 void Topography::setScale(float scale) {
     this->scale = scale;
+}
+
+float Topography::getSpacing() {
+    return spacing;
 }

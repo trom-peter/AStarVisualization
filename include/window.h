@@ -3,7 +3,7 @@
 
 #include <iostream>
 #include <SDL.h>
-#include "visualization/gui.h"
+#include "gui.h"
 
 class InputHandler;
 class GUI;

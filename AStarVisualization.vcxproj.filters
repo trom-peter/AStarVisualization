@@ -48,7 +48,7 @@
     <ClCompile Include="source\opengl\camera.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="source\visualization\gui.cpp">
+    <ClCompile Include="source\gui.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="source\main.cpp">
@@ -60,13 +60,13 @@
     <ClCompile Include="source\opengl\shader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="source\model\shape.cpp">
+    <ClCompile Include="source\opengl\shape.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="source\opengl\shape_renderer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="source\model\sphere.cpp">
+    <ClCompile Include="source\opengl\sphere.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="source\model\topography.cpp">
@@ -84,7 +84,7 @@
     <ClCompile Include="source\model\heuristic.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="source\visualization\visualization.cpp">
+    <ClCompile Include="source\visualization.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="source\model\state_grid.cpp">
@@ -140,7 +140,7 @@
     <ClInclude Include="include\opengl\framebuffer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\visualization\gui.h">
+    <ClInclude Include="include\gui.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\opengl\index_buffer.h">
@@ -152,16 +152,16 @@
     <ClInclude Include="include\opengl\shader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\shape.h">
+    <ClInclude Include="include\opengl\shape.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\opengl\shape_renderer.h">
+    <ClInclude Include="include\opengl\stategrid_renderer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\sphere.h">
+    <ClInclude Include="include\opengl\sphere.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\topography.h">
+    <ClInclude Include="include\model\topography.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\opengl\topography_renderer.h">
@@ -1082,13 +1082,13 @@
     <ClInclude Include="include\seed_generator.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\visualization\visualization_state.h">
+    <ClInclude Include="include\visualization_state.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\model\heuristic.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\visualization\visualization.h">
+    <ClInclude Include="include\visualization.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\model\state_grid.h">

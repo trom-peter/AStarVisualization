@@ -13,10 +13,11 @@ void Graph::reset(int nodes, int size) {
 	this->size = size;
 	spacing = size / (nodes - 1);
 	int totalNodes = n * n;
+	adjMatrix.clear();
 	adjMatrix.resize(totalNodes, std::vector<int>(totalNodes, 0));
 }
 
-//add initial grid edges
+//add grid edges
 void Graph::init() {
 	for (int z = 0; z <= size; z += spacing) {
 		for (int x = 0; x <= size; x += spacing) {

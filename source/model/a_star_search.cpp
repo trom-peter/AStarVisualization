@@ -4,7 +4,7 @@
 #include <unordered_map>
 #include <set>
 #include <functional>
-#include "topography.h"
+#include "model/topography.h"
 #include "configurations/problem_configuration.h"
 
 AStarSearch::AStarSearch(SearchProblem& p, ProblemConfig& config, Topography* topo) :

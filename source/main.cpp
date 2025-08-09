@@ -1,5 +1,5 @@
 #include <iostream>
-#include "visualization/visualization.h";
+#include "visualization.h";
 
 #pragma comment(lib, "SDL2.lib")
 #pragma comment(lib, "glew32s.lib")

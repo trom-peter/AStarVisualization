@@ -1,4 +1,4 @@
-#include "visualization/gui.h"
+#include "gui.h"
 #include <algorithm>
 #include "window.h"
 #include "opengl/framebuffer.h"

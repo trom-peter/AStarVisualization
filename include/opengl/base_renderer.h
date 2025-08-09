@@ -16,13 +16,9 @@ public:
 
     static bool init();
 
-    void clear();
+    static void clear();
 
-    void setClearColor(GLclampf r, GLclampf g, GLclampf b);
-
-    virtual void setupUniforms() = 0;
-
-    virtual void updateUniforms(Camera* camera, glm::mat4 model = glm::mat4(1.0f)) = 0;
+    static void setClearColor(GLclampf r, GLclampf g, GLclampf b);
 
 protected:
 	std::unique_ptr<Shader> shader;
@@ -30,5 +26,4 @@ protected:
 
 private:
     static void setupGLDebugCallback();
-
 };

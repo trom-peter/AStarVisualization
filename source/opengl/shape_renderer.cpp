@@ -1,8 +1,8 @@
-#include "opengl/shape_renderer.h"
-#include "shape.h"
+#include "opengl/stategrid_renderer.h"
+#include "opengl/shape.h"
 #include "opengl/camera.h"
 
-ShapeRenderer::ShapeRenderer() : color(glm::vec3(0.0f)), BaseRenderer() {
+StategridRenderer::StategridRenderer(Stategrid& stategrid) : stategrid(stategrid), BaseRenderer() {
     shader = std::unique_ptr<Shader>(new Shader("shaders/3dshape.vert", "shaders/3dshape.frag"));
     shader->bind();
 
@@ -11,42 +11,51 @@ ShapeRenderer::ShapeRenderer() : color(glm::vec3(0.0f)), BaseRenderer() {
     vao->setupVertexLayout();
 }
 
-void ShapeRenderer::draw(Shape* shape) {
-    vao->addVertexBuffer(*shape->mesh->vertexBuffer);
-    shader->bind();
-    shape->mesh->vertexBuffer->bind();
-    shape->mesh->indexBuffer->bind();
-    glDrawElements(GL_TRIANGLES, shape->mesh->numIndices, GL_UNSIGNED_INT, 0);
-    shape->mesh->vertexBuffer->unbind();
-    shape->mesh->indexBuffer->unbind();
-    shader->unbind();
-    vao->unbind();
+void StategridRenderer::setStategrid(Stategrid& stategrid) {
+    this->stategrid = stategrid;
 }
 
-void ShapeRenderer::setupUniforms() {
-    shader->bind();
-    shader->setUniform4fv("u_material.ambient", 1, glm::vec4(0.25, 0.25, 0.28, 1.0));
-    shader->setUniform4fv("u_material.diffuse", 1, glm::vec4(1.3, 1.3, 1.0, 1.0));
-    shader->setUniform4fv("u_material.specular", 1, glm::vec4(0.4, 0.4, 0.4, 1.0));
-    shader->setUniform1f("u_material.shininess", 500);
+void StategridRenderer::draw() {
+    if (stategrid.grid.size() == 0) {
+        return;
+    }
+
+    for (std::pair<const State, glm::vec3>& kv : stategrid.grid) {
+        glm::vec3 stateColor = kv.second;
+
+        if (!stategrid.isVisible(stateColor)) // only draw visible states
+            continue;
+
+        stateSphere.setColor(stateColor);
+        stateSphere.setPosition(glm::vec3(kv.first.x, kv.first.y + 40.0f, kv.first.z));
+        stateSphere.setScale(glm::vec3(1000.0f / stategrid.gridSize));
+
+        updateUniforms(stateSphere.model, stateSphere.color);
+
+        vao->addVertexBuffer(*stateSphere.mesh->vertexBuffer);
+        shader->bind();
+        stateSphere.mesh->vertexBuffer->bind();
+        stateSphere.mesh->indexBuffer->bind();
+        glDrawElements(GL_TRIANGLES, stateSphere.mesh->numIndices, GL_UNSIGNED_INT, 0);
+        stateSphere.mesh->vertexBuffer->unbind();
+        stateSphere.mesh->indexBuffer->unbind();
+        shader->unbind();
+        vao->unbind();
+    }
 }
 
-void ShapeRenderer::updateUniforms(Camera* camera, glm::mat4 model) {
+void StategridRenderer::setupUniforms(Camera* camera) {
     shader->bind();
 
     glm::mat4 view = camera->getView();
     glm::mat4 proj = camera->getProj();
 
-    shader->setUniform3f("u_color", color.x, color.y, color.z);
-    shader->setUniformMatrix4fv("u_model", 1, GL_FALSE, model);
     shader->setUniformMatrix4fv("u_view", 1, GL_FALSE, view);
     shader->setUniformMatrix4fv("u_projection", 1, GL_FALSE, proj);
 }
 
-glm::vec3 ShapeRenderer::getColor() {
-    return color;
-}
-
-void ShapeRenderer::setColor(glm::vec3 color) {
-    this->color = color;
+void StategridRenderer::updateUniforms(glm::mat4 model, glm::vec3 color) {
+    shader->bind();
+    shader->setUniform3f("u_color", color.x, color.y, color.z);
+    shader->setUniformMatrix4fv("u_model", 1, GL_FALSE, model);
 }

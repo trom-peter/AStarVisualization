@@ -1,7 +1,7 @@
 #pragma once
 #include "opengl/base_renderer.h"
 #include "opengl/mesh.h"
-#include "topography.h"
+#include "model/topography.h"
 
 class Topography;
 class Camera;
@@ -13,8 +13,8 @@ public:
 
     void setTopography(Topography& topography);
     void draw();
-    void setupUniforms() override;
-    void updateUniforms(Camera* camera, glm::mat4 model = glm::mat4(1.0f)) override;
+    void setupUniforms(Camera* camera);
+    void updateUniforms(Camera* camera, glm::mat4 model = glm::mat4(1.0f));
 
 private:
     std::vector<Vertex> generateVertices();

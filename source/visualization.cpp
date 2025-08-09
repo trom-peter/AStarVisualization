@@ -1,6 +1,6 @@
-#include "visualization/visualization.h"
+#include "visualization.h"
 #include "model/state.h"
-#include "sphere.h"
+#include "opengl/sphere.h"
 #include "opengl/camera.h"
 
 Visualization::Visualization() : window("A* Visualisierung") {}
@@ -14,20 +14,22 @@ bool Visualization::init() {
 		return false;
 	}
 
+	BaseRenderer::setClearColor(0.1f, 0.1f, 0.1f);
+
 	config_Stategrid.init();
 	config_Environment.init();
 	config_Problem.init();
 	config_Playback.init();
 
 	gui.init(window);
+
 	environment = new SearchEnvironment(config_Environment, config_Stategrid);
 	problem = new SearchProblem(*environment, config_Problem);
 	aStar = new AStarSearch(*problem, config_Problem, &environment->topography);
+
 	topoRenderer = new TopographyRenderer(environment->topography);
-	shapeRenderer = new ShapeRenderer();
-	topoRenderer->setupUniforms();
-	topoRenderer->setClearColor(0.1f, 0.1f, 0.1f);
-	shapeRenderer->setupUniforms();
+	stategridRenderer = new StategridRenderer(environment->stateGrid);
+
 	fb = new Framebuffer(window.getWidth() , window.getHeight());
 	vao = new VertexArray();
 	camera = new Camera(glm::radians(90.0f), window.getWidth(), window.getHeight(), 10.0f, 20000.0f);
@@ -35,10 +37,14 @@ bool Visualization::init() {
 		environment->topography.getSize() / 2,
 		10000.0f, 
 		environment->topography.getSize() / 2));
-
 	camera->rotate(glm::vec2(-90.0f, 90.0f));
+
+	topoRenderer->setupUniforms(camera);
+	stategridRenderer->setupUniforms(camera);
+
 	step = 0;
 	running = true;
+
 	return true;
 }
 
@@ -88,24 +94,14 @@ void Visualization::run() {
 		glViewport(0, 0, (int)fb->width, (int)fb->height);
 		camera->resizeProj(fb->width, fb->height);
 
+		BaseRenderer::clear();
+
 		//draw topography
-		topoRenderer->clear();
 		topoRenderer->updateUniforms(camera);
 		topoRenderer->draw();
 
 		//draw stategrid
-		for (std::pair<const State, Sphere*> kv : environment->stateGrid.grid) {
-			glm::vec3 stateColor = kv.second->color;
-
-			if (!environment->stateGrid.isVisible(stateColor)) // only draw visible states
-				continue;
-
-			if (shapeRenderer->getColor() != stateColor)
-				shapeRenderer->setColor(stateColor);
-
-			shapeRenderer->updateUniforms(camera, kv.second->model);
-			shapeRenderer->draw(kv.second);
-		}
+		stategridRenderer->draw();
 
 		fb->unbind();
 
@@ -128,7 +124,7 @@ int Visualization::quit() {
 	delete environment;
 	delete problem;
 	delete aStar;
-	delete shapeRenderer;
+	delete stategridRenderer;
 	delete topoRenderer;
 	delete fb;
 	delete vao;
@@ -158,7 +154,7 @@ void Visualization::inEnvironment() {
 }
 
 void Visualization::environmentToProblem() {
-	environment->graph.reset(config_Environment.gridSize, config_Environment.topographySize);
+	environment->graph.reset(environment->stateGrid.gridSize, environment->topography.getSize());
 	environment->graph.setTopography(&environment->topography);
 	environment->graph.init();
 	problem->initial = State(0, environment->topography.getY(0, 0), 0);
@@ -169,18 +165,18 @@ void Visualization::environmentToProblem() {
 
 void Visualization::inProblem() {
 	if (config_Problem.initial != problem->initial.getXZ()) { //initial state updated
-		environment->stateGrid.grid[problem->initial]->color = config_Stategrid.defaultColor;
+		environment->stateGrid.grid[problem->initial] = config_Stategrid.defaultColor;
 		problem->initial.y = environment->topography.getY(config_Problem.initial.x, config_Problem.initial.y);
 		problem->initial.setXZ(config_Problem.initial);
 	}
 	if (config_Problem.goal != problem->goal.getXZ()) { //goal state updated
-		environment->stateGrid.grid[problem->goal]->color = config_Stategrid.defaultColor;
+		environment->stateGrid.grid[problem->goal] = config_Stategrid.defaultColor;
 		problem->goal.y = environment->topography.getY(config_Problem.goal.x, config_Problem.goal.y);
 		problem->goal.setXZ(config_Problem.goal);
 	}
 
-	environment->stateGrid.grid[problem->initial]->color = config_Stategrid.initialStateColor;
-	environment->stateGrid.grid[problem->goal]->color = config_Stategrid.goalStateColor;
+	environment->stateGrid.grid[problem->initial] = config_Stategrid.initialStateColor;
+	environment->stateGrid.grid[problem->goal] = config_Stategrid.goalStateColor;
 
 	if (config_Problem.heuristic != aStar->getHeuristic().heuristicId)
 		aStar->setHeuristic(config_Problem.heuristic);

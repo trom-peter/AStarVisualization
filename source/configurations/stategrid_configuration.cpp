@@ -12,3 +12,4 @@ void StategridConfig::init() {
 	frontierVisible = true;
 	reachedVisible = true;
 }
+

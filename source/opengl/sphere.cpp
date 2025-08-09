@@ -1,4 +1,4 @@
-#include "sphere.h"
+#include "opengl/sphere.h"
 
 Sphere::Sphere(float radius, int sectorCount, int stackCount, glm::vec3 position, glm::vec3 scale, glm::vec3 color) : Shape(position, scale, color) {
     const int MIN_SECTOR_COUNT = 2;

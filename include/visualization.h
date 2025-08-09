@@ -1,18 +1,18 @@
 #pragma once
 #include "opengl/base_renderer.h"
 #include "opengl/topography_renderer.h"
-#include "opengl/shape_renderer.h"
+#include "opengl/stategrid_renderer.h"
 #include "opengl/framebuffer.h"
 #include "model/state_grid.h"
 #include "model/search_problem.h"
 #include "model/search_environment.h"
-#include "visualization/gui.h"
+#include "model/a_star_search.h"
 #include "configurations/environment_configuration.h"
 #include "configurations/playback_configuration.h"
 #include "configurations/stategrid_configuration.h"
 #include "configurations/problem_configuration.h"
+#include "gui.h"
 #include "window.h"
-#include "model/a_star_search.h"
 
 class Visualization {
 public:
@@ -40,7 +40,7 @@ private:
     GUI gui;
     Window window;
     TopographyRenderer* topoRenderer;
-    ShapeRenderer* shapeRenderer;
+    StategridRenderer* stategridRenderer;
     Framebuffer* fb; // framebuffer where visualization (not gui) is drawn to
     VertexArray* vao;
     Camera* camera;

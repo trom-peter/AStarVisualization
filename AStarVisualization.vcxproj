@@ -166,19 +166,19 @@
     <ClCompile Include="source\configurations\stategrid_configuration.cpp" />
     <ClCompile Include="source\opengl\base_renderer.cpp" />
     <ClCompile Include="source\opengl\camera.cpp" />
-    <ClCompile Include="source\visualization\gui.cpp" />
+    <ClCompile Include="source\gui.cpp" />
     <ClCompile Include="source\model\heuristic.cpp" />
     <ClCompile Include="source\main.cpp" />
     <ClCompile Include="source\opengl\mesh.cpp" />
     <ClCompile Include="source\opengl\shader.cpp" />
-    <ClCompile Include="source\model\shape.cpp" />
+    <ClCompile Include="source\opengl\shape.cpp" />
     <ClCompile Include="source\opengl\shape_renderer.cpp" />
-    <ClCompile Include="source\model\sphere.cpp" />
+    <ClCompile Include="source\opengl\sphere.cpp" />
     <ClCompile Include="source\model\topography.cpp" />
     <ClCompile Include="source\opengl\topography_renderer.cpp" />
     <ClCompile Include="source\opengl\vertex_array.cpp" />
     <ClCompile Include="source\window.cpp" />
-    <ClCompile Include="source\visualization\visualization.cpp" />
+    <ClCompile Include="source\visualization.cpp" />
     <ClCompile Include="source\model\state_grid.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -193,23 +193,23 @@
     <ClInclude Include="include\opengl\base_renderer.h" />
     <ClInclude Include="include\opengl\camera.h" />
     <ClInclude Include="include\opengl\framebuffer.h" />
-    <ClInclude Include="include\visualization\gui.h" />
+    <ClInclude Include="include\gui.h" />
     <ClInclude Include="include\model\heuristic.h" />
     <ClInclude Include="include\opengl\index_buffer.h" />
     <ClInclude Include="include\opengl\mesh.h" />
     <ClInclude Include="include\configurations\environment_configuration.h" />
     <ClInclude Include="include\seed_generator.h" />
     <ClInclude Include="include\opengl\shader.h" />
-    <ClInclude Include="include\shape.h" />
-    <ClInclude Include="include\opengl\shape_renderer.h" />
-    <ClInclude Include="include\sphere.h" />
-    <ClInclude Include="include\topography.h" />
+    <ClInclude Include="include\opengl\shape.h" />
+    <ClInclude Include="include\opengl\stategrid_renderer.h" />
+    <ClInclude Include="include\opengl\sphere.h" />
+    <ClInclude Include="include\model\topography.h" />
     <ClInclude Include="include\opengl\topography_renderer.h" />
     <ClInclude Include="include\opengl\vertex.h" />
     <ClInclude Include="include\opengl\vertex_array.h" />
     <ClInclude Include="include\opengl\vertex_buffer.h" />
     <ClInclude Include="include\opengl\vertex_buffer_layout.h" />
-    <ClInclude Include="include\visualization\visualization_state.h" />
+    <ClInclude Include="include\visualization_state.h" />
     <ClInclude Include="include\window.h" />
     <ClInclude Include="libs\glm\common.hpp" />
     <ClInclude Include="libs\glm\detail\compute_common.hpp" />
@@ -509,7 +509,7 @@
     <ClInclude Include="libs\imgui\imstb_textedit.h" />
     <ClInclude Include="libs\imgui\imstb_truetype.h" />
     <ClInclude Include="libs\stb_perlin.h" />
-    <ClInclude Include="include\visualization\visualization.h" />
+    <ClInclude Include="include\visualization.h" />
     <ClInclude Include="include\model\state_grid.h" />
     <ClInclude Include="include\model\search_environment.h" />
   </ItemGroup>

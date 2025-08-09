@@ -1,15 +1,6 @@
 #pragma once
-
 #include <vector>
 #include <limits>
-#include "opengl/mesh.h"
-#include "opengl/vertex.h"
-#include "opengl/shader.h"
-#include "opengl/vertex_array.h"
-
-struct Shader;
-struct Mesh;
-class VertexArray;
 
 class Topography {
 
@@ -22,14 +13,21 @@ public:
 	float getMaxY();
 	float getMinY();
 	int getY(int x, int z);
+
 	unsigned char getSeed();
+	void setSeed(unsigned char seed);
+
 	int getType();
+	void setType(int type);
+
 	float getScale();
+	void setScale(float scale);
+
 	int getSize();
 	int getAmplitude();
-	void setSeed(unsigned char seed);
-	void setType(int type);
-	void setScale(float scale);
+	float getSpacing();
+
+private:
 	int size;
 	int amplitude;
 	float scale;
@@ -39,7 +37,4 @@ public:
 
 	float minY; //non normalized minimum and maximum height of the topography
 	float maxY;
-
-private:
-
 };

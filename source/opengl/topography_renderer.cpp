@@ -1,5 +1,5 @@
 #include "opengl/topography_renderer.h"
-#include "topography.h"
+#include "model/topography.h"
 #include "opengl/camera.h"
 
 TopographyRenderer::TopographyRenderer(Topography& topography) :
@@ -40,25 +40,24 @@ void TopographyRenderer::draw() {
     vao->unbind();
 }
 
-void TopographyRenderer::setupUniforms() {
+void TopographyRenderer::setupUniforms(Camera* camera) {
     shader->bind();
-    shader->setUniform1f("u_amplitude", topography.amplitude);
+    glm::mat4 view = camera->getView();
+    glm::mat4 proj = camera->getProj();
+    shader->setUniformMatrix4fv("u_view", 1, GL_FALSE, view);
+    shader->setUniformMatrix4fv("u_projection", 1, GL_FALSE, proj);
+    shader->setUniform1f("u_amplitude", topography.getAmplitude());
 }
 
 void TopographyRenderer::updateUniforms(Camera* camera, glm::mat4 model) {
     shader->bind();
-    glm::mat4 view = camera->getView();
-    glm::mat4 proj = camera->getProj();
-
     shader->setUniformMatrix4fv("u_model", 1, GL_FALSE, model);
-    shader->setUniformMatrix4fv("u_view", 1, GL_FALSE, view);
-    shader->setUniformMatrix4fv("u_projection", 1, GL_FALSE, proj);
 }
 
 std::vector<Vertex> TopographyRenderer::generateVertices() {
     std::vector<Vertex> vertices;
-    for (double z = 0; z < topography.size; z += topography.spacing) {
-        for (double x = 0; x < topography.size; x += topography.spacing) {
+    for (double z = 0; z < topography.getSize(); z += topography.getSpacing()) {
+        for (double x = 0; x < topography.getSize(); x += topography.getSpacing()) {
             Vertex v;
             float y = topography.getY(x, z);
             v.position = glm::vec3(x, y, z);
@@ -71,8 +70,8 @@ std::vector<Vertex> TopographyRenderer::generateVertices() {
 
 std::vector<uint32_t> TopographyRenderer::generateIndices() {
     std::vector<uint32_t> indices;
-    int lastX = topography.size / topography.spacing - 1;
-    int lastZ = topography.size / topography.spacing - 1;
+    int lastX = topography.getSize() / topography.getSpacing() - 1;
+    int lastZ = topography.getSize() / topography.getSpacing() - 1;
     for (int z = 0; z < lastZ; z++) {
         for (int x = 0; x < lastX; x++) {
             int topLeft = (z + 1) * (lastX + 1) + x;

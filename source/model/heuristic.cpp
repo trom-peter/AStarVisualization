@@ -1,6 +1,6 @@
 #include "model/heuristic.h"
 #include "model/state.h"
-#include "topography.h"
+#include "model/topography.h"
 
 Heuristic::Heuristic(Topography* topo, int heuristicId, float overestimateFactor) : 
     topo(topo), heuristicId(heuristicId), overestimateFactor(overestimateFactor) {}

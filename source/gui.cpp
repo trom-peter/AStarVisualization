@@ -38,14 +38,16 @@ void GUI::init(Window& window) {
     font = io.Fonts->AddFontFromFileTTF("fonts/JetbrainsMonoRegular.ttf", 18.0f);
 }
 
-void GUI::processWindowEvents(bool& running) {
+bool GUI::isWindowExited() {
+    bool exited = false;
     SDL_Event event;
     while (SDL_PollEvent(&event)) {
         ImGui_ImplSDL2_ProcessEvent(&event);
         if (event.type == SDL_QUIT) {
-            running = false;
+            exited = true;
         }
     }
+    return exited;
 }
 
 void GUI::startFrame() {

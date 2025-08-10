@@ -16,7 +16,7 @@ class GUI {
 public:
 	GUI();
 	void init(Window& window);
-	void processWindowEvents(bool& running);
+	bool isWindowExited();
 	void startFrame();
 	void render();
 	ImVec2 getViewportSize();

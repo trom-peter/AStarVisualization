@@ -43,15 +43,18 @@ bool Visualization::init() {
 	stategridRenderer->setupUniforms(camera);
 
 	step = 0;
-	running = true;
+
+	state = VisualizationState::ConfiguringSearchEnvironment;
 
 	return true;
 }
 
 void Visualization::run() {
-	while (running) {
+	while (true) {
 		gui.startFrame();
-		gui.processWindowEvents(running);
+
+		if (gui.isWindowExited())
+			state = VisualizationState::Quit;
 
 		//draw gui and update visualization state
 		switch (state) {
@@ -84,11 +87,10 @@ void Visualization::run() {
 				else if (state == VisualizationState::ConfiguringSearchProblem)
 					finishedToProblem();
 				break;
-		}
 
-		environment->stateGrid.defaultVisible = config_Stategrid.defaultVisible;
-		environment->stateGrid.frontierVisible = config_Stategrid.frontierVisible;
-		environment->stateGrid.reachedVisible = config_Stategrid.reachedVisible;
+			case VisualizationState::Quit:
+				return;
+		}
 
 		fb->bind();
 		glViewport(0, 0, (int)fb->width, (int)fb->height);

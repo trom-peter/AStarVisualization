@@ -4,5 +4,6 @@ enum class VisualizationState {
 	ConfiguringSearchEnvironment,
 	ConfiguringSearchProblem,
 	Searching,
-	Finished
+	Finished,
+	Quit
 };

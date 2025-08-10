@@ -49,5 +49,4 @@ private:
     PlaybackConfig config_Playback;
     StategridConfig config_Stategrid;
     int step;
-    bool running;
 };

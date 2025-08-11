@@ -196,7 +196,7 @@ int Visualization::problemToSearching() {
 	}
 
 	config_Playback.step = 0;
-	config_Playback.maxSteps = aStar->allExpanded.size() - 1;
+	config_Playback.maxSteps = aStar->allExpanded.size();
 }
 
 void Visualization::inSearching() {

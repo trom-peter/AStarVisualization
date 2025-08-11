@@ -217,9 +217,9 @@ VisualizationState GUI::showUI_Searching(PlaybackConfig& playbackConfig) {
 
     ImGui::Begin("Suche", nullptr, windowFlags);
 
-    ImGui::Text("Schritte pro Sekunde");
+    ImGui::Text("Expansionen pro Sekunde");
 
-    if (ImGui::InputInt("##stepsPerSecond", &playbackConfig.searchRate, 1, 5)) {
+    if (ImGui::InputInt("##expansionsPerSecond", &playbackConfig.searchRate, 1, 5)) {
         playbackConfig.searchRate = std::clamp(playbackConfig.searchRate, 0, 60);
     }
 
@@ -236,15 +236,15 @@ VisualizationState GUI::showUI_Searching(PlaybackConfig& playbackConfig) {
     ImGui::NewLine();
 
     if (playbackConfig.searchPlaying) ImGui::BeginDisabled();
-    ImGui::Text("Schritt");
-    if (ImGui::InputInt("##step", &playbackConfig.step) || playbackConfig.searchPlaying) {
+    ImGui::Text("Expansion");
+    if (ImGui::InputInt("##expansion", &playbackConfig.step) || playbackConfig.searchPlaying) {
         playbackConfig.step = std::clamp(playbackConfig.step, 0, playbackConfig.maxSteps);
     }
     if (playbackConfig.searchPlaying) ImGui::EndDisabled();
 
     if (playbackConfig.step == playbackConfig.maxSteps) {
         playbackConfig.searchPlaying = false;
-        ImGui::OpenPopup("Pfad gefunden!"); //open a pop up when the search is finished (only the first time)
+        ImGui::OpenPopup("Pfad gefunden!"); //open a pop up when the search is finished
     }
 
     if (ImGui::BeginPopupModal("Pfad gefunden!")) {

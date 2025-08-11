@@ -172,7 +172,7 @@
     <ClCompile Include="source\opengl\mesh.cpp" />
     <ClCompile Include="source\opengl\shader.cpp" />
     <ClCompile Include="source\opengl\shape.cpp" />
-    <ClCompile Include="source\opengl\shape_renderer.cpp" />
+    <ClCompile Include="source\opengl\stategrid_renderer.cpp" />
     <ClCompile Include="source\opengl\sphere.cpp" />
     <ClCompile Include="source\model\topography.cpp" />
     <ClCompile Include="source\opengl\topography_renderer.cpp" />

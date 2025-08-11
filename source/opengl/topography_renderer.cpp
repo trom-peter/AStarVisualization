@@ -24,7 +24,7 @@ void TopographyRenderer::setTopography(Topography& topography) {
     topographyMesh = new Mesh(vertices, vertices.size(), indices, indices.size());
 }
 
-void TopographyRenderer::draw() {
+void TopographyRenderer::drawTopography() {
     if (topographyMesh == nullptr) {
         std::cerr << "ERROR: no topography available to render" << std::endl;
         return;
@@ -52,6 +52,12 @@ void TopographyRenderer::setupUniforms(Camera* camera) {
 void TopographyRenderer::updateUniforms(Camera* camera, glm::mat4 model) {
     shader->bind();
     shader->setUniformMatrix4fv("u_model", 1, GL_FALSE, model);
+    glm::mat4 view = camera->getView();
+    glm::mat4 proj = camera->getProj();
+
+    shader->setUniformMatrix4fv("u_model", 1, GL_FALSE, model);
+    shader->setUniformMatrix4fv("u_view", 1, GL_FALSE, view);
+    shader->setUniformMatrix4fv("u_projection", 1, GL_FALSE, proj);
 }
 
 std::vector<Vertex> TopographyRenderer::generateVertices() {

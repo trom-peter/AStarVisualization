@@ -12,7 +12,7 @@ public:
     TopographyRenderer(Topography& topography);
 
     void setTopography(Topography& topography);
-    void draw();
+    void drawTopography();
     void setupUniforms(Camera* camera);
     void updateUniforms(Camera* camera, glm::mat4 model = glm::mat4(1.0f));
 

@@ -15,7 +15,7 @@ void StategridRenderer::setStategrid(Stategrid& stategrid) {
     this->stategrid = stategrid;
 }
 
-void StategridRenderer::draw() {
+void StategridRenderer::drawStategrid(Camera* camera) {
     if (stategrid.grid.size() == 0) {
         return;
     }
@@ -30,7 +30,7 @@ void StategridRenderer::draw() {
         stateSphere.setPosition(glm::vec3(kv.first.x, kv.first.y + 40.0f, kv.first.z));
         stateSphere.setScale(glm::vec3(1000.0f / stategrid.gridSize));
 
-        updateUniforms(stateSphere.model, stateSphere.color);
+        updateUniforms(camera, stateSphere.model, stateSphere.color);
 
         vao->addVertexBuffer(*stateSphere.mesh->vertexBuffer);
         shader->bind();
@@ -54,8 +54,14 @@ void StategridRenderer::setupUniforms(Camera* camera) {
     shader->setUniformMatrix4fv("u_projection", 1, GL_FALSE, proj);
 }
 
-void StategridRenderer::updateUniforms(glm::mat4 model, glm::vec3 color) {
+void StategridRenderer::updateUniforms(Camera* camera, glm::mat4 model, glm::vec3 color) {
     shader->bind();
+    glm::mat4 proj = camera->getProj();
+    glm::mat4 view = camera->getView();
+
     shader->setUniform3f("u_color", color.x, color.y, color.z);
+
     shader->setUniformMatrix4fv("u_model", 1, GL_FALSE, model);
+    shader->setUniformMatrix4fv("u_view", 1, GL_FALSE, view);
+    shader->setUniformMatrix4fv("u_projection", 1, GL_FALSE, proj);
 }

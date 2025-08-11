@@ -100,10 +100,10 @@ void Visualization::run() {
 
 		//draw topography
 		topoRenderer->updateUniforms(camera);
-		topoRenderer->draw();
+		topoRenderer->drawTopography();
 
 		//draw stategrid
-		stategridRenderer->draw();
+		stategridRenderer->drawStategrid(camera);
 
 		fb->unbind();
 		glViewport(0, 0, window.getWidth(), window.getHeight());

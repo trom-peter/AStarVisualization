@@ -12,8 +12,8 @@ public:
 
     void setStategrid(Stategrid& stategrid);
     void setupUniforms(Camera* camera);
-    void updateUniforms(glm::mat4 model = glm::mat4(1.0f), glm::vec3 color = glm::vec3(0.0f));
-    void draw();
+    void updateUniforms(Camera* camera, glm::mat4 model = glm::mat4(1.0f), glm::vec3 color = glm::vec3(0.0f));
+    void drawStategrid(Camera* camera);
 
 private:
     Sphere stateSphere;

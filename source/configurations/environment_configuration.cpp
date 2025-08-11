@@ -4,9 +4,9 @@ void EnvironmentConfig::init() {
 	seed = 0;
 	topographyType = 0;
 	terrainScaling = 0.0001f;
-	gridSize = 15;
+	gridSize = 10;
 	topographySize = 7000;
-	topographyAmplitude = 500;
+	topographyAmplitude = 1000;
 	stateSpacing = topographySize / (gridSize - 1);
 }
 

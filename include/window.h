@@ -5,7 +5,6 @@
 #include <SDL.h>
 #include "gui.h"
 
-class InputHandler;
 class GUI;
 
 class Window {

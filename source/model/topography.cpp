@@ -19,9 +19,9 @@ void Topography::setMinMaxHeight() {
     for (double z = 0; z < size; z += spacing) {
         for (double x = 0; x < size; x += spacing) {
             float y;
-            if (type == 1) 
+            if (type == 0) 
                 y = stb_perlin_fbm_noise3_seed(x * scale, z * scale, 0.0f, 2.0f, 0.5f, 4, seed) * amplitude;
-            else 
+            else if (type == 1)
                 y = stb_perlin_ridge_noise3_seed(x * scale, z * scale, 0.0f, 2.0f, 0.5f, 1.0f, 4, seed) * amplitude;
             if (y < minY) minY = y;
             if (y > maxY) maxY = y;
@@ -36,9 +36,9 @@ int Topography::getY(int x, int z) {
     int y = 0;
 
     if (type == 0)
-        y = stb_perlin_ridge_noise3_seed(x * scale, z * scale, 0.0f, 2.0f, 0.5f, 1.0f, 4, seed) * amplitude;
-    else if (type == 1)
         y = stb_perlin_fbm_noise3_seed(x * scale, z * scale, 0.0f, 2.0f, 0.5f, 4, seed) * amplitude;
+    else if (type == 1)
+        y = stb_perlin_ridge_noise3_seed(x * scale, z * scale, 0.0f, 2.0f, 0.5f, 1.0f, 4, seed) * amplitude;
     else
         std::cerr << "ERROR: getY() on topography with invalid topography type" << std::endl;
 

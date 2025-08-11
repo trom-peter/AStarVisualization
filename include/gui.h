@@ -24,7 +24,7 @@ public:
 	VisualizationState showUI_EnvironmentConfig(EnvironmentConfig& envConfig);
 	VisualizationState showUI_SearchProblemConfig(ProblemConfig& problemConfig, EnvironmentConfig& envConfig);
 	VisualizationState showUI_Searching(PlaybackConfig& playbackConfig);
-	VisualizationState showUI_Finished(AStarSearch& aStar, EnvironmentConfig& envConfig);
+	VisualizationState showUI_Finished(AStarSearch& aStar);
 	void showUI_Viewport(Framebuffer* fb);
 	void showUI_Visibility(StategridConfig& gridConfig);
 

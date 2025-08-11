@@ -289,7 +289,7 @@ VisualizationState GUI::showUI_Finished(AStarSearch& aStar) {
     return nextState;
 }
 
-void GUI::showUI_Viewport(Framebuffer* fb) {
+void GUI::showUI_Viewport(FrameBuffer* fb) {
     // viewport
     ImGui::Begin("Visualisierung", nullptr, windowFlags);
     {

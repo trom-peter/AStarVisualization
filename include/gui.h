@@ -10,7 +10,7 @@ struct ProblemConfig;
 struct PlaybackConfig;
 class AStarSearch;
 class Window;
-struct Framebuffer;
+struct FrameBuffer;
 
 class GUI {
 public:
@@ -25,7 +25,7 @@ public:
 	VisualizationState showUI_SearchProblemConfig(ProblemConfig& problemConfig, EnvironmentConfig& envConfig);
 	VisualizationState showUI_Searching(PlaybackConfig& playbackConfig);
 	VisualizationState showUI_Finished(AStarSearch& aStar);
-	void showUI_Viewport(Framebuffer* fb);
+	void showUI_Viewport(FrameBuffer* fb);
 	void showUI_Visibility(StategridConfig& gridConfig);
 
 private:

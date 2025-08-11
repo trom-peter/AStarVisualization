@@ -41,7 +41,7 @@ private:
     Window window;
     TopographyRenderer* topoRenderer;
     StategridRenderer* stategridRenderer;
-    Framebuffer* fb; // framebuffer where visualization (not gui) is drawn to
+    FrameBuffer* fb; // framebuffer where visualization (not gui) is drawn to
     VertexArray* vao;
     Camera* camera;
     EnvironmentConfig config_Environment;

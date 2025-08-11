@@ -30,7 +30,7 @@ bool Visualization::init() {
 	topoRenderer = new TopographyRenderer(environment->topography);
 	stategridRenderer = new StategridRenderer(environment->stateGrid);
 
-	fb = new Framebuffer(window.getWidth() , window.getHeight());
+	fb = new FrameBuffer(window.getWidth() , window.getHeight());
 	vao = new VertexArray();
 	camera = new Camera(glm::radians(90.0f), window.getWidth(), window.getHeight(), 10.0f, 20000.0f);
 	camera->translate(glm::vec3(

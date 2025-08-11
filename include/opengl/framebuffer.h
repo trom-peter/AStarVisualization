@@ -2,8 +2,8 @@
 #include "opengl/base_renderer.h"
 #include <cstdint>
 
-struct Framebuffer {
-	Framebuffer(uint32_t width, uint32_t height) {
+struct FrameBuffer {
+	FrameBuffer(uint32_t width, uint32_t height) {
 		this->width = width;
 		this->height = height;
 
@@ -30,7 +30,7 @@ struct Framebuffer {
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	}
 
-	virtual ~Framebuffer() {
+	virtual ~FrameBuffer() {
 		glDeleteFramebuffers(1, &framebufferId);
 		glDeleteTextures(1, &colorTextureId);
 		glDeleteRenderbuffers(1, &renderbufferId);

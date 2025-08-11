@@ -4,13 +4,14 @@
 #include "model/node.h"
 
 struct SearchProblem;
+struct SearchEnvironment;
 struct ProblemConfig;
 struct Node;
 struct Heuristic;
 
 class AStarSearch {
 public:
-	AStarSearch(SearchProblem& p, ProblemConfig& config, Topography* topo);
+	AStarSearch(SearchProblem& problem, ProblemConfig& config, SearchEnvironment& environment);
 	~AStarSearch();
 
 	Node* search();

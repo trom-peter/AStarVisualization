@@ -25,7 +25,7 @@ bool Visualization::init() {
 
 	environment = new SearchEnvironment(config_Environment, config_Stategrid);
 	problem = new SearchProblem(*environment, config_Problem);
-	aStar = new AStarSearch(*problem, config_Problem, &environment->topography);
+	aStar = new AStarSearch(*problem, config_Problem, *environment);
 
 	topoRenderer = new TopographyRenderer(environment->topography);
 	stategridRenderer = new StategridRenderer(environment->stateGrid);
@@ -80,7 +80,7 @@ void Visualization::run() {
 				break;
 
 			case VisualizationState::Finished:
-				state = gui.showUI_Finished(*aStar, config_Environment);
+				state = gui.showUI_Finished(*aStar);
 				inFinished();
 				if (state == VisualizationState::ConfiguringSearchEnvironment)
 					finishedToEnvironment();
@@ -106,6 +106,7 @@ void Visualization::run() {
 		stategridRenderer->draw();
 
 		fb->unbind();
+		glViewport(0, 0, window.getWidth(), window.getHeight());
 
 		gui.showUI_Visibility(config_Stategrid);
 		environment->stateGrid.updateVisibility(config_Stategrid);
@@ -113,7 +114,7 @@ void Visualization::run() {
 		gui.showUI_Viewport(fb);
 		gui.render();
 
-		if (fb->width != gui.getViewportSize().x || fb->height != gui.getViewportSize().y) 
+		//if (fb->width != gui.getViewportSize().x || fb->height != gui.getViewportSize().y) 
 			fb->resize(gui.getViewportSize().x, gui.getViewportSize().y);
 
 		window.swapBuffers();

@@ -259,7 +259,7 @@ VisualizationState GUI::showUI_Searching(PlaybackConfig& playbackConfig) {
     return nextState;
 }
 
-VisualizationState GUI::showUI_Finished(AStarSearch& aStar, EnvironmentConfig& envConfig) {
+VisualizationState GUI::showUI_Finished(AStarSearch& aStar) {
     VisualizationState nextState = VisualizationState::Finished;
 
     ImGui::Begin("Statistik", nullptr, windowFlags);
@@ -284,9 +284,6 @@ VisualizationState GUI::showUI_Finished(AStarSearch& aStar, EnvironmentConfig& e
     if (ImGui::Button("Suchumgebung")) {
         nextState = VisualizationState::ConfiguringSearchEnvironment;
     }
-
-    ImGui::NewLine();
-    ImGui::LabelText(std::to_string(envConfig.seed).c_str(), u8"Seed");
 
     ImGui::End();
     return nextState;

@@ -9,7 +9,6 @@ struct State;
 struct Graph;
 
 struct SearchProblem {
-public:
 	SearchProblem(SearchEnvironment& environment, ProblemConfig problemConfig);
 
 	bool isGoal(State s);
@@ -19,7 +18,4 @@ public:
 	Graph& graph;
 	State initial;
 	State goal;
-
-private:
-	float travelTimeActionCost(State a, State b);
 };

@@ -185,6 +185,7 @@
     <ClInclude Include="include\model\a_star_search.h" />
     <ClInclude Include="include\model\graph.h" />
     <ClInclude Include="include\model\node.h" />
+    <ClInclude Include="include\model\performance_measure.h" />
     <ClInclude Include="include\model\search_problem.h" />
     <ClInclude Include="include\model\state.h" />
     <ClInclude Include="include\configurations\playback_configuration.h" />

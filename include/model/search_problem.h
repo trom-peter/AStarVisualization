@@ -3,13 +3,12 @@
 #include "model/state.h"
 
 struct SearchEnvironment;
-struct ProblemConfig;
 struct Node;
 struct State;
 struct Graph;
 
 struct SearchProblem {
-	SearchProblem(SearchEnvironment& environment, ProblemConfig problemConfig);
+	SearchProblem(SearchEnvironment& environment, glm::ivec2 initial, glm::ivec2 goal);
 
 	bool isGoal(State s);
 

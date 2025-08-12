@@ -14,18 +14,19 @@ Stategrid::Stategrid() :
     solutionStateColor(glm::vec3(0.0f)),
     defaultVisible(false),
     frontierVisible(false),
-    reachedVisible(false) {
-}
+    reachedVisible(false) {}
 
-Stategrid::Stategrid(int gridSize, StategridConfig& config) :
+Stategrid::Stategrid(
+    int gridSize, glm::vec3 defaultColor, glm::vec3 frontierColor, glm::vec3 reachedColor,
+    glm::vec3 initialStateColor, glm::vec3 goalStateColor, glm::vec3 solutionStateColor,
+    bool defaultVisible, bool frontierVisible, bool reachedVisible) :
     gridSize(gridSize),
-    defaultColor(config.defaultColor), frontierColor(config.frontierColor), reachedColor(config.reachedColor),
-    initialStateColor(config.initialStateColor), goalStateColor(config.goalStateColor),
-    solutionStateColor(config.solutionStateColor),
-    defaultVisible(config.defaultVisible),
-    frontierVisible(config.frontierVisible),
-    reachedVisible(config.reachedVisible) {
-}
+    defaultColor(defaultColor), frontierColor(frontierColor), reachedColor(reachedColor),
+    initialStateColor(initialStateColor), goalStateColor(goalStateColor),
+    solutionStateColor(solutionStateColor),
+    defaultVisible(defaultVisible),
+    frontierVisible(frontierVisible),
+    reachedVisible(reachedVisible) {}
 
 Stategrid::~Stategrid() {
     clearGrid();

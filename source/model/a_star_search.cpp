@@ -4,12 +4,11 @@
 #include <unordered_map>
 #include <set>
 #include <functional>
-#include "configurations/problem_configuration.h"
 #include "model/search_environment.h"
 
-AStarSearch::AStarSearch(SearchProblem& problem, ProblemConfig& config, SearchEnvironment& environment) :
+AStarSearch::AStarSearch(SearchProblem& problem, Heuristic heuristic, SearchEnvironment& environment) :
 	problem(problem), 
-	heuristic(Heuristic(&environment.topography, config.heuristic, config.overestimateFactor)), 
+	heuristic(heuristic),
 	solution(nullptr) {}
 
 AStarSearch::~AStarSearch() {

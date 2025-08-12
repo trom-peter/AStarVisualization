@@ -13,7 +13,9 @@ struct SearchProblem;
 class Stategrid {
 public:
 	Stategrid();
-	Stategrid(int gridSize, StategridConfig& config);
+	Stategrid(int gridSize, glm::vec3 defaultColor, glm::vec3 frontierColor, glm::vec3 reachedColor,
+		glm::vec3 initialStateColor, glm::vec3 goalStateColor, glm::vec3 solutionStateColor, 
+		bool defaultVisible, bool frontierVisible, bool reachedVisible);
 
 	~Stategrid();
 

@@ -4,17 +4,10 @@
 #include "model/performance_measure.h"
 #include "configurations/problem_configuration.h"
 
-SearchProblem::SearchProblem(SearchEnvironment& environment, ProblemConfig problemConfig) :
+SearchProblem::SearchProblem(SearchEnvironment& environment, glm::ivec2 initial, glm::ivec2 goal) :
 	graph(environment.graph),
-	initial(State(
-		problemConfig.initial.x,
-		environment.topography.getY(problemConfig.initial.x, problemConfig.initial.y),
-		problemConfig.initial.y)),
-	goal(State(
-		problemConfig.goal.x,
-		environment.topography.getY(problemConfig.goal.x, problemConfig.goal.y),
-		problemConfig.goal.y)) {
-}
+	initial(State(initial.x, environment.topography.getY(initial.x, initial.y), initial.y)),
+	goal(State(goal.x, environment.topography.getY(goal.x, goal.y), goal.y)) {}
 
 bool SearchProblem::isGoal(State s) {
 	return s == goal;

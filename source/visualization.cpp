@@ -23,9 +23,21 @@ bool Visualization::init() {
 
 	gui.init(window);
 
-	environment = new SearchEnvironment(config_Environment, config_Stategrid);
-	problem = new SearchProblem(*environment, config_Problem);
-	aStar = new AStarSearch(*problem, config_Problem, *environment);
+	environment = new SearchEnvironment(
+		config_Environment.seed, config_Environment.terrainScaling, 
+		config_Environment.topographyType, config_Environment.topographySize, 
+		config_Environment.topographyAmplitude, config_Environment.gridSize,
+		Stategrid(config_Environment.gridSize, 
+			config_Stategrid.defaultColor, config_Stategrid.frontierColor, config_Stategrid.reachedColor, 
+			config_Stategrid.initialStateColor, config_Stategrid.goalStateColor, config_Stategrid.solutionStateColor, 
+			config_Stategrid.defaultVisible, config_Stategrid.frontierVisible, config_Stategrid.reachedVisible));
+
+	problem = new SearchProblem(*environment, config_Problem.initial, config_Problem.goal);
+
+	aStar = new AStarSearch(
+		*problem, 
+		Heuristic(&environment->topography, config_Problem.heuristic, config_Problem.overestimateFactor), 
+		*environment);
 
 	topoRenderer = new TopographyRenderer(environment->topography);
 	stategridRenderer = new StategridRenderer(environment->stateGrid);

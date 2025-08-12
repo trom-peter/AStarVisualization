@@ -1,14 +1,13 @@
 #include "model/search_environment.h"
 #include "model/state_grid.h"
-#include "configurations/environment_configuration.h"
-#include "configurations/stategrid_configuration.h"
 
-SearchEnvironment::SearchEnvironment(EnvironmentConfig& envConfig, StategridConfig& stateConfig) :
-	topography(
-		Topography(envConfig.seed, envConfig.terrainScaling, envConfig.topographyType,
-			envConfig.topographySize, envConfig.topographyAmplitude)),
-	graph(Graph(envConfig.gridSize, envConfig.topographySize)),
-	stateGrid(Stategrid(envConfig.gridSize, stateConfig))
+SearchEnvironment::SearchEnvironment(
+	unsigned char seed, float terrainScaling, int topographyType, 
+	int topographySize, int topographyAmplitude,
+	int gridSize, Stategrid stategrid) :
+	topography(Topography(seed, terrainScaling, topographyType, topographySize, topographyAmplitude)),
+	graph(Graph(gridSize, topographySize)),
+	stateGrid(stategrid)
 {
 	topography.setMinMaxHeight();
 	graph.init();

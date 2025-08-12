@@ -3,13 +3,14 @@
 #include "model/graph.h"
 #include "model/topography.h"
 
-struct EnvironmentConfig;
-struct StateGridConfig;
 class Stategrid;
 
 struct SearchEnvironment {
 
-	SearchEnvironment(EnvironmentConfig& envConfig, StategridConfig& stateConfig);
+	SearchEnvironment(
+		unsigned char seed, float terrainScaling, int topographyType, 
+		int topographySize, int topographyAmplitude,
+		int gridSize, Stategrid stategrid);
 
 	void resetGrid(int gridSize);
 	void resetTopography(unsigned char seed, float scale, bool type);

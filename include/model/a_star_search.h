@@ -5,13 +5,12 @@
 
 struct SearchProblem;
 struct SearchEnvironment;
-struct ProblemConfig;
 struct Node;
 struct Heuristic;
 
 class AStarSearch {
 public:
-	AStarSearch(SearchProblem& problem, ProblemConfig& config, SearchEnvironment& environment);
+	AStarSearch(SearchProblem& problem, Heuristic heuristic, SearchEnvironment& environment);
 	~AStarSearch();
 
 	void search();

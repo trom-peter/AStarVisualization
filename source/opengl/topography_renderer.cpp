@@ -15,6 +15,10 @@ TopographyRenderer::TopographyRenderer(Topography& topography) :
     setTopography(topography);
 }
 
+TopographyRenderer::~TopographyRenderer() {
+    delete topographyMesh;
+}
+
 void TopographyRenderer::setTopography(Topography& topography) {
     this->topography = topography;
     if (topographyMesh != nullptr) delete topographyMesh;

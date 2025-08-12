@@ -10,6 +10,7 @@ class TopographyRenderer : public BaseRenderer {
 
 public:
     TopographyRenderer(Topography& topography);
+    ~TopographyRenderer();
 
     void setTopography(Topography& topography);
     void drawTopography();

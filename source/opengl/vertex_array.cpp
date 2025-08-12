@@ -8,6 +8,7 @@ VertexArray::VertexArray() {
 
 VertexArray::~VertexArray() {
 	glDeleteVertexArrays(1, &vaoId);
+	delete layout;
 }
 
 void VertexArray::bind() {

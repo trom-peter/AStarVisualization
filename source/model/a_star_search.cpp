@@ -16,7 +16,7 @@ AStarSearch::~AStarSearch() {
 	delete solution;
 }
 
-Node* AStarSearch::search() {
+void AStarSearch::search() {
 	int step = 0;
 	allFrontiers.clear();
 	allExpanded.clear();
@@ -52,7 +52,7 @@ Node* AStarSearch::search() {
 			solution = n;
 			setSolutionPath(n);
 			setConsideredNodes();
-			return n;
+			return;
 		}
 
 		for (Node* child : problem.actions(n)) {
@@ -67,7 +67,7 @@ Node* AStarSearch::search() {
 		allFrontiers.push_back({});
 	}
 
-	return nullptr;
+	solution = nullptr;
 }
 
 void AStarSearch::setSolutionPath(Node* n) {

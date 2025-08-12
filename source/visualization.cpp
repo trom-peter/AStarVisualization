@@ -114,7 +114,7 @@ void Visualization::run() {
 		gui.showUI_Viewport(fb);
 		gui.render();
 
-		//if (fb->width != gui.getViewportSize().x || fb->height != gui.getViewportSize().y) 
+		if (fb->width != gui.getViewportSize().x || fb->height != gui.getViewportSize().y) 
 			fb->resize(gui.getViewportSize().x, gui.getViewportSize().y);
 
 		window.swapBuffers();

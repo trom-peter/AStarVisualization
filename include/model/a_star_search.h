@@ -14,7 +14,7 @@ public:
 	AStarSearch(SearchProblem& problem, ProblemConfig& config, SearchEnvironment& environment);
 	~AStarSearch();
 
-	Node* search();
+	void search();
 	SearchProblem getProblem();
 	Heuristic getHeuristic();
 	Node* getSolution();

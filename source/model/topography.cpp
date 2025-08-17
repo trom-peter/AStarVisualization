@@ -4,9 +4,16 @@
 #define STB_PERLIN_IMPLEMENTATION
 #include "stb_perlin.h"
 
+float constexpr VERTEX_SPACING = 20.0f;
+int constexpr TOPOGRAPHY_AMPLITUDE = 500;
+int constexpr NOISE_OCTAVES = 4;
+float constexpr NOISE_LACUNARITY = 2.0f;
+float constexpr NOISE_GAIN = 0.5f;
+float constexpr NOISE_RIDGE_OFFSET = 1.0f;
+
 Topography::Topography(unsigned char seed, float scale, int type, int size, int amplitude) :
-    seed(seed), size(size), amplitude(500), scale(scale),
-    spacing(50.0f), type(type) 
+    seed(seed), size(size), amplitude(TOPOGRAPHY_AMPLITUDE), 
+    scale(scale), spacing(VERTEX_SPACING), type(type)
 {
     setMinMaxHeight();
 }
@@ -20,9 +27,17 @@ void Topography::setMinMaxHeight() {
         for (double x = 0; x < size; x += spacing) {
             float y;
             if (type == 0) 
-                y = stb_perlin_fbm_noise3_seed(x * scale, z * scale, 0.0f, 2.0f, 0.5f, 4, seed) * amplitude;
+                y = stb_perlin_fbm_noise3_seed(
+                    x * scale, z * scale, 
+                    0.0f, NOISE_LACUNARITY, NOISE_GAIN, 
+                    NOISE_OCTAVES, seed) * amplitude;
+
             else if (type == 1)
-                y = stb_perlin_ridge_noise3_seed(x * scale, z * scale, 0.0f, 2.0f, 0.5f, 1.0f, 4, seed) * amplitude;
+                y = stb_perlin_ridge_noise3_seed(
+                    x * scale, z * scale,
+                    0.0f, NOISE_LACUNARITY, NOISE_GAIN, 
+                    NOISE_RIDGE_OFFSET, NOISE_OCTAVES, seed) * amplitude;
+
             if (y < minY) minY = y;
             if (y > maxY) maxY = y;
         }
@@ -36,9 +51,16 @@ int Topography::getY(int x, int z) {
     int y = 0;
 
     if (type == 0)
-        y = stb_perlin_fbm_noise3_seed(x * scale, z * scale, 0.0f, 2.0f, 0.5f, 4, seed) * amplitude;
+        y = stb_perlin_fbm_noise3_seed(
+            x * scale, z * scale, 
+            0.0f, NOISE_LACUNARITY, NOISE_GAIN, 
+            NOISE_OCTAVES, seed) * amplitude;
+
     else if (type == 1)
-        y = stb_perlin_ridge_noise3_seed(x * scale, z * scale, 0.0f, 2.0f, 0.5f, 1.0f, 4, seed) * amplitude;
+        y = stb_perlin_ridge_noise3_seed(
+            x * scale, z * scale, 
+            0.0f, NOISE_LACUNARITY, NOISE_GAIN, 
+            NOISE_RIDGE_OFFSET, NOISE_OCTAVES, seed) * amplitude;
     else
         std::cerr << "ERROR: getY() on topography with invalid topography type" << std::endl;
 

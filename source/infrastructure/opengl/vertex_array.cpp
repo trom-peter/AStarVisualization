@@ -1,7 +1,7 @@
 #include "infrastructure/opengl/vertex_array.h"
 #include "infrastructure/opengl/vertex_buffer.h"
 
-VertexArray::VertexArray() {
+VertexArray::VertexArray() : layout(nullptr) {
 	glGenVertexArrays(1, &vaoId);
 	setupVertexLayout();
 }

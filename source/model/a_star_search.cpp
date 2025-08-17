@@ -7,9 +7,7 @@
 #include "model/search_environment.h"
 
 AStarSearch::AStarSearch(SearchProblem& problem, Heuristic heuristic, SearchEnvironment& environment) :
-	problem(problem), 
-	heuristic(heuristic),
-	solution(nullptr) {}
+	problem(problem), heuristic(heuristic), solution(nullptr), consideredNodes(0) {}
 
 AStarSearch::~AStarSearch() {
 	delete solution;

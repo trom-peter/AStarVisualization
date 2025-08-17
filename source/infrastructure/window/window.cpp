@@ -1,6 +1,8 @@
 #include "infrastructure/window/window.h"
 
-Window::Window(const char* title) : title(title), window(nullptr), glContext(nullptr) {}
+Window::Window(const char* title) : title(title), window(nullptr), 
+    glContext(nullptr), width(0), height(0), FPS(0), perfCounterFrequency(0), 
+    lastCounter(0), time(0), delta(0) {}
 
 bool Window::init() {
     SDL_DisplayMode dm;

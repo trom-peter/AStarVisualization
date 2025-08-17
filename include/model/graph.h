@@ -26,5 +26,5 @@ private:
 	int size; //size in units (size x size units)
 	int spacing; //horizontal, vertical space between all nodes
 	std::vector<std::vector<int>> adjMatrix; //adjacency matrix for storing edges and weights
-	Topography* topo; // topography object for getting y values for any x, z point
+	Topography* topography; // topography object for getting y values for any x, z point
 };

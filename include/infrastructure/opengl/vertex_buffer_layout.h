@@ -4,10 +4,6 @@
 #include "infrastructure/opengl/base_renderer.h"
 
 struct VertexBufferElement{
-	GLenum type;
-	GLuint count;
-	GLboolean normalized;
-
 	VertexBufferElement(const GLenum type, const GLuint count, const GLboolean normalized) :
 		type(type), count(count), normalized(normalized) {}
 
@@ -20,6 +16,10 @@ struct VertexBufferElement{
 		}
 		return 0;
 	}
+
+	GLenum type;
+	GLuint count;
+	GLboolean normalized;
 };
 
 class VertexBufferLayout {

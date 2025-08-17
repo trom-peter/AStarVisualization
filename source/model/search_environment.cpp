@@ -10,7 +10,6 @@ SearchEnvironment::SearchEnvironment(
 	stateGrid(stategrid)
 {
 	topography.setMinMaxHeight();
-	graph.init();
 	graph.setTopography(&topography);
 	stateGrid.initGrid(&topography);
 }

@@ -17,95 +17,28 @@ void Graph::reset(int nodes, int size) {
 	adjMatrix.resize(totalNodes, std::vector<int>(totalNodes, 0));
 }
 
-//add grid edges
-void Graph::init() {
-	for (int z = 0; z <= size; z += spacing) {
-		for (int x = 0; x <= size; x += spacing) {
-
-			// get index of this node
-			int i = toNodeIndex(x, z);
-
-			// add top neighbour
-			if (z < n - 1) {
-				int top = toNodeIndex(x, z + 1);
-				addEdge(i, top, 1);
-			}
-
-			// add top left neighbour
-			if (z < n - 1 && x > 0) {
-				int topLeft = toNodeIndex(x - 1, z + 1);
-				addEdge(i, topLeft, 1);
-			}
-
-			// add left neighbour
-			if (x > 0) {
-				int left = toNodeIndex(x - 1, z);
-				addEdge(i, left, 1);
-			}
-
-			// add bottom left neighbour
-			if (x > 0 && z > 0) {
-				int bottomLeft = toNodeIndex(x - 1, z - 1);
-				addEdge(i, bottomLeft, 1);
-			}
-
-			// add bottom neighbour
-			if (z > 0) {
-				int bottom = toNodeIndex(x, z - 1);
-				addEdge(i, bottom, 1);
-			}
-
-			// add bottom right neighbour
-			if (z > 0 && x < n - 1) {
-				int bottomRight = toNodeIndex(x + 1, z - 1);
-				addEdge(i, bottomRight, 1);
-			}
-
-			// add right neighbour
-			if (x < n - 1) {
-				int right = toNodeIndex(x + 1, z);
-				addEdge(i, right, 1);
-			}
-
-			// add top right neighbour
-			if (x < n - 1 && z < n - 1) {
-				int topRight = toNodeIndex(x + 1, z + 1);
-				addEdge(i, topRight, 1);
-			}
-		}
-	}
-}
-
 std::vector<State> Graph::getNeighbours(int x, int z) {
 	std::vector<State> neighbours;
 
-	//calculate node position in graph (gX and gZ are between 0 and n)
-	int gX = x / spacing;
-	int gZ = z / spacing;
+	//all eight x,z neighbour offsets
+	int neighbourOffsets[8][2] = { 
+		{0, spacing},			// top neighbour
+		{-spacing, spacing},	// top left neighbour
+		{-spacing, 0},			// left neighbour
+		{-spacing, -spacing},	// bottom left neighbour
+		{0, -spacing},			// bottom neighbour
+		{spacing, -spacing},	// bottom right neighbour
+		{spacing, 0},			// right neighbour
+		{spacing, spacing}		// top right neighbour
+	};
 
-	if (gZ < n - 1)
-		neighbours.push_back(State(x, topo->getY(x, z + spacing), (z + spacing))); // top neighbour
+	for (int i = 0; i < 8; i++) {
+		int neighbourX = x + neighbourOffsets[i][0];
+		int neighbourZ = z + neighbourOffsets[i][1];
 
-	if (gZ < n - 1 && gX > 0)
-		neighbours.push_back(State((x - spacing), topo->getY(x - spacing, z + spacing), (z + spacing))); // top left neighbour
-
-	if (gX > 0)
-		neighbours.push_back(State((x - spacing), topo->getY(x - spacing, z), z)); // left neighbour
-
-	if (gX > 0 && gZ > 0)
-		neighbours.push_back(State((x - spacing), topo->getY(x - spacing, z - spacing), (z - spacing))); // bottom left neighbour
-
-	if (gZ > 0)
-		neighbours.push_back(State(x, topo->getY(x, z - spacing), (z - spacing))); // bottom neighbour
-
-	if (gZ > 0 && gX < n - 1)
-		neighbours.push_back(State((x + spacing), topo->getY(x + spacing, z - spacing), (z - spacing))); // bottom right neighbour
-
-	if (gX < n - 1)
-		neighbours.push_back(State((x + spacing), topo->getY(x + spacing, z), z)); // right neighbour
-
-	if (gX < n - 1 && gZ < n - 1)
-		neighbours.push_back(State((x + spacing), topo->getY(x + spacing, z + spacing), (z + spacing))); // top right neighbour
+		if (isValid(neighbourX, neighbourZ))
+			neighbours.push_back(State(neighbourX, topo->getY(neighbourX, neighbourZ), neighbourZ));
+	}
 
 	return neighbours;
 }
@@ -118,7 +51,7 @@ int Graph::toNodeIndex(int x, int z) const {
 
 // does graph contain a node at a given position
 bool Graph::isValid(int x, int z) const {
-	return isValid(toNodeIndex(x, z));
+	return (x >= 0 && x <= size && z >= 0 && z <= size);
 }
 
 // does graph contain a node at index i

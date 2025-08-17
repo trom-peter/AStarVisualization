@@ -2,7 +2,9 @@
 #include "glm/glm.hpp"
 
 struct EnvironmentConfig {
-	void init();
+	EnvironmentConfig();
+
+	void reset();
 	void updateStateSpacing();
 
 	unsigned char seed; // with what seed the topography should be generated

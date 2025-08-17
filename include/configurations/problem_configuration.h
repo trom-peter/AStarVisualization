@@ -2,7 +2,9 @@
 #include "glm/glm.hpp"
 
 struct ProblemConfig {
-	void init();
+	ProblemConfig();
+
+	void reset();
 
 	int heuristic; // what heuristic should be used for searching
 	float overestimateFactor; // by what factor the overestimated heuristic should be multiplied by

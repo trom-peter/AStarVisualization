@@ -5,27 +5,29 @@
 class Topography {
 
 public:
-	Topography(unsigned char seed, float scale, int type, int size, int amplitude);
+	Topography(const unsigned char seed, const float scale, 
+		const int type, const int size, const int amplitude);
+
 	~Topography();
 
 	void setMinMaxHeight();
 
-	float getMaxY();
-	float getMinY();
-	int getY(int x, int z);
+	float getMaxY() const;
+	float getMinY() const;
+	int getY(const int x, const int z) const;
 
-	unsigned char getSeed();
+	unsigned char getSeed() const;
 	void setSeed(unsigned char seed);
 
-	int getType();
-	void setType(int type);
+	int getType() const;
+	void setType(const int type);
 
-	float getScale();
-	void setScale(float scale);
+	float getScale() const;
+	void setScale(const float scale);
 
-	int getSize();
-	int getAmplitude();
-	float getSpacing();
+	int getSize() const;
+	int getAmplitude() const;
+	float getSpacing() const;
 
 private:
 	int size;

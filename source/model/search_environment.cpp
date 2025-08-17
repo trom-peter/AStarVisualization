@@ -2,9 +2,9 @@
 #include "model/state_grid.h"
 
 SearchEnvironment::SearchEnvironment(
-	unsigned char seed, float terrainScaling, int topographyType, 
-	int topographySize, int topographyAmplitude,
-	int gridSize, Stategrid stategrid) :
+	const unsigned char seed, const float terrainScaling, const int topographyType,
+	const int topographySize, const int topographyAmplitude,
+	const int gridSize, const Stategrid stategrid) :
 	topography(Topography(seed, terrainScaling, topographyType, topographySize, topographyAmplitude)),
 	graph(Graph(gridSize, topographySize)),
 	stateGrid(stategrid)
@@ -14,13 +14,13 @@ SearchEnvironment::SearchEnvironment(
 	stateGrid.initGrid(&topography);
 }
 
-void SearchEnvironment::resetGrid(int gridSize) {
+void SearchEnvironment::resetGrid(const int gridSize) {
 	stateGrid.clearGrid();
 	stateGrid.gridSize = gridSize;
 	stateGrid.initGrid(&topography);
 }
 
-void SearchEnvironment::resetTopography(unsigned char seed, float scale, bool type) {
+void SearchEnvironment::resetTopography(const unsigned char seed, const float scale, const bool type) {
 	topography.setSeed(seed);
 	topography.setType(type);
 	topography.setScale(scale);

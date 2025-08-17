@@ -8,12 +8,12 @@ class Stategrid;
 struct SearchEnvironment {
 
 	SearchEnvironment(
-		unsigned char seed, float terrainScaling, int topographyType, 
-		int topographySize, int topographyAmplitude,
-		int gridSize, Stategrid stategrid);
+		const unsigned char seed, const float terrainScaling, const int topographyType,
+		const int topographySize, const int topographyAmplitude,
+		const int gridSize, const Stategrid stategrid);
 
-	void resetGrid(int gridSize);
-	void resetTopography(unsigned char seed, float scale, bool type);
+	void resetGrid(const int gridSize);
+	void resetTopography(const unsigned char seed, const float scale, const bool type);
 
 	Topography topography;
 	Stategrid stateGrid;

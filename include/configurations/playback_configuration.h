@@ -2,8 +2,9 @@
 #include "glm/glm.hpp"
 
 struct PlaybackConfig {
+	PlaybackConfig();
 
-	void init();
+	void reset();
 	void updateTimePerIncrement();
 
 	int step; // step number in search process. measured in number of expanded nodes

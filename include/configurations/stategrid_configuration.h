@@ -2,7 +2,9 @@
 #include "glm/glm.hpp"
 
 struct StategridConfig {
-	void init();
+	StategridConfig();
+
+	void reset();
 
 	//state colors
 	glm::vec3 defaultColor;

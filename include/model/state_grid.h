@@ -13,18 +13,19 @@ struct SearchProblem;
 class Stategrid {
 public:
 	Stategrid();
-	Stategrid(int gridSize, glm::vec3 defaultColor, glm::vec3 frontierColor, glm::vec3 reachedColor,
-		glm::vec3 initialStateColor, glm::vec3 goalStateColor, glm::vec3 solutionStateColor, 
-		bool defaultVisible, bool frontierVisible, bool reachedVisible);
+	Stategrid(const int gridSize, 
+		const glm::vec3 defaultColor, const glm::vec3 frontierColor, const glm::vec3 reachedColor,
+		const glm::vec3 initialStateColor, const glm::vec3 goalStateColor, const glm::vec3 solutionStateColor,
+		const bool defaultVisible, const bool frontierVisible, const bool reachedVisible);
 
 	~Stategrid();
 
-	void initGrid(Topography* topo);
-	void updateToStep(int step, Graph& g, AStarSearch& aStar, bool forwards);
+	void initGrid(const Topography* topo);
+	void updateToStep(const int step, const Graph& g, AStarSearch& aStar, const bool forwards);
 
-	void updateVisibility(StategridConfig& config);
-	void showSolutionPath(std::vector<State> solutionPath, SearchProblem& problem);
-	bool isVisible(glm::vec3 color) const;
+	void updateVisibility(const StategridConfig& config);
+	void showSolutionPath(const std::vector<State> solutionPath, const SearchProblem& problem);
+	bool isVisible(const glm::vec3 color) const;
 	void clearGrid();
 
 	std::unordered_map<State, glm::vec3, StateHash> grid;

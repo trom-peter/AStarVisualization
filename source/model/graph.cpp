@@ -2,13 +2,13 @@
 #include <iostream>
 #include "model/state.h"
 
-Graph::Graph(int nodes, int size) : n(nodes), size(size) {
+Graph::Graph(const int nodes, const int size) : n(nodes), size(size) {
 	spacing = size / (nodes - 1);
 	int totalNodes = n * n;
 	adjMatrix.resize(totalNodes, std::vector<int>(totalNodes, 0));
 }
 
-void Graph::reset(int nodes, int size) {
+void Graph::reset(const int nodes, const int size) {
 	this->n = nodes;
 	this->size = size;
 	spacing = size / (nodes - 1);
@@ -17,7 +17,7 @@ void Graph::reset(int nodes, int size) {
 	adjMatrix.resize(totalNodes, std::vector<int>(totalNodes, 0));
 }
 
-std::vector<State> Graph::getNeighbours(int x, int z) {
+std::vector<State> Graph::getNeighbours(const int x, const int z) const {
 	std::vector<State> neighbours;
 
 	//all eight x,z neighbour offsets
@@ -50,37 +50,40 @@ int Graph::toNodeIndex(int x, int z) const {
 }
 
 // does graph contain a node at a given position
-bool Graph::isValid(int x, int z) const {
+bool Graph::isValid(const int x, const int z) const {
 	return (x >= 0 && x <= size && z >= 0 && z <= size);
 }
 
 // does graph contain a node at index i
-bool Graph::isValid(int i) const {
+bool Graph::isValid(const int i) const {
 	return (0 <= i) && (i < n * n);
 }
 
-void Graph::addEdge(int i, int j, int weight) {
+void Graph::addEdge(const int i, const int j, const int weight) {
 	adjMatrix[i][j] = weight;
 	adjMatrix[j][i] = weight;
 }
 
-void Graph::addEdge(int x1, int z1, int x2, int z2, int weight) {
+void Graph::addEdge(const int x1, const int z1, 
+	const int x2, const int z2, 
+	const int weight) 
+{
 	addEdge(toNodeIndex(x1, z1), toNodeIndex(x2, z2), weight);
 }
 
-int Graph::getWeight(int x1, int z1, int x2, int z2) {
+int Graph::getWeight(const int x1, const int z1, const int x2, const int z2) const {
 	int i = toNodeIndex(x1, z1);
 	int j = toNodeIndex(x2, z2);
 	return adjMatrix[i][j];
 }
 
-bool Graph::hasEdge(int x1, int z1, int x2, int z2) {
+bool Graph::hasEdge(const int x1, const int z1, const int x2, const int z2) const {
 	int i = toNodeIndex(x1, z1);
 	int j = toNodeIndex(x2, z2);
 	return adjMatrix[i][j] || adjMatrix[j][i];
 }
 
-void Graph::printAdjacencyMatrix() {
+void Graph::printAdjacencyMatrix() const {
 	for (int i = 0; i < n * n; i++) {
 		for (int j = 0; j < n * n; j++) {
 			std::cout << adjMatrix[i][j] << " ";
@@ -89,7 +92,7 @@ void Graph::printAdjacencyMatrix() {
 	}
 }
 
-float Graph::getSpacing() {
+float Graph::getSpacing() const {
 	return spacing;
 }
 

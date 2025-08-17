@@ -2,10 +2,10 @@
 #include "model/state.h"
 #include "model/topography.h"
 
-Heuristic::Heuristic(Topography* topo, int heuristicId, float overestimateFactor) : 
+Heuristic::Heuristic(Topography* topo, const int heuristicId, const float overestimateFactor) :
     topo(topo), heuristicId(heuristicId), overestimateFactor(overestimateFactor) {}
 
-std::function<float(State, State)> Heuristic::getFunction() {
+std::function<float(State, State)> Heuristic::getFunction() const {
     switch (heuristicId) {
         case 0:
             return travelTime_Overestimated(0.0f);
@@ -30,13 +30,13 @@ std::function<float(State, State)> Heuristic::travelTime = [](State a, State b) 
     return ((distance / 1000) / speed) * 3600;
 };
 
-std::function<float(State, State)> Heuristic::travelTime_Overestimated(float factor) {
+std::function<float(State, State)> Heuristic::travelTime_Overestimated(const float factor) {
     return [factor](State a, State b) {
         return factor * Heuristic::travelTime(a, b);
     };
 };
 
-std::function<float(State, State)> Heuristic::travelTime_Intersections(Topography* topo) {
+std::function<float(State, State)> Heuristic::travelTime_Intersections(const Topography* topo) {
     return [topo](State a, State b) {
         float h = Heuristic::travelTime(a, b);	    // standard duration
         int intersections = 0;			// number of intersections
@@ -64,7 +64,7 @@ std::function<float(State, State)> Heuristic::travelTime_Intersections(Topograph
     };
 };
 
-std::function<float(State, State)> Heuristic::travelTime_WeightedHeights(Topography* topo) {
+std::function<float(State, State)> Heuristic::travelTime_WeightedHeights(const Topography* topo) {
     return [topo](State a, State b) {
         float h = Heuristic::travelTime(a, b);	// standard duration
         float height = a.y / topo->getMaxY();	// relative height of evaluated state

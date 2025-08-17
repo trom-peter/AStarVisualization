@@ -5,17 +5,17 @@
 #include "configurations/problem_configuration.h"
 #include <iostream>
 
-SearchProblem::SearchProblem(SearchEnvironment& environment, glm::ivec2 initial, glm::ivec2 goal) :
+SearchProblem::SearchProblem(SearchEnvironment& environment, const glm::ivec2 initial, const glm::ivec2 goal) :
 	graph(environment.graph),
 	initial(State(initial.x, environment.topography.getY(initial.x, initial.y), initial.y)),
 	goal(State(goal.x, environment.topography.getY(goal.x, goal.y), goal.y)) {
 }
 
-bool SearchProblem::isGoal(State s) {
+bool SearchProblem::isGoal(const State s) const {
 	return s == goal;
 }
 
-std::vector<Node*> SearchProblem::actions(Node* n) {
+std::vector<Node*> SearchProblem::actions(Node* n) const {
 	State& s0 = n->s;
 	std::vector<Node*> nodes;
 	std::vector<State> neighbours = graph.getNeighbours(s0.x, s0.z);

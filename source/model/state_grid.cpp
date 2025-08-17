@@ -17,9 +17,9 @@ Stategrid::Stategrid() :
     reachedVisible(false) {}
 
 Stategrid::Stategrid(
-    int gridSize, glm::vec3 defaultColor, glm::vec3 frontierColor, glm::vec3 reachedColor,
-    glm::vec3 initialStateColor, glm::vec3 goalStateColor, glm::vec3 solutionStateColor,
-    bool defaultVisible, bool frontierVisible, bool reachedVisible) :
+    const int gridSize, const glm::vec3 defaultColor, const glm::vec3 frontierColor, const glm::vec3 reachedColor,
+    const glm::vec3 initialStateColor, const glm::vec3 goalStateColor, const glm::vec3 solutionStateColor,
+    const bool defaultVisible, const bool frontierVisible, const bool reachedVisible) :
     gridSize(gridSize),
     defaultColor(defaultColor), frontierColor(frontierColor), reachedColor(reachedColor),
     initialStateColor(initialStateColor), goalStateColor(goalStateColor),
@@ -36,7 +36,7 @@ void Stategrid::clearGrid() {
     grid.clear();
 }
 
-void Stategrid::updateToStep(int step, Graph& g, AStarSearch& aStar, bool forwards) {
+void Stategrid::updateToStep(const int step, const Graph& g, AStarSearch& aStar, const bool forwards) {
     State expanded = aStar.allExpanded.at(step);
 
     if (forwards) {
@@ -67,7 +67,7 @@ void Stategrid::updateToStep(int step, Graph& g, AStarSearch& aStar, bool forwar
     grid[aStar.getProblem().goal] = goalStateColor;
 }
 
-void Stategrid::initGrid(Topography* topo) {
+void Stategrid::initGrid(const Topography* topo) {
     grid.clear();
     int stepSize = topo->getSize() / (gridSize - 1);
     for (int z = 0; z <= topo->getSize(); z += stepSize) {
@@ -79,13 +79,13 @@ void Stategrid::initGrid(Topography* topo) {
     }
 }
 
-void Stategrid::updateVisibility(StategridConfig& config) {
+void Stategrid::updateVisibility(const StategridConfig& config) {
     this->defaultVisible = config.defaultVisible;
     this->frontierVisible = config.frontierVisible;
     this->reachedVisible = config.reachedVisible;
 }
 
-bool Stategrid::isVisible(glm::vec3 color) const {
+bool Stategrid::isVisible(const glm::vec3 color) const {
     return (
         color == frontierColor && frontierVisible ||
         color == reachedColor && reachedVisible ||
@@ -95,7 +95,7 @@ bool Stategrid::isVisible(glm::vec3 color) const {
         color == solutionStateColor);
 }
 
-void Stategrid::showSolutionPath(std::vector<State> solutionPath, SearchProblem& problem) {
+void Stategrid::showSolutionPath(const std::vector<State> solutionPath, const SearchProblem& problem) {
     for (State s : solutionPath) {
         if (s != problem.initial && s != problem.goal) {
             grid[s] = solutionStateColor;

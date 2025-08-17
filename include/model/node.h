@@ -4,13 +4,13 @@
 
 struct Node {
 
-	Node(int x, int y, int z, int pathCost, Node* parent);
-	Node(int x, int y, int z, int pathCost);
-	Node(int x, int y, int z, Node* parent, int pathCost);
-	Node(State state, int pathCost);
-	Node(State state, Node* parent, int pathCost);
+	Node(const int x, const int y, const int z, const int pathCost, Node* parent);
+	Node(const int x, const int y, const int z, const int pathCost);
+	Node(const int x, const int y, const int z, Node* parent, const int pathCost);
+	Node(const State state, const int pathCost);
+	Node(const State state, Node* parent, const int pathCost);
 
-	std::string getPath();
+	std::string getPath() const;
 
 	Node* parent;
 	State s;

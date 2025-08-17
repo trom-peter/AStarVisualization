@@ -2,27 +2,27 @@
 #include <string>
 #include "model/state.h"
 
-Node::Node(int x, int y, int z, int pathCost, Node* parent) :
+Node::Node(const int x, const int y, const int z, const int pathCost, Node* parent) :
 	s(State(x, y, z)), parent(parent), pathCost(pathCost) {
 };
 
-Node::Node(int x, int y, int z, int pathCost) :
+Node::Node(const int x, const int y, const int z, const int pathCost) :
 	s(State(x, y, z)), parent(nullptr), pathCost(pathCost) {
 };
 
-Node::Node(int x, int y, int z, Node* parent, int pathCost) :
+Node::Node(const int x, const int y, const int z, Node* parent, const int pathCost) :
 	s(State(x, y, z)), parent(parent), pathCost(pathCost) {
 };
 
-Node::Node(State state, int pathCost) :
+Node::Node(const State state, const int pathCost) :
 	s(state), parent(nullptr), pathCost(pathCost) {
 };
 
-Node::Node(State state, Node* parent, int pathCost) :
+Node::Node(const State state, Node* parent, const int pathCost) :
 	s(state), parent(parent), pathCost(pathCost) {
 };
 
-std::string Node::getPath() {
+std::string Node::getPath() const {
 	if (parent == nullptr) return "[" + std::to_string(s.x) + ", " + std::to_string(s.y) + ", " + std::to_string(s.z) + "]";
 	return parent->getPath() + " -> " + "[" + std::to_string(s.x) + ", " + std::to_string(s.y) + ", " + std::to_string(s.z) + "]";
 }

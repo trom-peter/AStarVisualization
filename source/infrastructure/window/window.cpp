@@ -1,0 +1,120 @@
+#include "infrastructure/window/window.h"
+
+Window::Window(const char* title) : title(title), window(nullptr), glContext(nullptr) {}
+
+bool Window::init() {
+    SDL_DisplayMode dm;
+    if (SDL_Init(SDL_INIT_EVERYTHING) < 0) {
+        std::cout << "Failed to initialize SDL: " << SDL_GetError() << std::endl;
+    }
+    if (SDL_GetCurrentDisplayMode(0, &dm) != 0) {
+        std::cerr << "Error at SDL_GetCurrentDisplayMode: " << SDL_GetError() << std::endl;
+    }
+
+    int screenWidth = dm.w;
+    int screenHeight = dm.h;
+    this->width = screenWidth * 1.0f;
+    this->height = screenHeight * 1.0f;
+
+    setupOpenGLAttributes();
+
+    SDL_SetRelativeMouseMode(SDL_FALSE);
+
+    setupTimeCount();
+
+    SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
+    SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 4); // 4x Multisampling
+
+
+    SDL_WindowFlags window_flags = (SDL_WindowFlags)
+        (SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE | SDL_WINDOW_MAXIMIZED);
+
+    window = SDL_CreateWindow(title, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 
+        width, height, window_flags);
+
+    if (!window) {
+        std::cout << "Failed to create window: " << SDL_GetError() << std::endl;
+        return false;
+    }
+
+    glContext = SDL_GL_CreateContext(window);
+    SDL_GL_MakeCurrent(window, glContext);
+    SDL_GL_SetSwapInterval(1); // enable v-sync
+    return true;
+}
+
+void Window::swapBuffers() const {
+    SDL_GL_SwapWindow(window);
+}
+
+void Window::quit() const {
+    SDL_GL_DeleteContext(glContext);
+    SDL_DestroyWindow(window);
+    SDL_Quit();
+}
+
+void Window::setupOpenGLAttributes() const {
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 5);
+
+    SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 8);
+    SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 8);
+    SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 8);
+    SDL_GL_SetAttribute(SDL_GL_ALPHA_SIZE, 8);
+
+    SDL_GL_SetAttribute(SDL_GL_BUFFER_SIZE, 32);
+    SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+    SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24); //set up depth buffer size
+    SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8);
+
+
+    #ifdef _DEBUG
+    std::cout << "Running in debug mode" << std::endl;
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS, SDL_GL_CONTEXT_DEBUG_FLAG);
+    #endif
+}
+
+void Window::setupTimeCount() {
+    perfCounterFrequency = SDL_GetPerformanceFrequency();
+    lastCounter = SDL_GetPerformanceCounter();
+    delta = 0.0f;
+    time = 0.0f;
+    FPS = 0;
+}
+
+void Window::updateTime() {
+    uint64_t endCounter = SDL_GetPerformanceCounter();
+    uint64_t counterElapsed = SDL_GetPerformanceCounter() - lastCounter;
+    delta = (float)counterElapsed / (float)perfCounterFrequency;
+    FPS = (int)((float)perfCounterFrequency / (float)counterElapsed);
+#ifdef SHOW_FPS
+    std::cout << FPS << std::endl;
+#endif
+    lastCounter = endCounter;
+    time += delta;
+}
+
+int Window::getWidth() const {
+    return width;
+}
+
+int Window::getHeight() const {
+    return height;
+}
+
+float Window::getDelta() const {
+    return delta;
+}
+
+float Window::getTime() const {
+    return time;
+}
+
+SDL_Window* Window::getWindow() const {
+    return window;
+}
+
+SDL_GLContext Window::getGLContext() const {
+    return glContext;
+}

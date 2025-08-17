@@ -42,46 +42,46 @@
     <ClCompile Include="source\model\a_star_search.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="source\opengl\base_renderer.cpp">
+    <ClCompile Include="source\infrastructure\opengl\base_renderer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="source\opengl\camera.cpp">
+    <ClCompile Include="source\infrastructure\opengl\camera.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="source\gui.cpp">
+    <ClCompile Include="source\gui\gui.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="source\main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="source\opengl\mesh.cpp">
+    <ClCompile Include="source\infrastructure\opengl\mesh.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="source\opengl\shader.cpp">
+    <ClCompile Include="source\infrastructure\opengl\shader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="source\opengl\shape.cpp">
+    <ClCompile Include="source\infrastructure\geometry\shape.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="source\opengl\sphere.cpp">
+    <ClCompile Include="source\infrastructure\geometry\sphere.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="source\model\topography.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="source\opengl\topography_renderer.cpp">
+    <ClCompile Include="source\infrastructure\opengl\topography_renderer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="source\opengl\vertex_array.cpp">
+    <ClCompile Include="source\infrastructure\opengl\vertex_array.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="source\window.cpp">
+    <ClCompile Include="source\infrastructure\window\window.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="source\model\heuristic.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="source\visualization.cpp">
+    <ClCompile Include="source\visualization\visualization.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="source\model\state_grid.cpp">
@@ -111,7 +111,7 @@
     <ClCompile Include="source\model\node.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="source\opengl\stategrid_renderer.cpp">
+    <ClCompile Include="source\infrastructure\opengl\stategrid_renderer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -131,55 +131,55 @@
     <ClInclude Include="include\model\state.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\opengl\base_renderer.h">
+    <ClInclude Include="include\infrastructure\opengl\base_renderer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\opengl\camera.h">
+    <ClInclude Include="include\infrastructure\opengl\camera.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\opengl\framebuffer.h">
+    <ClInclude Include="include\infrastructure\opengl\framebuffer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\gui.h">
+    <ClInclude Include="include\gui\gui.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\opengl\index_buffer.h">
+    <ClInclude Include="include\infrastructure\opengl\index_buffer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\opengl\mesh.h">
+    <ClInclude Include="include\infrastructure\opengl\mesh.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\opengl\shader.h">
+    <ClInclude Include="include\infrastructure\opengl\shader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\opengl\shape.h">
+    <ClInclude Include="include\infrastructure\geometry\shape.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\opengl\stategrid_renderer.h">
+    <ClInclude Include="include\infrastructure\opengl\stategrid_renderer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\opengl\sphere.h">
+    <ClInclude Include="include\infrastructure\geometry\sphere.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\model\topography.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\opengl\topography_renderer.h">
+    <ClInclude Include="include\infrastructure\opengl\topography_renderer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\opengl\vertex.h">
+    <ClInclude Include="include\infrastructure\geometry\vertex.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\opengl\vertex_array.h">
+    <ClInclude Include="include\infrastructure\opengl\vertex_array.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\opengl\vertex_buffer.h">
+    <ClInclude Include="include\infrastructure\opengl\vertex_buffer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\opengl\vertex_buffer_layout.h">
+    <ClInclude Include="include\infrastructure\opengl\vertex_buffer_layout.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\window.h">
+    <ClInclude Include="include\infrastructure\window\window.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="libs\glm\detail\_features.hpp">
@@ -1082,13 +1082,13 @@
     <ClInclude Include="include\seed_generator.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\visualization_state.h">
+    <ClInclude Include="include\visualization\visualization_state.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\model\heuristic.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\visualization.h">
+    <ClInclude Include="include\visualization\visualization.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\model\state_grid.h">

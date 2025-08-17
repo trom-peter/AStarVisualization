@@ -8,11 +8,11 @@ struct State;
 struct Graph;
 
 struct SearchProblem {
-	SearchProblem(SearchEnvironment& environment, glm::ivec2 initial, glm::ivec2 goal);
+	SearchProblem(SearchEnvironment& environment, const glm::ivec2 initial, const glm::ivec2 goal);
 
-	bool isGoal(State s);
+	bool isGoal(const State s) const;
 
-	std::vector<Node*> actions(Node* n);
+	std::vector<Node*> actions(Node* n) const;
 
 	Graph& graph;
 	State initial;

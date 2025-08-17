@@ -69,7 +69,7 @@ void AStarSearch::search() {
 	solution = nullptr;
 }
 
-void AStarSearch::setSolutionPath(Node* n) {
+void AStarSearch::setSolutionPath(const Node* n) {
 	if (n == nullptr) return;
 	else {
 		solutionPath.push_back(n->s);
@@ -83,19 +83,19 @@ void AStarSearch::setConsideredNodes() {
 	}
 }
 
-SearchProblem AStarSearch::getProblem() {
+SearchProblem AStarSearch::getProblem() const {
 	return problem;
 }
 
-void AStarSearch::setHeuristic(int heuristicId, float overestimateFactor) {
+void AStarSearch::setHeuristic(const int heuristicId, const float overestimateFactor) {
 	heuristic.heuristicId = heuristicId;
 	heuristic.overestimateFactor = overestimateFactor;
 }
 
-Heuristic AStarSearch::getHeuristic() {
+Heuristic AStarSearch::getHeuristic() const {
 	return heuristic;
 }
 
-Node* AStarSearch::getSolution() {
+Node* AStarSearch::getSolution() const {
 	return solution;
 }

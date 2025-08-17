@@ -14,10 +14,10 @@ public:
 	~AStarSearch();
 
 	void search();
-	SearchProblem getProblem();
-	Heuristic getHeuristic();
-	Node* getSolution();
-	void setHeuristic(int heuristicId, float overestimateFactor = 1.0f);
+	SearchProblem getProblem() const;
+	Heuristic getHeuristic() const;
+	Node* getSolution() const;
+	void setHeuristic(const int heuristicId, const float overestimateFactor = 1.0f);
 
 	std::vector<std::vector<State>> allFrontiers;
 	std::vector<State> allExpanded;
@@ -29,5 +29,5 @@ private:
 	SearchProblem& problem;
 	Heuristic heuristic;
 	void setConsideredNodes();
-	void setSolutionPath(Node* n);
+	void setSolutionPath(const Node* n);
 };

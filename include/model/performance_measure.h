@@ -2,7 +2,7 @@
 #include "model/state.h"
 
 struct PerformanceMeasure {
-	static float hikingFunction(State a, State b) {
+	static float hikingFunction(const State a, const State b) {
 		float dx = abs(a.x - b.x);
 		float dh = abs(a.y - b.y);
 		float dz = abs(a.z - b.z);

@@ -11,7 +11,8 @@ float constexpr NOISE_LACUNARITY = 2.0f;
 float constexpr NOISE_GAIN = 0.5f;
 float constexpr NOISE_RIDGE_OFFSET = 1.0f;
 
-Topography::Topography(unsigned char seed, float scale, int type, int size, int amplitude) :
+Topography::Topography(const unsigned char seed, const float scale, 
+    const int type, const int size, const int amplitude) :
     seed(seed), size(size), amplitude(TOPOGRAPHY_AMPLITUDE), 
     scale(scale), spacing(VERTEX_SPACING), type(type)
 {
@@ -47,7 +48,7 @@ void Topography::setMinMaxHeight() {
     this->maxY = maxY;
 }
 
-int Topography::getY(int x, int z) {
+int Topography::getY(const int x, const int z) const {
     int y = 0;
 
     if (type == 0)
@@ -68,46 +69,46 @@ int Topography::getY(int x, int z) {
     return y;
 }
 
-float Topography::getMinY() {
+float Topography::getMinY() const {
     return minY;
 }
 
-float Topography::getMaxY() {
+float Topography::getMaxY() const {
     return maxY;
 }
 
-unsigned char Topography::getSeed() {
+unsigned char Topography::getSeed() const {
     return seed;
 }
 
-void Topography::setSeed(unsigned char seed) {
+void Topography::setSeed(const unsigned char seed) {
     this->seed = seed;
 }
 
-int Topography::getType() {
+int Topography::getType() const {
     return type;
 }
 
-void Topography::setType(int type) {
+void Topography::setType(const int type) {
     this->type = type;
 }
 
-float Topography::getScale() {
+float Topography::getScale() const {
     return scale;
 }
 
-int Topography::getSize() {
+int Topography::getSize() const {
     return size;
 }
 
-int Topography::getAmplitude() {
+int Topography::getAmplitude() const {
     return amplitude;
 }
 
-void Topography::setScale(float scale) {
+void Topography::setScale(const float scale) {
     this->scale = scale;
 }
 
-float Topography::getSpacing() {
+float Topography::getSpacing() const {
     return spacing;
 }

@@ -3,7 +3,7 @@
 #include <functional>
 
 struct State {
-	State(int x, int y, int z) : x(x), y(y), z(z) {}
+	State(const int x, const int y, const int z) : x(x), y(y), z(z) {}
 	State() : x(0), y(0), z(0) {}
 
     bool operator==(const State& other) const {
@@ -14,11 +14,11 @@ struct State {
         return x != other.x || y != other.y || z != other.z;
     }
 
-    glm::ivec2 getXZ() {
+    glm::ivec2 getXZ() const {
         return glm::ivec2(x, z);
     }
 
-    void setXZ(glm::ivec2 xz) {
+    void setXZ(const glm::ivec2 xz) {
         x = xz.x;
         z = xz.y;
     }

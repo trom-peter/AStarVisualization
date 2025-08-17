@@ -120,8 +120,8 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy /Y /F "$(SolutionDir)dependencies/SDL2-2.30.6/lib/x64/SDL2.dll" "$(TargetDir)"
-</Command>
+      <Command>
+xcopy /Y /F "$(SolutionDir)dependencies/SDL2-2.30.6/lib/x64/SDL2.dll" "$(TargetDir)"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -142,8 +142,8 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy /Y /F "$(SolutionDir)dependencies/SDL2-2.30.6/lib/x64/SDL2.dll" "$(TargetDir)"
-</Command>
+      <Command>
+xcopy /Y /F "$(SolutionDir)dependencies/SDL2-2.30.6/lib/x64/SDL2.dll" "$(TargetDir)"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -164,21 +164,21 @@
     <ClCompile Include="source\configurations\playback_configuration.cpp" />
     <ClCompile Include="source\configurations\problem_configuration.cpp" />
     <ClCompile Include="source\configurations\stategrid_configuration.cpp" />
-    <ClCompile Include="source\opengl\base_renderer.cpp" />
-    <ClCompile Include="source\opengl\camera.cpp" />
-    <ClCompile Include="source\gui.cpp" />
+    <ClCompile Include="source\infrastructure\opengl\base_renderer.cpp" />
+    <ClCompile Include="source\infrastructure\opengl\camera.cpp" />
+    <ClCompile Include="source\gui\gui.cpp" />
     <ClCompile Include="source\model\heuristic.cpp" />
     <ClCompile Include="source\main.cpp" />
-    <ClCompile Include="source\opengl\mesh.cpp" />
-    <ClCompile Include="source\opengl\shader.cpp" />
-    <ClCompile Include="source\opengl\shape.cpp" />
-    <ClCompile Include="source\opengl\stategrid_renderer.cpp" />
-    <ClCompile Include="source\opengl\sphere.cpp" />
+    <ClCompile Include="source\infrastructure\opengl\mesh.cpp" />
+    <ClCompile Include="source\infrastructure\opengl\shader.cpp" />
+    <ClCompile Include="source\infrastructure\geometry\shape.cpp" />
+    <ClCompile Include="source\infrastructure\opengl\stategrid_renderer.cpp" />
+    <ClCompile Include="source\infrastructure\geometry\sphere.cpp" />
     <ClCompile Include="source\model\topography.cpp" />
-    <ClCompile Include="source\opengl\topography_renderer.cpp" />
-    <ClCompile Include="source\opengl\vertex_array.cpp" />
-    <ClCompile Include="source\window.cpp" />
-    <ClCompile Include="source\visualization.cpp" />
+    <ClCompile Include="source\infrastructure\opengl\topography_renderer.cpp" />
+    <ClCompile Include="source\infrastructure\opengl\vertex_array.cpp" />
+    <ClCompile Include="source\infrastructure\window\window.cpp" />
+    <ClCompile Include="source\visualization\visualization.cpp" />
     <ClCompile Include="source\model\state_grid.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -191,27 +191,27 @@
     <ClInclude Include="include\configurations\playback_configuration.h" />
     <ClInclude Include="include\configurations\problem_configuration.h" />
     <ClInclude Include="include\configurations\stategrid_configuration.h" />
-    <ClInclude Include="include\opengl\base_renderer.h" />
-    <ClInclude Include="include\opengl\camera.h" />
-    <ClInclude Include="include\opengl\framebuffer.h" />
-    <ClInclude Include="include\gui.h" />
+    <ClInclude Include="include\infrastructure\opengl\base_renderer.h" />
+    <ClInclude Include="include\infrastructure\opengl\camera.h" />
+    <ClInclude Include="include\infrastructure\opengl\framebuffer.h" />
+    <ClInclude Include="include\gui\gui.h" />
     <ClInclude Include="include\model\heuristic.h" />
-    <ClInclude Include="include\opengl\index_buffer.h" />
-    <ClInclude Include="include\opengl\mesh.h" />
+    <ClInclude Include="include\infrastructure\opengl\index_buffer.h" />
+    <ClInclude Include="include\infrastructure\opengl\mesh.h" />
     <ClInclude Include="include\configurations\environment_configuration.h" />
     <ClInclude Include="include\seed_generator.h" />
-    <ClInclude Include="include\opengl\shader.h" />
-    <ClInclude Include="include\opengl\shape.h" />
-    <ClInclude Include="include\opengl\stategrid_renderer.h" />
-    <ClInclude Include="include\opengl\sphere.h" />
+    <ClInclude Include="include\infrastructure\opengl\shader.h" />
+    <ClInclude Include="include\infrastructure\geometry\shape.h" />
+    <ClInclude Include="include\infrastructure\opengl\stategrid_renderer.h" />
+    <ClInclude Include="include\infrastructure\geometry\sphere.h" />
     <ClInclude Include="include\model\topography.h" />
-    <ClInclude Include="include\opengl\topography_renderer.h" />
-    <ClInclude Include="include\opengl\vertex.h" />
-    <ClInclude Include="include\opengl\vertex_array.h" />
-    <ClInclude Include="include\opengl\vertex_buffer.h" />
-    <ClInclude Include="include\opengl\vertex_buffer_layout.h" />
-    <ClInclude Include="include\visualization_state.h" />
-    <ClInclude Include="include\window.h" />
+    <ClInclude Include="include\infrastructure\opengl\topography_renderer.h" />
+    <ClInclude Include="include\infrastructure\geometry\vertex.h" />
+    <ClInclude Include="include\infrastructure\opengl\vertex_array.h" />
+    <ClInclude Include="include\infrastructure\opengl\vertex_buffer.h" />
+    <ClInclude Include="include\infrastructure\opengl\vertex_buffer_layout.h" />
+    <ClInclude Include="include\visualization\visualization_state.h" />
+    <ClInclude Include="include\infrastructure\window\window.h" />
     <ClInclude Include="libs\glm\common.hpp" />
     <ClInclude Include="libs\glm\detail\compute_common.hpp" />
     <ClInclude Include="libs\glm\detail\compute_vector_decl.hpp" />
@@ -510,7 +510,7 @@
     <ClInclude Include="libs\imgui\imstb_textedit.h" />
     <ClInclude Include="libs\imgui\imstb_truetype.h" />
     <ClInclude Include="libs\stb_perlin.h" />
-    <ClInclude Include="include\visualization.h" />
+    <ClInclude Include="include\visualization\visualization.h" />
     <ClInclude Include="include\model\state_grid.h" />
     <ClInclude Include="include\model\search_environment.h" />
   </ItemGroup>

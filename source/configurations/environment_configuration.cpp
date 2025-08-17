@@ -3,7 +3,7 @@
 void EnvironmentConfig::init() {
 	seed = 0;
 	topographyType = 0;
-	terrainScaling = 0.0001f;
+	terrainScaling = COMPLEXITY_LOW;
 	gridSize = 10;
 	topographySize = 7000;
 	topographyAmplitude = 1000;

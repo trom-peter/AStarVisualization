@@ -2,7 +2,6 @@
 #include "glm/glm.hpp"
 
 struct EnvironmentConfig {
-
 	void init();
 	void updateStateSpacing();
 
@@ -10,7 +9,14 @@ struct EnvironmentConfig {
 	int topographyType;
 	int topographySize;
 	int topographyAmplitude;
-	float terrainScaling; // the higher this parameter, the larger the terrain area
+
+	// the higher this parameter, the larger the terrain area (also known as terrain complexity)
+	float terrainScaling; 
+
 	int gridSize;
 	int stateSpacing;
+
+	static constexpr float COMPLEXITY_LOW = 0.0001f;
+	static constexpr float COMPLEXITY_MEDIUM = 0.00015f;
+	static constexpr float COMPLEXITY_HIGH = 0.0002f;
 };

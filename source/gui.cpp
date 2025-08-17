@@ -86,20 +86,20 @@ VisualizationState GUI::showUI_EnvironmentConfig(EnvironmentConfig& envConfig) {
 
     ImGui::Text(u8"Komplexität");
     if (ImGui::Button("Einfach")) {
-        envConfig.terrainScaling = 0.0001f;
+        envConfig.terrainScaling = EnvironmentConfig::COMPLEXITY_LOW;
     }
 
     if (ImGui::Button("Mittel")) {
-        envConfig.terrainScaling = 0.00015f;
+        envConfig.terrainScaling = EnvironmentConfig::COMPLEXITY_MEDIUM;
     }     
 
     if (ImGui::Button("Hoch")) {
-        envConfig.terrainScaling = 0.0002f;
+        envConfig.terrainScaling = EnvironmentConfig::COMPLEXITY_HIGH;
     }
 
     ImGui::NewLine();
 
-    ImGui::Text(u8"Gittergröße");
+    ImGui::Text(u8"Anzahl Gitterpunkte (n x n)");
     if (ImGui::InputInt("##graphsize", &envConfig.gridSize)) {
         envConfig.gridSize = std::clamp(envConfig.gridSize, 5, 30);
         envConfig.updateStateSpacing();

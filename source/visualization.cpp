@@ -171,7 +171,6 @@ void Visualization::inEnvironment() {
 void Visualization::environmentToProblem() {
 	environment->graph.reset(environment->stateGrid.gridSize, environment->topography.getSize());
 	environment->graph.setTopography(&environment->topography);
-	environment->graph.init();
 	problem->initial = State(0, environment->topography.getY(0, 0), 0);
 	problem->goal = State(0, environment->topography.getY(0, 0), 0);
 	problem->graph = environment->graph;

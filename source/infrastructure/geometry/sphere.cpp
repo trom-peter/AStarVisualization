@@ -1,5 +1,10 @@
 #include "infrastructure/geometry/sphere.h"
 
+/*
+* Implementation of getVertices() and getIndices() is based on portions of the code of Eric Arnebäck.
+* https://github.com/Erkaman/cute-deferred-shading/tree/master
+*/
+
 int constexpr MIN_SECTOR_COUNT = 2;
 int constexpr MIN_STACK_COUNT = 2;
 float constexpr MIN_RADIUS = 0.0f;

@@ -54,5 +54,5 @@ private:
     PlaybackConfig config_Playback;
     StategridConfig config_Stategrid;
 
-    int step; // Current step in search process
+    int step; // Step number in search process. Measured in number of expanded nodes
 };

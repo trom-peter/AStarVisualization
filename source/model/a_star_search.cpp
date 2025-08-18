@@ -13,7 +13,7 @@ AStarSearch::~AStarSearch() {}
 
 // Start the search for the current search problem
 void AStarSearch::search() {
-	int step = 0;
+	int step = 0; // Number of expanded nodes. Used for adding states to allFrontiers at each step
 	allFrontiers.clear();
 	allExpanded.clear();
 	solutionPath.clear();

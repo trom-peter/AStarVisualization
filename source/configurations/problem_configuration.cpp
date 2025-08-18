@@ -3,7 +3,7 @@
 glm::ivec2 constexpr INITIAL_STATE = glm::ivec2(0, 0);
 glm::ivec2 constexpr GOAL_STATE = glm::ivec2(0, 0);
 int constexpr HEURISTIC = 0;
-float constexpr OVERESTIMATE_FACTOR = 0.0f;
+float constexpr OVERESTIMATE_FACTOR = 1.0f;
 
 ProblemConfig::ProblemConfig() : 
 	initial(INITIAL_STATE),

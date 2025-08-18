@@ -32,6 +32,7 @@ bool BaseRenderer::init() {
     return true;
 }
 
+// Clear background with the set clearColor.
 void BaseRenderer::clear() {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }

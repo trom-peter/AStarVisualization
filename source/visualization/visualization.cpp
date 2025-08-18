@@ -3,6 +3,7 @@
 #include "infrastructure/geometry/sphere.h"
 #include "infrastructure/opengl/camera.h"
 
+// rendering and camera configuration
 glm::vec3 constexpr BACKGROUND_COLOR = glm::vec3(0.1f);
 float constexpr CAMERA_FOV = 90.0f;
 float constexpr CAMERA_NEAR_PLANE = 10.0f;
@@ -46,7 +47,7 @@ bool Visualization::init() {
 		*environment);
 
 	topoRenderer = std::make_unique<TopographyRenderer>(environment->topography);
-	stategridRenderer = std::make_unique<StategridRenderer>(environment->stateGrid);
+	stategridRenderer = std::make_unique<StategridRenderer>(environment->stategrid);
 
 	fb = std::make_unique<FrameBuffer>(window.getWidth() , window.getHeight());
 	vao = std::make_unique<VertexArray>();
@@ -69,10 +70,15 @@ bool Visualization::init() {
 	return true;
 }
 
+/*
+	Main loop for running the visualization.
+	Exits when state == VisualizationState::Quit.
+*/
 void Visualization::run() {
 	while (true) {
 		gui.startFrame();
 
+		//check if window was exited
 		if (gui.isWindowExited())
 			state = VisualizationState::Quit;
 
@@ -117,22 +123,27 @@ void Visualization::run() {
 
 		BaseRenderer::clear();
 
-		//draw topography
+		// draw topography into FrameBuffer fb
 		topoRenderer->updateUniforms(*camera);
 		topoRenderer->drawTopography();
 
-		//draw stategrid
+		// draw stategrid into FrameBuffer fb
 		stategridRenderer->drawStategrid(*camera);
 
 		fb->unbind();
 		glViewport(0, 0, window.getWidth(), window.getHeight());
 
+		// show visibility menu and update visibility regardless of state
 		gui.showUI_Visibility(config_Stategrid);
-		environment->stateGrid.updateVisibility(config_Stategrid);
+		environment->stategrid.updateVisibility(config_Stategrid);
 
+		// show fb in viewport window
 		gui.showUI_Viewport(*fb);
+
+		// render the whole gui
 		gui.render();
 
+		// resize fb if viewport was resized
 		if (fb->width != gui.getViewportSize().x || fb->height != gui.getViewportSize().y) 
 			fb->resize(gui.getViewportSize().x, gui.getViewportSize().y);
 
@@ -147,7 +158,7 @@ int Visualization::quit() {
 }
 
 void Visualization::inEnvironment() {
-	//topography was changed
+	// topography was changed by user
 	if (config_Environment.topographyType != environment->topography.getType() ||
 		config_Environment.seed != environment->topography.getSeed() ||
 		config_Environment.terrainScaling != environment->topography.getScale())
@@ -162,49 +173,60 @@ void Visualization::inEnvironment() {
 		topoRenderer->setTopography(environment->topography);
 	}
 
-	if (config_Environment.gridSize != environment->stateGrid.gridSize) {
+	// gridsize was changed by user
+	if (config_Environment.gridSize != environment->stategrid.gridSize) {
 		environment->resetGrid(config_Environment.gridSize);
 	}
 }
 
 void Visualization::environmentToProblem() {
-	environment->graph.reset(environment->stateGrid.gridSize, environment->topography.getSize());
+	// Prepare graph and search problem
+	environment->graph.reset(environment->stategrid.gridSize, environment->topography.getSize());
 	environment->graph.setTopography(environment->topography);
 	problem->initial = State(0, environment->topography.getY(0, 0), 0);
 	problem->goal = State(0, environment->topography.getY(0, 0), 0);
-	//problem->graph = environment->graph;
-	config_Stategrid.defaultVisible = false; //unexplored nodes are invisble when configuring search problem
+
+	// Unexplored nodes should be invisble when configuring search problem
+	config_Stategrid.defaultVisible = false; 
 }
 
 void Visualization::inProblem() {
-	if (config_Problem.initial != problem->initial.getXZ()) { //initial state updated
-		environment->stateGrid.grid[problem->initial] = config_Stategrid.defaultColor;
+	// Initial state was changed by user
+	if (config_Problem.initial != problem->initial.getXZ()) { 
+		environment->stategrid.grid[problem->initial] = config_Stategrid.defaultColor;
 		problem->initial.y = environment->topography.getY(config_Problem.initial.x, config_Problem.initial.y);
 		problem->initial.setXZ(config_Problem.initial);
 	}
-	if (config_Problem.goal != problem->goal.getXZ()) { //goal state updated
-		environment->stateGrid.grid[problem->goal] = config_Stategrid.defaultColor;
+
+	// Goal state was changed by user
+	if (config_Problem.goal != problem->goal.getXZ()) { 
+		environment->stategrid.grid[problem->goal] = config_Stategrid.defaultColor;
 		problem->goal.y = environment->topography.getY(config_Problem.goal.x, config_Problem.goal.y);
 		problem->goal.setXZ(config_Problem.goal);
 	}
 
-	environment->stateGrid.grid[problem->initial] = config_Stategrid.initialStateColor;
-	environment->stateGrid.grid[problem->goal] = config_Stategrid.goalStateColor;
+	// Set initial and goal state colors
+	environment->stategrid.grid[problem->initial] = config_Stategrid.initialStateColor;
+	environment->stategrid.grid[problem->goal] = config_Stategrid.goalStateColor;
 
+	// Heuristic was changed by user
 	if (config_Problem.heuristic != aStar->getHeuristic().heuristicId)
 		aStar->setHeuristic(config_Problem.heuristic);
 
+	// Heuristic overestimate factor was changed by user
 	if (config_Problem.overestimateFactor != aStar->getHeuristic().overestimateFactor)
 		aStar->setHeuristic(config_Problem.heuristic, config_Problem.overestimateFactor);
 }
 
 int Visualization::problemToSearching() {
+	// Start the configured search
 	aStar->search();
 	if (aStar->getSolution() == nullptr) {
 		std::cout << "No path found." << std::endl;
 		return -1;
 	}
 
+	// Initialize playback config
 	config_Playback.step = 0;
 	config_Playback.maxSteps = aStar->allExpanded.size();
 }
@@ -212,6 +234,7 @@ int Visualization::problemToSearching() {
 void Visualization::inSearching() {
 	config_Playback.updateTimePerIncrement();
 
+	// Increment config step if its playing and enough time (timePerIncrement) has passed
 	if (config_Playback.searchPlaying) {
 		config_Playback.searchTime += window.getDelta();
 		if (config_Playback.searchTime >= config_Playback.timePerIncrement) {
@@ -220,21 +243,25 @@ void Visualization::inSearching() {
 		}
 	}
 
-	if (config_Playback.step > step) { //forwards step
-		environment->stateGrid.updateToStep(config_Playback.step - 1, problem->graph, *aStar, true);
+	if (config_Playback.step > step) { // Forwards step by user
+		environment->stategrid.updateToStep(config_Playback.step - 1, problem->graph, *aStar, true);
 	}
-	else if (config_Playback.step < step) { // backwards step
-		environment->stateGrid.updateToStep(config_Playback.step, problem->graph, *aStar, false);
+	else if (config_Playback.step < step) { // Backwards step by user
+		environment->stategrid.updateToStep(config_Playback.step, problem->graph, *aStar, false);
 	}
+
+	// Update visualization step 
 	step = config_Playback.step;
 }
 
 void Visualization::searchingToFinished() {
-	environment->stateGrid.showSolutionPath(aStar->solutionPath, *problem);
+	// Show and highlight solution states
+	environment->stategrid.showSolutionPath(aStar->solutionPath, *problem);
 }
 
 void Visualization::finishedToEnvironment() {
-	environment->resetGrid(environment->stateGrid.gridSize);
+	// Reset stategrid colors, search problem and playback configuration
+	environment->resetGrid(environment->stategrid.gridSize);
 	config_Stategrid.defaultVisible = true;
 	config_Problem.reset();
 	config_Playback.step = 0;
@@ -242,7 +269,8 @@ void Visualization::finishedToEnvironment() {
 }
 
 void Visualization::finishedToProblem() {
-	environment->resetGrid(environment->stateGrid.gridSize);
+	// Reset stategrid colors and playback configuration
+	environment->resetGrid(environment->stategrid.gridSize);
 	config_Playback.step = 0;
 	config_Playback.maxSteps = 0;
 }

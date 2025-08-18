@@ -1,5 +1,6 @@
 #include "configurations/playback_configuration.h"
 
+// Initial playback configuration
 int constexpr STEP = 0;
 int constexpr MAX_STEPS = 0;
 float constexpr SEARCH_TIME = 0.0f;
@@ -16,6 +17,7 @@ PlaybackConfig::PlaybackConfig() :
 	timePerIncrement(TIME_PER_INCREMENT) {
 }
 
+// Reset config to initial configuration
 void PlaybackConfig::reset() {
 	step = STEP;
 	maxSteps = MAX_STEPS;

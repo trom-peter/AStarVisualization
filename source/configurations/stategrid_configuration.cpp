@@ -1,5 +1,6 @@
 #include "configurations/stategrid_configuration.h"
 
+// Initial stategrid configuration
 glm::vec3 constexpr DEFAULT_COLOR = glm::vec3(0.0f);
 glm::vec3 constexpr FRONTIER_COLOR = glm::vec3(1.0f);
 glm::vec3 constexpr REACHED_COLOR = glm::vec3(0.2f, 0.6f, 1.0f);
@@ -22,6 +23,7 @@ StategridConfig::StategridConfig() :
 	frontierVisible(FRONTIER_VISIBLE),
 	reachedVisible(REACHED_VISIBLE) {}
 
+// Reset stategrid to initial configuration
 void StategridConfig::reset() {
 	defaultColor = DEFAULT_COLOR;
 	frontierColor = FRONTIER_COLOR;

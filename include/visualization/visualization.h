@@ -24,15 +24,18 @@ public:
     int quit();
 
 private:
-    //TODO State funktionen
-    void inEnvironment();
+
+    // State transitions
     void environmentToProblem();
-    void inProblem();
     int problemToSearching();
-    void inSearching();
     void searchingToFinished();
     void finishedToEnvironment();
     void finishedToProblem();
+
+    // State executes
+    void inEnvironment();
+    void inProblem();
+    void inSearching();
 
     VisualizationState state;
     Window window;

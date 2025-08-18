@@ -16,6 +16,6 @@ struct SearchEnvironment {
 	void resetTopography(const unsigned char seed, const float scale, const bool type);
 
 	Topography topography;
-	Stategrid stateGrid;
+	Stategrid stategrid;
 	Graph graph;
 };

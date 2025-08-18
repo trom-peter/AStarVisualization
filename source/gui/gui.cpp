@@ -11,7 +11,7 @@
 #include "model/a_star_search.h"
 #include "model/node.h"
 
-GUI::GUI() : windowFlags(ImGuiWindowFlags()), dockingFlags(ImGuiDockNodeFlags()) {}
+GUI::GUI() : font(nullptr), windowFlags(ImGuiWindowFlags()), dockingFlags(ImGuiDockNodeFlags()) {}
 
 void GUI::init(const Window& window) {
     // Setup Dear ImGui context
@@ -21,6 +21,7 @@ void GUI::init(const Window& window) {
     io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
     io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;         // Enable Docking
     io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;       // Enable Multi-Viewport / Platform Windows
+
     // Setup Dear ImGui style
     ImGui::StyleColorsDark();
     ImGuiStyle& style = ImGui::GetStyle();
@@ -40,10 +41,11 @@ void GUI::init(const Window& window) {
     dockingFlags = ImGuiDockNodeFlags_NoResize | ImGuiDockNodeFlags_PassthruCentralNode;
 }
 
+// Check if window was exited by the user
 bool GUI::isWindowExited() {
     bool exited = false;
     SDL_Event event;
-    while (SDL_PollEvent(&event)) {
+    while (SDL_PollEvent(&event)) { // Get SDL2 events
         ImGui_ImplSDL2_ProcessEvent(&event);
         if (event.type == SDL_QUIT) {
             exited = true;
@@ -52,6 +54,7 @@ bool GUI::isWindowExited() {
     return exited;
 }
 
+// Start GUI rendering frame
 void GUI::startFrame() {
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplSDL2_NewFrame();
@@ -63,7 +66,7 @@ void GUI::startFrame() {
 VisualizationState GUI::showUI_EnvironmentConfig(EnvironmentConfig& envConfig) const {
     VisualizationState nextState = VisualizationState::ConfiguringSearchEnvironment;
 
-    //Suchraum
+    // Show environment configuration menu
     ImGui::Begin("Konfiguration des Suchraums", nullptr, windowFlags);
 
     char buffer[4];
@@ -117,12 +120,12 @@ VisualizationState GUI::showUI_EnvironmentConfig(EnvironmentConfig& envConfig) c
 VisualizationState GUI::showUI_SearchProblemConfig(ProblemConfig& problemConfig, const EnvironmentConfig& envConfig) const {
     VisualizationState nextState = VisualizationState::ConfiguringSearchProblem;
 
-    // Suchproblem
+    // Search problem configuration
     ImGui::Begin("Konfiguration des Suchproblems", nullptr, windowFlags);
     ImGui::Text("Startzustand"); ImGui::SameLine(125); ImGui::Text("Zielzustand");
     ImGui::NewLine();
 
-    // Startzustand Konfiguration
+    // Initial state configuration
     ImGui::BeginGroup();
     ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 25);
     if (ImGui::ArrowButton("##up1", ImGuiDir_Up)) {
@@ -158,7 +161,7 @@ VisualizationState GUI::showUI_SearchProblemConfig(ProblemConfig& problemConfig,
 
     ImGui::SameLine(0, 50);
 
-    // Zielzustand Konfiguration
+    // Goal state configuration
     ImGui::BeginGroup();
     ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 25);
     if (ImGui::ArrowButton("##up2", ImGuiDir_Up)) {
@@ -193,7 +196,7 @@ VisualizationState GUI::showUI_SearchProblemConfig(ProblemConfig& problemConfig,
 
     ImGui::NewLine();
 
-    // heuristics
+    // Heuristic choice
     const char* items[] = { "Keine", "Wanderdauer", 
         u8"Wanderdauer Überschätzt", "Schnittpunkte", u8"Höhengewichtung"};
 
@@ -205,6 +208,7 @@ VisualizationState GUI::showUI_SearchProblemConfig(ProblemConfig& problemConfig,
         problemConfig.overestimateFactor = std::clamp(problemConfig.overestimateFactor, 0.0f, 100.0f);
     }
 
+    // Begin search
     if (ImGui::Button("Suche!", ImVec2(80.0f, 40.0f))) nextState = VisualizationState::Searching;
 
     ImGui::End();
@@ -215,6 +219,7 @@ VisualizationState GUI::showUI_SearchProblemConfig(ProblemConfig& problemConfig,
 VisualizationState GUI::showUI_Searching(PlaybackConfig& playbackConfig) const {
     VisualizationState nextState = VisualizationState::Searching;
 
+    // Playback configuration
     ImGui::Begin("Suche", nullptr, windowFlags);
 
     ImGui::Text("Expansionen pro Sekunde");
@@ -242,12 +247,14 @@ VisualizationState GUI::showUI_Searching(PlaybackConfig& playbackConfig) const {
     }
     if (playbackConfig.searchPlaying) ImGui::EndDisabled();
 
+    // Search playback is finished
     if (playbackConfig.step == playbackConfig.maxSteps) {
         playbackConfig.searchPlaying = false;
-        ImGui::OpenPopup("Pfad gefunden!"); //open a pop up when the search is finished
+        ImGui::OpenPopup("Pfad gefunden!"); // Open pop up
     }
 
     if (ImGui::BeginPopupModal("Pfad gefunden!")) {
+        // Close Popup if user presses "Ok"
         if (ImGui::Button("Ok", ImVec2(80.0f, 30.0f))) {
             nextState = VisualizationState::Finished;
             ImGui::CloseCurrentPopup();
@@ -262,9 +269,10 @@ VisualizationState GUI::showUI_Searching(PlaybackConfig& playbackConfig) const {
 VisualizationState GUI::showUI_Finished(const AStarSearch& aStar) const {
     VisualizationState nextState = VisualizationState::Finished;
 
+    // Search statistics
     ImGui::Begin("Statistik", nullptr, windowFlags);
     char sTime[100];
-    sprintf_s(sTime, "%.2fh", aStar.getSolution()->pathCost/ 3600.0f); // show travel time in hours
+    sprintf_s(sTime, "%.2fh", aStar.getSolution()->pathCost / 3600.0f); // Show travel time in hours
     ImGui::LabelText(sTime, u8"Wanderdauer");
 
     ImGui::NewLine();
@@ -276,6 +284,7 @@ VisualizationState GUI::showUI_Finished(const AStarSearch& aStar) const {
 
     ImGui::NewLine();
 
+    // Menu for going back
     ImGui::Text(u8"Zurück zu:");
     if (ImGui::Button("Suchproblem")) {
         nextState = VisualizationState::ConfiguringSearchProblem;
@@ -290,13 +299,14 @@ VisualizationState GUI::showUI_Finished(const AStarSearch& aStar) const {
 }
 
 void GUI::showUI_Viewport(FrameBuffer& fb) {
-    // viewport
+    // Visualization viewport
     ImGui::Begin("Visualisierung", nullptr, windowFlags);
     {
         ImGui::BeginChild("Viewport");
 
-        viewportSize = ImGui::GetContentRegionAvail();
+        viewportSize = ImGui::GetContentRegionAvail(); // Update viewport size
 
+        // Show framebuffer with visualization
         ImGui::Image((ImTextureID)(intptr_t)fb.colorTextureId, viewportSize, ImVec2(0, 1), ImVec2(1, 0));
         ImGui::EndChild();
     }
@@ -304,6 +314,7 @@ void GUI::showUI_Viewport(FrameBuffer& fb) {
 }
 
 void GUI::showUI_Visibility(StategridConfig& gridConfig) const {
+    // Visibility menu
     ImGui::Begin("Sichtbarkeit", nullptr, windowFlags);
     ImGui::Checkbox("Unbesucht", &gridConfig.defaultVisible);
     ImGui::Checkbox("Grenzbereich", &gridConfig.frontierVisible);
@@ -314,10 +325,11 @@ void GUI::showUI_Visibility(StategridConfig& gridConfig) const {
 void GUI::render() const {
     ImGui::PopFont();
 
+    // Render GUI
     ImGui::Render();
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
-    // update and render additional windows
+    // Update and render additional windows
     if (ImGui::GetIO().ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
     {
         SDL_Window* backup_current_window = SDL_GL_GetCurrentWindow();

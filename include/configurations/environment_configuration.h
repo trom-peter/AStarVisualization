@@ -7,16 +7,16 @@ struct EnvironmentConfig {
 	void reset();
 	void updateStateSpacing();
 
-	unsigned char seed; // with what seed the topography should be generated
-	int topographyType;
-	int topographySize;
-	int topographyAmplitude;
+	unsigned char seed; // With what seed the topography should be generated
+	int topographyType; // Type of topography (0/1)
+	int topographySize; // Size of topography in meters
+	int topographyAmplitude; // Amplitude of topography in meters
 
-	// the higher this parameter, the larger the terrain area (also known as terrain complexity)
+	// The higher this parameter, the larger the terrain area (also known as terrain complexity)
 	float terrainScaling; 
 
 	int gridSize;
-	int stateSpacing;
+	int stateSpacing; // Horizontal spacing between states in meters
 
 	static constexpr float COMPLEXITY_LOW = 0.0001f;
 	static constexpr float COMPLEXITY_MEDIUM = 0.00015f;

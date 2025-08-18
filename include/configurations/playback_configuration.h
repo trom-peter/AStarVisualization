@@ -7,10 +7,10 @@ struct PlaybackConfig {
 	void reset();
 	void updateTimePerIncrement();
 
-	int step; // step number in search process. measured in number of expanded nodes
-	int maxSteps; // maximum steps in search process
-	float searchTime;
-	int searchRate; //steps per second
-	bool searchPlaying;
-	float timePerIncrement;
+	int step; // Step number in search process. Measured in number of expanded nodes
+	int maxSteps; // Maximum steps in search process
+	float searchTime; // Time spent searching, in seconds
+	int searchRate; // Steps per second
+	bool searchPlaying; // Is the search currently automatically playing
+	float timePerIncrement; // How many seconds a step increment takes
 };

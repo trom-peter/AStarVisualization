@@ -1,6 +1,6 @@
 #include "configurations/environment_configuration.h"
 
-//initial environment configuration
+// Initial environment configuration
 int constexpr SEED = 0;
 int constexpr TOPOGRAPHY_TYPE = 0;
 float constexpr TERRAIN_SCALING = EnvironmentConfig::COMPLEXITY_LOW;
@@ -18,7 +18,7 @@ EnvironmentConfig::EnvironmentConfig() :
 	topographyAmplitude(TOPOGRAPHY_AMPLITUDE),
 	stateSpacing(STATE_SPACING) {}
 
-//set to initial configuration
+// Set to initial configuration
 void EnvironmentConfig::reset() {
 	seed = SEED;
 	topographyType = TOPOGRAPHY_TYPE;

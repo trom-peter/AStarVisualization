@@ -1,5 +1,6 @@
 #include "configurations/problem_configuration.h"
 
+// Initial search problem configuration
 glm::ivec2 constexpr INITIAL_STATE = glm::ivec2(0, 0);
 glm::ivec2 constexpr GOAL_STATE = glm::ivec2(0, 0);
 int constexpr HEURISTIC = 0;
@@ -11,6 +12,7 @@ ProblemConfig::ProblemConfig() :
 	heuristic(HEURISTIC),
 	overestimateFactor(OVERESTIMATE_FACTOR) {}
 
+// Reset search problem to inital problem configuration
 void ProblemConfig::reset() {
 	initial = INITIAL_STATE;
 	goal = GOAL_STATE;

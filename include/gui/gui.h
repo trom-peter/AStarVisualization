@@ -31,8 +31,8 @@ public:
 	void showUI_Visibility(StategridConfig& gridConfig) const;
 
 private:
-	ImFont* font;
-	ImVec2 viewportSize;
-	ImGuiWindowFlags windowFlags;
-	ImGuiDockNodeFlags dockingFlags;
+	ImFont* font; // GUI Font
+	ImVec2 viewportSize; // Size of viewport where visualization is drawn to
+	ImGuiWindowFlags windowFlags; // Flags for drawing windows
+	ImGuiDockNodeFlags dockingFlags; // Docking window flags
 };

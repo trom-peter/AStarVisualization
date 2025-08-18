@@ -15,7 +15,7 @@ struct EnvironmentConfig {
 	// The higher this parameter, the larger the terrain area. Also known as terrain complexity
 	float terrainScaling; 
 
-	int gridSize;
+	int gridResolution;
 	int stateSpacing; // Horizontal spacing between states in meters
 
 	static constexpr float COMPLEXITY_LOW = 0.0001f;

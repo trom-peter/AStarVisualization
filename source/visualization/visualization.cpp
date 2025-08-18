@@ -33,8 +33,8 @@ bool Visualization::init() {
 	environment = std::make_unique<SearchEnvironment>(
 		config_Environment.seed, config_Environment.terrainScaling, 
 		config_Environment.topographyType, config_Environment.topographySize, 
-		config_Environment.topographyAmplitude, config_Environment.gridSize,
-		Stategrid(config_Environment.gridSize, 
+		config_Environment.topographyAmplitude, config_Environment.gridResolution,
+		Stategrid(config_Environment.gridResolution, 
 			config_Stategrid.defaultColor, config_Stategrid.frontierColor, config_Stategrid.reachedColor, 
 			config_Stategrid.initialStateColor, config_Stategrid.goalStateColor, config_Stategrid.solutionStateColor, 
 			config_Stategrid.defaultVisible, config_Stategrid.frontierVisible, config_Stategrid.reachedVisible));
@@ -168,20 +168,20 @@ void Visualization::inEnvironment() {
 			config_Environment.terrainScaling, 
 			config_Environment.topographyType);
 
-		environment->resetGrid(config_Environment.gridSize);
+		environment->resetGrid(config_Environment.gridResolution);
 
 		topoRenderer->setTopography(environment->topography);
 	}
 
 	// Gridsize was changed by user
-	if (config_Environment.gridSize != environment->stategrid.gridSize) {
-		environment->resetGrid(config_Environment.gridSize);
+	if (config_Environment.gridResolution != environment->stategrid.gridResolution) {
+		environment->resetGrid(config_Environment.gridResolution);
 	}
 }
 
 void Visualization::environmentToProblem() {
 	// Prepare graph and search problem
-	environment->graph.reset(environment->stategrid.gridSize, environment->topography.getSize());
+	environment->graph.reset(environment->stategrid.gridResolution, environment->topography.getSize());
 	environment->graph.setTopography(environment->topography);
 	problem->initial = State(0, environment->topography.getY(0, 0), 0);
 	problem->goal = State(0, environment->topography.getY(0, 0), 0);
@@ -262,7 +262,7 @@ void Visualization::searchingToFinished() {
 
 void Visualization::finishedToEnvironment() {
 	// Reset stategrid colors, search problem and playback configuration
-	environment->resetGrid(environment->stategrid.gridSize);
+	environment->resetGrid(environment->stategrid.gridResolution);
 	config_Stategrid.defaultVisible = true;
 	config_Problem.reset();
 	config_Playback.step = 0;
@@ -271,7 +271,7 @@ void Visualization::finishedToEnvironment() {
 
 void Visualization::finishedToProblem() {
 	// Reset stategrid colors and playback configuration
-	environment->resetGrid(environment->stategrid.gridSize);
+	environment->resetGrid(environment->stategrid.gridResolution);
 	config_Playback.step = 0;
 	config_Playback.maxSteps = 0;
 }

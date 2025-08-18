@@ -15,7 +15,7 @@ SearchEnvironment::SearchEnvironment(
 
 void SearchEnvironment::resetGrid(const int gridSize) {
 	stategrid.clearGrid();
-	stategrid.gridSize = gridSize;
+	stategrid.gridResolution = gridSize;
 	stategrid.initGrid(topography);
 }
 

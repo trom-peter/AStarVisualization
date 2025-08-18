@@ -102,9 +102,9 @@ VisualizationState GUI::showUI_EnvironmentConfig(EnvironmentConfig& envConfig) c
 
     ImGui::NewLine();
 
-    ImGui::Text(u8"Anzahl Gitterpunkte (n x n)");
-    if (ImGui::InputInt("##graphsize", &envConfig.gridSize)) {
-        envConfig.gridSize = std::clamp(envConfig.gridSize, 5, 30);
+    ImGui::Text(u8"Gitterauflösung (n * n)");
+    if (ImGui::InputInt("##gridResolution", &envConfig.gridResolution)) {
+        envConfig.gridResolution = std::clamp(envConfig.gridResolution, 5, 30);
         envConfig.updateStateSpacing();
     }
 
@@ -132,7 +132,7 @@ VisualizationState GUI::showUI_SearchProblemConfig(ProblemConfig& problemConfig,
         problemConfig.initial.y = std::clamp(
             problemConfig.initial.y - envConfig.stateSpacing, 
             0, 
-            (envConfig.gridSize - 1) * envConfig.stateSpacing);
+            (envConfig.gridResolution - 1) * envConfig.stateSpacing);
     }
 
     ImGui::BeginGroup();
@@ -140,14 +140,14 @@ VisualizationState GUI::showUI_SearchProblemConfig(ProblemConfig& problemConfig,
         problemConfig.initial.x = std::clamp(
             problemConfig.initial.x - envConfig.stateSpacing,
             0,
-            (envConfig.gridSize - 1) * envConfig.stateSpacing);
+            (envConfig.gridResolution - 1) * envConfig.stateSpacing);
     }
     ImGui::SameLine(0, 30);
     if (ImGui::ArrowButton("##right1", ImGuiDir_Right)) {
         problemConfig.initial.x = std::clamp(
             problemConfig.initial.x + envConfig.stateSpacing,
             0,
-            (envConfig.gridSize - 1) * envConfig.stateSpacing);
+            (envConfig.gridResolution - 1) * envConfig.stateSpacing);
     }
     ImGui::EndGroup();
     ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 25);
@@ -155,7 +155,7 @@ VisualizationState GUI::showUI_SearchProblemConfig(ProblemConfig& problemConfig,
         problemConfig.initial.y = std::clamp(
             problemConfig.initial.y + envConfig.stateSpacing,
             0,
-            (envConfig.gridSize - 1) * envConfig.stateSpacing);
+            (envConfig.gridResolution - 1) * envConfig.stateSpacing);
     }
     ImGui::EndGroup();
 
@@ -168,21 +168,21 @@ VisualizationState GUI::showUI_SearchProblemConfig(ProblemConfig& problemConfig,
         problemConfig.goal.y = std::clamp(
             problemConfig.goal.y - envConfig.stateSpacing,
             0,
-            (envConfig.gridSize - 1) * envConfig.stateSpacing);
+            (envConfig.gridResolution - 1) * envConfig.stateSpacing);
     }
     ImGui::BeginGroup();
     if (ImGui::ArrowButton("##left2", ImGuiDir_Left)) {
         problemConfig.goal.x = std::clamp(
             problemConfig.goal.x - envConfig.stateSpacing,
             0,
-            (envConfig.gridSize - 1) * envConfig.stateSpacing);
+            (envConfig.gridResolution - 1) * envConfig.stateSpacing);
     }
     ImGui::SameLine(0, 30);
     if (ImGui::ArrowButton("##right2", ImGuiDir_Right)) {
         problemConfig.goal.x = std::clamp(
             problemConfig.goal.x + envConfig.stateSpacing,
             0,
-            (envConfig.gridSize - 1) * envConfig.stateSpacing);
+            (envConfig.gridResolution - 1) * envConfig.stateSpacing);
     }
     ImGui::EndGroup();
     ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 25);
@@ -190,7 +190,7 @@ VisualizationState GUI::showUI_SearchProblemConfig(ProblemConfig& problemConfig,
         problemConfig.goal.y = std::clamp(
             problemConfig.goal.y + envConfig.stateSpacing,
             0,
-            (envConfig.gridSize - 1) * envConfig.stateSpacing);
+            (envConfig.gridResolution - 1) * envConfig.stateSpacing);
     }
     ImGui::EndGroup();
 

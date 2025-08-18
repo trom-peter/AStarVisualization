@@ -13,7 +13,7 @@ EnvironmentConfig::EnvironmentConfig() :
 	seed(SEED),
 	topographyType(TOPOGRAPHY_TYPE),
 	terrainScaling(TERRAIN_SCALING),
-	gridSize(GRID_SIZE),
+	gridResolution(GRID_SIZE),
 	topographySize(TOPOGRAPHY_SIZE),
 	topographyAmplitude(TOPOGRAPHY_AMPLITUDE),
 	stateSpacing(STATE_SPACING) {}
@@ -23,12 +23,12 @@ void EnvironmentConfig::reset() {
 	seed = SEED;
 	topographyType = TOPOGRAPHY_TYPE;
 	terrainScaling = TERRAIN_SCALING;
-	gridSize = GRID_SIZE;
+	gridResolution = GRID_SIZE;
 	topographySize = TOPOGRAPHY_SIZE;
 	topographyAmplitude = TOPOGRAPHY_AMPLITUDE;
 	stateSpacing = STATE_SPACING;
 }
 
 void EnvironmentConfig::updateStateSpacing() {
-	this->stateSpacing = topographySize / (gridSize - 1);
+	this->stateSpacing = topographySize / (gridResolution - 1);
 }

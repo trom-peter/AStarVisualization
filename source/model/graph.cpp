@@ -2,17 +2,19 @@
 #include <iostream>
 #include "model/state.h"
 
-Graph::Graph(const int nodes, const int size, Topography& topo) : n(nodes), size(size), topography(topo) {
-	spacing = size / (nodes - 1);
-	int totalNodes = n * n;
+Graph::Graph(const int resolution, const int size, Topography& topo) : 
+	resolution(resolution), size(size), topography(topo) 
+{
+	spacing = size / (resolution - 1);
+	totalNodes = resolution * resolution;
 	adjMatrix.resize(totalNodes, std::vector<int>(totalNodes, 0));
 }
 
-void Graph::reset(const int nodes, const int size) {
-	this->n = nodes;
+void Graph::reset(const int resolution, const int size) {
+	this->resolution = resolution;
 	this->size = size;
-	spacing = size / (nodes - 1);
-	int totalNodes = n * n;
+	spacing = size / (resolution - 1);
+	totalNodes = resolution * resolution;
 	adjMatrix.clear();
 	adjMatrix.resize(totalNodes, std::vector<int>(totalNodes, 0));
 }
@@ -46,7 +48,7 @@ std::vector<State> Graph::getNeighbours(const int x, const int z) const {
 int Graph::toNodeIndex(int x, int z) const {
 	x /= spacing;
 	z /= spacing;
-	return z * n + x;
+	return z * resolution + x;
 }
 
 // does graph contain a node at a given position
@@ -56,7 +58,7 @@ bool Graph::isValid(const int x, const int z) const {
 
 // does graph contain a node at index i
 bool Graph::isValid(const int i) const {
-	return (0 <= i) && (i < n * n);
+	return (0 <= i) && (i < totalNodes);
 }
 
 void Graph::addEdge(const int i, const int j, const int weight) {
@@ -84,8 +86,8 @@ bool Graph::hasEdge(const int x1, const int z1, const int x2, const int z2) cons
 }
 
 void Graph::printAdjacencyMatrix() const {
-	for (int i = 0; i < n * n; i++) {
-		for (int j = 0; j < n * n; j++) {
+	for (int i = 0; i < totalNodes; i++) {
+		for (int j = 0; j < totalNodes; j++) {
 			std::cout << adjMatrix[i][j] << " ";
 		}
 		std::cout << std::endl;

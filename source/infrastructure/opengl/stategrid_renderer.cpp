@@ -39,7 +39,7 @@ void StategridRenderer::drawStategrid(const Camera& camera) {
         // Update state sphere
         stateSphere.setColor(stateColor);
         stateSphere.setPosition(glm::vec3(kv.first.x, kv.first.y + 40.0f, kv.first.z));
-        stateSphere.setScale(glm::vec3(1000.0f / stategrid.gridSize));
+        stateSphere.setScale(glm::vec3(1000.0f / stategrid.gridResolution));
 
         updateUniforms(camera, stateSphere.model, stateSphere.color);
 

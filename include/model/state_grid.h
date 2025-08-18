@@ -29,7 +29,7 @@ public:
 	void clearGrid();
 
 	std::unordered_map<State, glm::vec3, StateHash> grid; // Map that stores color for each state
-	int gridSize;
+	int gridResolution;
 
 	// State colors
 	glm::vec3 defaultColor;

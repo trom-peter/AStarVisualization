@@ -8,7 +8,7 @@
 #include <iostream>
 
 Stategrid::Stategrid() :
-    gridSize(0),
+    gridResolution(0),
     defaultColor(glm::vec3(0.0f)), frontierColor(glm::vec3(0.0f)), reachedColor(glm::vec3(0.0f)),
     initialStateColor(glm::vec3(0.0f)), goalStateColor(glm::vec3(0.0f)),
     solutionStateColor(glm::vec3(0.0f)),
@@ -20,7 +20,7 @@ Stategrid::Stategrid(
     const int gridSize, const glm::vec3 defaultColor, const glm::vec3 frontierColor, const glm::vec3 reachedColor,
     const glm::vec3 initialStateColor, const glm::vec3 goalStateColor, const glm::vec3 solutionStateColor,
     const bool defaultVisible, const bool frontierVisible, const bool reachedVisible) :
-    gridSize(gridSize),
+    gridResolution(gridSize),
     defaultColor(defaultColor), frontierColor(frontierColor), reachedColor(reachedColor),
     initialStateColor(initialStateColor), goalStateColor(goalStateColor),
     solutionStateColor(solutionStateColor),
@@ -74,7 +74,7 @@ void Stategrid::updateToStep(const int step, const Graph& g, AStarSearch& aStar,
 
 void Stategrid::initGrid(const Topography& topo) {
     grid.clear();
-    int stepSize = topo.getSize() / (gridSize - 1);
+    int stepSize = topo.getSize() / (gridResolution - 1);
     for (int z = 0; z <= topo.getSize(); z += stepSize) {
         for (int x = 0; x <= topo.getSize(); x += stepSize) {
             int y = topo.getY(x, z);

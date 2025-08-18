@@ -6,7 +6,7 @@ struct State;
 
 class Graph {
 public:
-	Graph(const int nodes, const int size, Topography& topo);
+	Graph(const int resolution, const int size, Topography& topo);
 
 	void reset(const int nodes, const int size);
 	std::vector<State> getNeighbours(const int x, const int z) const;
@@ -22,7 +22,8 @@ public:
 	void setTopography(Topography& topo);
 
 private:
-	int n; // Size of grid (n x n nodes)
+	int resolution; // Resolution of grid
+	int totalNodes; // Total amount of nodes in graph (resolution * resolution)
 	int size; // Size in units (size x size units)
 	int spacing; // Horizontal, vertical space between all nodes
 	std::vector<std::vector<int>> adjMatrix; // Adjacency matrix for storing edges and weights

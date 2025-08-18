@@ -658,6 +658,10 @@ xcopy /Y /F "$(SolutionDir)dependencies/SDL2-2.30.6/lib/x64/SDL2.dll" "$(TargetD
     <None Include="shaders\3dshape.vert" />
     <None Include="shaders\topography.frag" />
     <None Include="shaders\topography.vert" />
+    <None Include="source\infrastructure\geometry\LICENSE" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="libs\glm\copying.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

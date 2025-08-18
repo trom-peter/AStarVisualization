@@ -1530,5 +1530,9 @@
     <None Include="shaders\3dshape.vert" />
     <None Include="shaders\topography.frag" />
     <None Include="imgui.ini" />
+    <None Include="source\infrastructure\geometry\LICENSE" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="libs\glm\copying.txt" />
   </ItemGroup>
 </Project>

@@ -1,5 +1,5 @@
 #include "model/a_star_search.h"
-
+#include <iostream>
 #include <queue>
 #include <unordered_map>
 #include <set>
@@ -9,9 +9,7 @@
 AStarSearch::AStarSearch(SearchProblem& problem, Heuristic heuristic, SearchEnvironment& environment) :
 	problem(problem), heuristic(heuristic), solution(nullptr), consideredNodes(0) {}
 
-AStarSearch::~AStarSearch() {
-	delete solution;
-}
+AStarSearch::~AStarSearch() {}
 
 void AStarSearch::search() {
 	int step = 0;
@@ -20,22 +18,23 @@ void AStarSearch::search() {
 	solutionPath.clear();
 	consideredNodes = 0;
 
-	Node* initial = new Node(problem.initial, 0);
+	std::shared_ptr<Node> initial = std::make_shared<Node>(problem.initial, 0);
 
-	auto f = [this](Node* a, Node* b) {
+	auto f = [this](std::shared_ptr<Node> a, std::shared_ptr<Node> b) {
 		return a->pathCost + heuristic.getFunction()(a->s, problem.goal) >
 			b->pathCost + heuristic.getFunction()(b->s, problem.goal);
 		};
 
-	std::priority_queue<Node*, std::vector<Node*>, decltype(f)> frontier(f); //grenzbereich
+	std::priority_queue<std::shared_ptr<Node>, 
+		std::vector<std::shared_ptr<Node>>, decltype(f)> frontier(f);
 	frontier.push(initial);
 	allFrontiers.push_back({ initial->s });
 
-	std::unordered_map<State, Node*, StateHash> reached; // bester pfad pro state
-	reached.insert({ problem.initial, initial });
+	std::unordered_map<State, std::shared_ptr<Node>, StateHash> reached;
+	reached.insert({ problem.initial, initial});
 
 	while (!frontier.empty()) {
-		Node* n = frontier.top();
+		std::shared_ptr<Node> n = frontier.top();
 		frontier.pop();
 
 		//skip outdated nodes that are not optimal
@@ -45,14 +44,14 @@ void AStarSearch::search() {
 
 		allExpanded.push_back(n->s);
 
-		if (problem.isGoal(n->s)) {
+		if (problem.isGoal(n->s)) { //solution found
 			solution = n;
 			setSolutionPath(n);
 			setConsideredNodes();
 			return;
 		}
 
-		for (Node* child : problem.actions(n)) {
+		for (std::shared_ptr<Node> child : problem.actions(n)) {
 			State s = child->s;
 			if (reached.count(s) == 0 || child->pathCost < reached[s]->pathCost) {
 				reached[s] = child;
@@ -67,7 +66,7 @@ void AStarSearch::search() {
 	solution = nullptr;
 }
 
-void AStarSearch::setSolutionPath(const Node* n) {
+void AStarSearch::setSolutionPath(const std::shared_ptr<Node> n) {
 	if (n == nullptr) return;
 	else {
 		solutionPath.push_back(n->s);
@@ -94,6 +93,6 @@ Heuristic AStarSearch::getHeuristic() const {
 	return heuristic;
 }
 
-Node* AStarSearch::getSolution() const {
+std::shared_ptr<Node> AStarSearch::getSolution() const {
 	return solution;
 }

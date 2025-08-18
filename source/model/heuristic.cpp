@@ -2,7 +2,7 @@
 #include "model/state.h"
 #include "model/topography.h"
 
-Heuristic::Heuristic(Topography* topo, const int heuristicId, const float overestimateFactor) :
+Heuristic::Heuristic(Topography& topo, const int heuristicId, const float overestimateFactor) :
     topo(topo), heuristicId(heuristicId), overestimateFactor(overestimateFactor) {}
 
 std::function<float(State, State)> Heuristic::getFunction() const {
@@ -36,7 +36,7 @@ std::function<float(State, State)> Heuristic::travelTime_Overestimated(const flo
     };
 };
 
-std::function<float(State, State)> Heuristic::travelTime_Intersections(const Topography* topo) {
+std::function<float(State, State)> Heuristic::travelTime_Intersections(const Topography& topo) {
     return [topo](State a, State b) {
         float h = Heuristic::travelTime(a, b);	    // standard duration
         int intersections = 0;			// number of intersections
@@ -53,7 +53,7 @@ std::function<float(State, State)> Heuristic::travelTime_Intersections(const Top
 
         while (glm::distance(start, pos) < totalDistance) {
             pos += stepSize;
-            if (pos.y < topo->getY(pos.x, pos.z) && aboveGround) {
+            if (pos.y < topo.getY(pos.x, pos.z) && aboveGround) {
                 intersections++;
                 aboveGround = false;
             }
@@ -64,10 +64,10 @@ std::function<float(State, State)> Heuristic::travelTime_Intersections(const Top
     };
 };
 
-std::function<float(State, State)> Heuristic::travelTime_WeightedHeights(const Topography* topo) {
+std::function<float(State, State)> Heuristic::travelTime_WeightedHeights(const Topography& topo) {
     return [topo](State a, State b) {
         float h = Heuristic::travelTime(a, b);	// standard duration
-        float height = a.y / topo->getMaxY();	// relative height of evaluated state
+        float height = a.y / topo.getMaxY();	// relative height of evaluated state
         float t = 500.0f;					    // maximum time save
         float timeSave = (1 - height) * t;      // actual time save
         return std::max(h - timeSave, 0.0f);

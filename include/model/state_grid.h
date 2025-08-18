@@ -20,7 +20,7 @@ public:
 
 	~Stategrid();
 
-	void initGrid(const Topography* topo);
+	void initGrid(const Topography& topo);
 	void updateToStep(const int step, const Graph& g, AStarSearch& aStar, const bool forwards);
 
 	void updateVisibility(const StategridConfig& config);

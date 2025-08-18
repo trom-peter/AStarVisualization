@@ -15,7 +15,7 @@ Sphere::Sphere(
     std::vector<Vertex> vertices = getVertices();
     std::vector<uint32_t> indices = getIndices();
 
-    mesh = new Mesh(vertices, vertices.size(), indices, indices.size());
+    mesh = std::make_unique<Mesh>(vertices, vertices.size(), indices, indices.size());
 }
 
 std::vector<Vertex> Sphere::getVertices() const {

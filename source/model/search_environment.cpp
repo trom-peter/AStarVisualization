@@ -6,18 +6,17 @@ SearchEnvironment::SearchEnvironment(
 	const int topographySize, const int topographyAmplitude,
 	const int gridSize, const Stategrid stategrid) :
 	topography(Topography(seed, terrainScaling, topographyType, topographySize, topographyAmplitude)),
-	graph(Graph(gridSize, topographySize)),
+	graph(Graph(gridSize, topographySize, topography)),
 	stateGrid(stategrid)
 {
 	topography.setMinMaxHeight();
-	graph.setTopography(&topography);
-	stateGrid.initGrid(&topography);
+	stateGrid.initGrid(topography);
 }
 
 void SearchEnvironment::resetGrid(const int gridSize) {
 	stateGrid.clearGrid();
 	stateGrid.gridSize = gridSize;
-	stateGrid.initGrid(&topography);
+	stateGrid.initGrid(topography);
 }
 
 void SearchEnvironment::resetTopography(const unsigned char seed, const float scale, const bool type) {

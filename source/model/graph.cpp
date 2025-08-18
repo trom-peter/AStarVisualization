@@ -2,7 +2,7 @@
 #include <iostream>
 #include "model/state.h"
 
-Graph::Graph(const int nodes, const int size) : n(nodes), size(size), topography(nullptr) {
+Graph::Graph(const int nodes, const int size, Topography& topo) : n(nodes), size(size), topography(topo) {
 	spacing = size / (nodes - 1);
 	int totalNodes = n * n;
 	adjMatrix.resize(totalNodes, std::vector<int>(totalNodes, 0));
@@ -37,7 +37,7 @@ std::vector<State> Graph::getNeighbours(const int x, const int z) const {
 		int neighbourZ = z + neighbourOffsets[i][1];
 
 		if (isValid(neighbourX, neighbourZ))
-			neighbours.push_back(State(neighbourX, topography->getY(neighbourX, neighbourZ), neighbourZ));
+			neighbours.push_back(State(neighbourX, topography.getY(neighbourX, neighbourZ), neighbourZ));
 	}
 
 	return neighbours;
@@ -96,6 +96,6 @@ float Graph::getSpacing() const {
 	return spacing;
 }
 
-void Graph::setTopography(Topography* topo) {
+void Graph::setTopography(Topography& topo) {
 	this->topography = topo;
 }

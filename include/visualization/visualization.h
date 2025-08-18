@@ -1,8 +1,10 @@
 #pragma once
+#include <memory>
 #include "infrastructure/opengl/base_renderer.h"
 #include "infrastructure/opengl/topography_renderer.h"
 #include "infrastructure/opengl/stategrid_renderer.h"
 #include "infrastructure/opengl/framebuffer.h"
+#include "infrastructure/opengl/camera.h"
 #include "model/state_grid.h"
 #include "model/search_problem.h"
 #include "model/search_environment.h"
@@ -33,16 +35,16 @@ private:
     void finishedToProblem();
 
     VisualizationState state;
-    SearchEnvironment* environment;
-    SearchProblem* problem;
-    AStarSearch* aStar;
-    GUI gui;
     Window window;
-    TopographyRenderer* topoRenderer;
-    StategridRenderer* stategridRenderer;
-    FrameBuffer* fb; // framebuffer where visualization (not gui) is drawn to
-    VertexArray* vao;
-    Camera* camera;
+    GUI gui;
+    std::unique_ptr<SearchEnvironment> environment;
+    std::unique_ptr<SearchProblem> problem;
+    std::unique_ptr<AStarSearch> aStar;
+    std::unique_ptr<Camera> camera;
+    std::unique_ptr<FrameBuffer> fb; // framebuffer where visualization (not gui) is drawn to
+    std::unique_ptr<VertexArray> vao;
+    std::unique_ptr<TopographyRenderer> topoRenderer;
+    std::unique_ptr<StategridRenderer> stategridRenderer;
     EnvironmentConfig config_Environment;
     ProblemConfig config_Problem;
     PlaybackConfig config_Playback;

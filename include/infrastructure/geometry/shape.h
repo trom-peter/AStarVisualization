@@ -17,7 +17,7 @@ struct Shape {
 	void setScale(const glm::vec3 scale);
 	void setColor(const glm::vec3 color);
 
-	Mesh* mesh;
+	std::unique_ptr<Mesh> mesh;
 	glm::mat4 model;
 	glm::vec3 position;
 	glm::vec3 scale;

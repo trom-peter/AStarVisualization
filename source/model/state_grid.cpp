@@ -67,12 +67,12 @@ void Stategrid::updateToStep(const int step, const Graph& g, AStarSearch& aStar,
     grid[aStar.getProblem().goal] = goalStateColor;
 }
 
-void Stategrid::initGrid(const Topography* topo) {
+void Stategrid::initGrid(const Topography& topo) {
     grid.clear();
-    int stepSize = topo->getSize() / (gridSize - 1);
-    for (int z = 0; z <= topo->getSize(); z += stepSize) {
-        for (int x = 0; x <= topo->getSize(); x += stepSize) {
-            int y = topo->getY(x, z);
+    int stepSize = topo.getSize() / (gridSize - 1);
+    for (int z = 0; z <= topo.getSize(); z += stepSize) {
+        for (int x = 0; x <= topo.getSize(); x += stepSize) {
+            int y = topo.getY(x, z);
             State s(x, y, z);
             grid[s] = defaultColor;
         }

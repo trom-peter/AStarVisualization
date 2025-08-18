@@ -14,8 +14,8 @@ public:
 
     void setTopography(Topography& topography);
     void drawTopography() const;
-    void setupUniforms(const Camera* camera) const;
-    void updateUniforms(const Camera* camera, const glm::mat4 model = glm::mat4(1.0f)) const;
+    void setupUniforms(const Camera& camera) const;
+    void updateUniforms(const Camera& camera, const glm::mat4 model = glm::mat4(1.0f)) const;
 
 private:
     std::vector<Vertex> generateVertices() const;

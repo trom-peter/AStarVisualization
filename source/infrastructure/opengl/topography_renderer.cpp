@@ -44,20 +44,20 @@ void TopographyRenderer::drawTopography() const {
     vao->unbind();
 }
 
-void TopographyRenderer::setupUniforms(const Camera* camera) const {
+void TopographyRenderer::setupUniforms(const Camera& camera) const {
     shader->bind();
-    glm::mat4 view = camera->getView();
-    glm::mat4 proj = camera->getProj();
+    glm::mat4 view = camera.getView();
+    glm::mat4 proj = camera.getProj();
     shader->setUniformMatrix4fv("u_view", 1, GL_FALSE, view);
     shader->setUniformMatrix4fv("u_projection", 1, GL_FALSE, proj);
     shader->setUniform1f("u_amplitude", topography.getAmplitude());
 }
 
-void TopographyRenderer::updateUniforms(const Camera* camera, const glm::mat4 model) const {
+void TopographyRenderer::updateUniforms(const Camera& camera, const glm::mat4 model) const {
     shader->bind();
     shader->setUniformMatrix4fv("u_model", 1, GL_FALSE, model);
-    glm::mat4 view = camera->getView();
-    glm::mat4 proj = camera->getProj();
+    glm::mat4 view = camera.getView();
+    glm::mat4 proj = camera.getProj();
 
     shader->setUniformMatrix4fv("u_model", 1, GL_FALSE, model);
     shader->setUniformMatrix4fv("u_view", 1, GL_FALSE, view);

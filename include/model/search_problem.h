@@ -1,6 +1,7 @@
 #pragma once
 #include "model/graph.h"
 #include "model/state.h"
+#include <memory>
 
 struct SearchEnvironment;
 struct Node;
@@ -12,7 +13,7 @@ struct SearchProblem {
 
 	bool isGoal(const State s) const;
 
-	std::vector<Node*> actions(Node* n) const;
+	std::vector<std::shared_ptr<Node>> actions(std::shared_ptr<Node> n) const;
 
 	Graph& graph;
 	State initial;

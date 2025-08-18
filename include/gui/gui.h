@@ -1,4 +1,5 @@
 #pragma once
+#include <memory>
 #include "imgui/imgui.h"
 #include "imgui/imgui_impl_sdl2.h"
 #include "imgui/imgui_impl_opengl3.h"
@@ -26,7 +27,7 @@ public:
 		ProblemConfig& problemConfig, const EnvironmentConfig& envConfig) const;
 	VisualizationState showUI_Searching(PlaybackConfig& playbackConfig) const;
 	VisualizationState showUI_Finished(const AStarSearch& aStar) const;
-	void showUI_Viewport(FrameBuffer* fb);
+	void showUI_Viewport(FrameBuffer& fb);
 	void showUI_Visibility(StategridConfig& gridConfig) const;
 
 private:

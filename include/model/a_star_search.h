@@ -1,4 +1,5 @@
 #pragma once
+#include <memory>
 #include "model/heuristic.h"
 #include "model/search_problem.h"
 #include "model/node.h"
@@ -16,7 +17,7 @@ public:
 	void search();
 	SearchProblem getProblem() const;
 	Heuristic getHeuristic() const;
-	Node* getSolution() const;
+	std::shared_ptr<Node> getSolution() const;
 	void setHeuristic(const int heuristicId, const float overestimateFactor = 1.0f);
 
 	std::vector<std::vector<State>> allFrontiers;
@@ -25,9 +26,9 @@ public:
 	int consideredNodes;
 
 private:
-	Node* solution;
+	std::shared_ptr<Node> solution;
 	SearchProblem& problem;
 	Heuristic heuristic;
 	void setConsideredNodes();
-	void setSolutionPath(const Node* n);
+	void setSolutionPath(const std::shared_ptr<Node> n);
 };

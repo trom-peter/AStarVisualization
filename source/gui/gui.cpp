@@ -11,7 +11,7 @@
 #include "model/a_star_search.h"
 #include "model/node.h"
 
-GUI::GUI() : font(nullptr), windowFlags(ImGuiWindowFlags()), dockingFlags(ImGuiDockNodeFlags()) {}
+GUI::GUI() : windowFlags(ImGuiWindowFlags()), dockingFlags(ImGuiDockNodeFlags()) {}
 
 void GUI::init(const Window& window) {
     // Setup Dear ImGui context
@@ -289,7 +289,7 @@ VisualizationState GUI::showUI_Finished(const AStarSearch& aStar) const {
     return nextState;
 }
 
-void GUI::showUI_Viewport(FrameBuffer* fb) {
+void GUI::showUI_Viewport(FrameBuffer& fb) {
     // viewport
     ImGui::Begin("Visualisierung", nullptr, windowFlags);
     {
@@ -297,7 +297,7 @@ void GUI::showUI_Viewport(FrameBuffer* fb) {
 
         viewportSize = ImGui::GetContentRegionAvail();
 
-        ImGui::Image((ImTextureID)(intptr_t)fb->colorTextureId, viewportSize, ImVec2(0, 1), ImVec2(1, 0));
+        ImGui::Image((ImTextureID)(intptr_t)fb.colorTextureId, viewportSize, ImVec2(0, 1), ImVec2(1, 0));
         ImGui::EndChild();
     }
     ImGui::End();

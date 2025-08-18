@@ -4,6 +4,7 @@
 #include "model/performance_measure.h"
 #include "configurations/problem_configuration.h"
 #include <iostream>
+#include <memory>
 
 SearchProblem::SearchProblem(SearchEnvironment& environment, const glm::ivec2 initial, const glm::ivec2 goal) :
 	graph(environment.graph),
@@ -15,9 +16,9 @@ bool SearchProblem::isGoal(const State s) const {
 	return s == goal;
 }
 
-std::vector<Node*> SearchProblem::actions(Node* n) const {
+std::vector<std::shared_ptr<Node>> SearchProblem::actions(std::shared_ptr<Node> n) const {
 	State& s0 = n->s;
-	std::vector<Node*> nodes;
+	std::vector<std::shared_ptr<Node>> nodes;
 	std::vector<State> neighbours = graph.getNeighbours(s0.x, s0.z);
 
 	for (State s1 : neighbours) {
@@ -34,7 +35,7 @@ std::vector<Node*> SearchProblem::actions(Node* n) const {
 		}
 
 		int pathCost = n->pathCost + actionCost;
-		nodes.push_back(new Node(s1.x, s1.y, s1.z, n, pathCost));
+		nodes.push_back(std::make_shared<Node>(s1.x, s1.y, s1.z, n, pathCost));
 	}
 
 	return nodes;

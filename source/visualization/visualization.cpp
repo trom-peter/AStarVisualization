@@ -29,7 +29,7 @@ bool Visualization::init() {
 
 	gui.init(window);
 
-	environment = new SearchEnvironment(
+	environment = std::make_unique<SearchEnvironment>(
 		config_Environment.seed, config_Environment.terrainScaling, 
 		config_Environment.topographyType, config_Environment.topographySize, 
 		config_Environment.topographyAmplitude, config_Environment.gridSize,
@@ -38,19 +38,19 @@ bool Visualization::init() {
 			config_Stategrid.initialStateColor, config_Stategrid.goalStateColor, config_Stategrid.solutionStateColor, 
 			config_Stategrid.defaultVisible, config_Stategrid.frontierVisible, config_Stategrid.reachedVisible));
 
-	problem = new SearchProblem(*environment, config_Problem.initial, config_Problem.goal);
+	problem = std::make_unique<SearchProblem>(*environment, config_Problem.initial, config_Problem.goal);
 
-	aStar = new AStarSearch(
+	aStar = std::make_unique<AStarSearch>(
 		*problem, 
-		Heuristic(&environment->topography, config_Problem.heuristic, config_Problem.overestimateFactor), 
+		Heuristic(environment->topography, config_Problem.heuristic, config_Problem.overestimateFactor), 
 		*environment);
 
-	topoRenderer = new TopographyRenderer(environment->topography);
-	stategridRenderer = new StategridRenderer(environment->stateGrid);
+	topoRenderer = std::make_unique<TopographyRenderer>(environment->topography);
+	stategridRenderer = std::make_unique<StategridRenderer>(environment->stateGrid);
 
-	fb = new FrameBuffer(window.getWidth() , window.getHeight());
-	vao = new VertexArray();
-	camera = new Camera(glm::radians(CAMERA_FOV), window.getWidth(), 
+	fb = std::make_unique<FrameBuffer>(window.getWidth() , window.getHeight());
+	vao = std::make_unique<VertexArray>();
+	camera = std::make_unique<Camera>(glm::radians(CAMERA_FOV), window.getWidth(),
 		window.getHeight(), CAMERA_NEAR_PLANE, CAMERA_FAR_PLANE);
 
 	camera->translate(glm::vec3(
@@ -60,8 +60,8 @@ bool Visualization::init() {
 
 	camera->rotate(glm::vec2(CAMERA_X_ROT, CAMERA_Y_ROT));
 
-	topoRenderer->setupUniforms(camera);
-	stategridRenderer->setupUniforms(camera);
+	topoRenderer->setupUniforms(*camera);
+	stategridRenderer->setupUniforms(*camera);
 
 	step = 0;
 	state = VisualizationState::ConfiguringSearchEnvironment;
@@ -118,11 +118,11 @@ void Visualization::run() {
 		BaseRenderer::clear();
 
 		//draw topography
-		topoRenderer->updateUniforms(camera);
+		topoRenderer->updateUniforms(*camera);
 		topoRenderer->drawTopography();
 
 		//draw stategrid
-		stategridRenderer->drawStategrid(camera);
+		stategridRenderer->drawStategrid(*camera);
 
 		fb->unbind();
 		glViewport(0, 0, window.getWidth(), window.getHeight());
@@ -130,7 +130,7 @@ void Visualization::run() {
 		gui.showUI_Visibility(config_Stategrid);
 		environment->stateGrid.updateVisibility(config_Stategrid);
 
-		gui.showUI_Viewport(fb);
+		gui.showUI_Viewport(*fb);
 		gui.render();
 
 		if (fb->width != gui.getViewportSize().x || fb->height != gui.getViewportSize().y) 
@@ -143,14 +143,6 @@ void Visualization::run() {
 
 int Visualization::quit() {
 	window.quit();
-	delete environment;
-	delete problem;
-	delete aStar;
-	delete stategridRenderer;
-	delete topoRenderer;
-	delete fb;
-	delete vao;
-	delete camera;
 	return 0;
 }
 
@@ -177,10 +169,10 @@ void Visualization::inEnvironment() {
 
 void Visualization::environmentToProblem() {
 	environment->graph.reset(environment->stateGrid.gridSize, environment->topography.getSize());
-	environment->graph.setTopography(&environment->topography);
+	environment->graph.setTopography(environment->topography);
 	problem->initial = State(0, environment->topography.getY(0, 0), 0);
 	problem->goal = State(0, environment->topography.getY(0, 0), 0);
-	problem->graph = environment->graph;
+	//problem->graph = environment->graph;
 	config_Stategrid.defaultVisible = false; //unexplored nodes are invisble when configuring search problem
 }
 

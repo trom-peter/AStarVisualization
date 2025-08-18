@@ -19,7 +19,7 @@ void StategridRenderer::setStategrid(const Stategrid& stategrid) {
     Draws the stategrid state by state by updating the
     stateSphere member variable position, scale, color for every state.
 */
-void StategridRenderer::drawStategrid(const Camera* camera) {
+void StategridRenderer::drawStategrid(const Camera& camera) {
     if (stategrid.grid.size() == 0) {
         return;
     }
@@ -54,22 +54,22 @@ void StategridRenderer::drawStategrid(const Camera* camera) {
     vao->unbind();
 }
 
-void StategridRenderer::setupUniforms(const Camera* camera) const {
+void StategridRenderer::setupUniforms(const Camera& camera) const {
     shader->bind();
 
-    glm::mat4 view = camera->getView();
-    glm::mat4 proj = camera->getProj();
+    glm::mat4 view = camera.getView();
+    glm::mat4 proj = camera.getProj();
 
     shader->setUniformMatrix4fv("u_view", 1, GL_FALSE, view);
     shader->setUniformMatrix4fv("u_projection", 1, GL_FALSE, proj);
 }
 
-void StategridRenderer::updateUniforms(const Camera* camera, const glm::mat4 model, 
+void StategridRenderer::updateUniforms(const Camera& camera, const glm::mat4 model, 
     const glm::vec3 color) const 
 {
     shader->bind();
-    glm::mat4 proj = camera->getProj();
-    glm::mat4 view = camera->getView();
+    glm::mat4 proj = camera.getProj();
+    glm::mat4 view = camera.getView();
 
     shader->setUniform3f("u_color", color.x, color.y, color.z);
 

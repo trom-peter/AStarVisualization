@@ -12,7 +12,7 @@ struct EnvironmentConfig {
 	int topographySize; // Size of topography in meters
 	int topographyAmplitude; // Amplitude of topography in meters
 
-	// The higher this parameter, the larger the terrain area (also known as terrain complexity)
+	// The higher this parameter, the larger the terrain area. Also known as terrain complexity
 	float terrainScaling; 
 
 	int gridSize;

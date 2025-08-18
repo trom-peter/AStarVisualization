@@ -3,12 +3,11 @@
 #include "infrastructure/opengl/camera.h"
 
 StategridRenderer::StategridRenderer(Stategrid& stategrid) : stategrid(stategrid), BaseRenderer() {
-    shader = std::unique_ptr<Shader>(new Shader("shaders/3dshape.vert", "shaders/3dshape.frag"));
+    shader = std::make_unique<Shader>("shaders/3dshape.vert", "shaders/3dshape.frag");
     shader->bind();
 
-    vao = std::unique_ptr<VertexArray>(new VertexArray());
+    vao = std::make_unique<VertexArray>();
     vao->bind();
-    vao->setupVertexLayout();
 }
 
 void StategridRenderer::setStategrid(const Stategrid& stategrid) {
@@ -16,28 +15,28 @@ void StategridRenderer::setStategrid(const Stategrid& stategrid) {
 }
 
 /*
-    Draws the stategrid state by state by updating the
-    stateSphere member variable position, scale, color for every state.
+    Draws the stategrid state by state by updating the stateSphere 
+    member variable position, scale, color for every state.
 */
 void StategridRenderer::drawStategrid(const Camera& camera) {
     if (stategrid.grid.size() == 0) {
         return;
     }
 
-    //setup rendering
+    // Setup rendering
     vao->addVertexBuffer(*stateSphere.mesh->vertexBuffer);
     shader->bind();
     stateSphere.mesh->vertexBuffer->bind();
     stateSphere.mesh->indexBuffer->bind();
 
-    //render stategrid
+    // Render stategrid
     for (std::pair<const State, glm::vec3>& kv : stategrid.grid) {
         glm::vec3 stateColor = kv.second;
 
-        if (!stategrid.isVisible(stateColor)) // only draw visible states
+        if (!stategrid.isVisible(stateColor)) // Only draw visible states
             continue;
 
-        //update state sphere
+        // Update state sphere
         stateSphere.setColor(stateColor);
         stateSphere.setPosition(glm::vec3(kv.first.x, kv.first.y + 40.0f, kv.first.z));
         stateSphere.setScale(glm::vec3(1000.0f / stategrid.gridSize));
@@ -47,7 +46,7 @@ void StategridRenderer::drawStategrid(const Camera& camera) {
         glDrawElements(GL_TRIANGLES, stateSphere.mesh->numIndices, GL_UNSIGNED_INT, 0);
     }
 
-    //end rendering
+    // End rendering
     stateSphere.mesh->vertexBuffer->unbind();
     stateSphere.mesh->indexBuffer->unbind();
     shader->unbind();

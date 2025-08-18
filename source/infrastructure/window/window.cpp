@@ -1,16 +1,16 @@
 #include "infrastructure/window/window.h"
 
 Window::Window(const char* title) : title(title), window(nullptr), 
-    glContext(nullptr), width(0), height(0), FPS(0), perfCounterFrequency(0), 
+    glContext(nullptr), width(0), height(0), perfCounterFrequency(0), 
     lastCounter(0), time(0), delta(0) {}
 
 bool Window::init() {
     SDL_DisplayMode dm;
     if (SDL_Init(SDL_INIT_EVERYTHING) < 0) {
-        std::cout << "Failed to initialize SDL: " << SDL_GetError() << std::endl;
+        std::cerr << "ERROR: Failed to initialize SDL: " << SDL_GetError() << std::endl;
     }
     if (SDL_GetCurrentDisplayMode(0, &dm) != 0) {
-        std::cerr << "Error at SDL_GetCurrentDisplayMode: " << SDL_GetError() << std::endl;
+        std::cerr << "ERROR: SDL_GetCurrentDisplayMode: " << SDL_GetError() << std::endl;
     }
 
     int screenWidth = dm.w;
@@ -35,13 +35,13 @@ bool Window::init() {
         width, height, window_flags);
 
     if (!window) {
-        std::cout << "Failed to create window: " << SDL_GetError() << std::endl;
+        std::cerr << "ERROR: Failed to create window: " << SDL_GetError() << std::endl;
         return false;
     }
 
     glContext = SDL_GL_CreateContext(window);
     SDL_GL_MakeCurrent(window, glContext);
-    SDL_GL_SetSwapInterval(1); // enable v-sync
+    SDL_GL_SetSwapInterval(1); // Enable v-sync
     return true;
 }
 
@@ -82,17 +82,12 @@ void Window::setupTimeCount() {
     lastCounter = SDL_GetPerformanceCounter();
     delta = 0.0f;
     time = 0.0f;
-    FPS = 0;
 }
 
 void Window::updateTime() {
     uint64_t endCounter = SDL_GetPerformanceCounter();
     uint64_t counterElapsed = SDL_GetPerformanceCounter() - lastCounter;
     delta = (float)counterElapsed / (float)perfCounterFrequency;
-    FPS = (int)((float)perfCounterFrequency / (float)counterElapsed);
-#ifdef SHOW_FPS
-    std::cout << FPS << std::endl;
-#endif
     lastCounter = endCounter;
     time += delta;
 }

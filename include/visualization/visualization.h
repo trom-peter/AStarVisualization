@@ -37,20 +37,22 @@ private:
     void inProblem();
     void inSearching();
 
-    VisualizationState state;
+    VisualizationState state; // Current visualization state
     Window window;
     GUI gui;
     std::unique_ptr<SearchEnvironment> environment;
     std::unique_ptr<SearchProblem> problem;
     std::unique_ptr<AStarSearch> aStar;
     std::unique_ptr<Camera> camera;
-    std::unique_ptr<FrameBuffer> fb; // framebuffer where visualization (not gui) is drawn to
-    std::unique_ptr<VertexArray> vao;
+    std::unique_ptr<FrameBuffer> fb; // Framebuffer where visualization (not gui) is drawn to
     std::unique_ptr<TopographyRenderer> topoRenderer;
     std::unique_ptr<StategridRenderer> stategridRenderer;
+
+    // Configurations
     EnvironmentConfig config_Environment;
     ProblemConfig config_Problem;
     PlaybackConfig config_Playback;
     StategridConfig config_Stategrid;
-    int step;
+
+    int step; // Current step in search process
 };

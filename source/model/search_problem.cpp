@@ -12,10 +12,12 @@ SearchProblem::SearchProblem(SearchEnvironment& environment, const glm::ivec2 in
 	goal(State(goal.x, environment.topography.getY(goal.x, goal.y), goal.y)) {
 }
 
+// Goal test
 bool SearchProblem::isGoal(const State s) const {
 	return s == goal;
 }
 
+// Returns all possible actions for a state.
 std::vector<std::shared_ptr<Node>> SearchProblem::actions(std::shared_ptr<Node> n) const {
 	State& s0 = n->s;
 	std::vector<std::shared_ptr<Node>> nodes;
@@ -25,12 +27,12 @@ std::vector<std::shared_ptr<Node>> SearchProblem::actions(std::shared_ptr<Node> 
 		int actionCost = 0;
 
 		if (!graph.hasEdge(s0.x, s0.y, s1.x, s1.y)) {
-			//add edge with action cost if necessary
+			// Add edge with action cost if necessary
 			actionCost = PerformanceMeasure::hikingFunction(s0, s1);
 			graph.addEdge(s0.x, s0.z, s1.x, s1.z, actionCost);
 		}
 		else {
-			//get action cost if edge already exists
+			// Get action cost if edge already exists
 			actionCost = graph.getWeight(s0.x, s0.y, s1.x, s1.y);
 		}
 

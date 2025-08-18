@@ -1,6 +1,7 @@
 #include "infrastructure/opengl/shader.h"
-#include <fstream>
 #include <iostream>
+#include <fstream>
+#include <sstream>
 #include "glm/ext/matrix_transform.hpp"
 #include "glm/gtc/matrix_transform.hpp"
 
@@ -24,53 +25,53 @@ GLuint Shader::getShaderId() const {
 	return shaderId;
 }
 
-std::string Shader::parse(const char* filename) const {
-	FILE* file;
-	if (fopen_s(&file, filename, "rb") != 0) {
-		std::cout << "File " << filename << " not found" << std::endl;
-		return "";
-	}
+// Parse the given shader file
+std::string Shader::parse(const std::string& filename) const {
+	std::ifstream shaderFile(filename, std::ios::binary);
 
-	std::string contents;
-	fseek(file, 0, SEEK_END);
-	size_t filesize = ftell(file);
-	rewind(file);
-	contents.resize(filesize);
+	if (!shaderFile.is_open())
+		std::cerr << "Failed to open shader file: " + filename << std::endl;
 
-	fread(&contents[0], 1, filesize, file);
-	fclose(file);
-
-	return contents;
+	std::ostringstream buffer;
+	buffer << shaderFile.rdbuf();
+	return buffer.str();
 }
 
-GLuint Shader::compile(const std::string shaderSource, 
-	const GLenum type, const const char* shaderFilename) const 
+// Compile the given shader file
+GLuint Shader::compile(const std::string& shaderSource, GLenum type, const std::string& shaderFilename) const 
 {
 	GLuint shaderId = glCreateShader(type);
-	const char* src = shaderSource.c_str();
-	glShaderSource(shaderId, 1, &src, 0);
+
+	if (shaderId == 0)
+		std::cerr << "Failed to create shader for: " + shaderFilename << std::endl;
+
+	// Compile shader
+	const char* source = shaderSource.c_str();
+	glShaderSource(shaderId, 1, &source, 0);
 	glCompileShader(shaderId);
 
-	// check for compilation errors
-	int result;
-	glGetShaderiv(shaderId, GL_COMPILE_STATUS, &result);
-	if (result != GL_TRUE) {
-		int length = 0;
+	// Check shader compilation status
+	int compileResult;
+	glGetShaderiv(shaderId, GL_COMPILE_STATUS, &compileResult);
+	if (compileResult != GL_TRUE) {
+		GLint length = 0;
 		glGetShaderiv(shaderId, GL_INFO_LOG_LENGTH, &length);
-		char* message = new char[length]; // create compilation errror message on heap
+
+		char* message = new char[length];
 		glGetShaderInfoLog(shaderId, length, &length, message);
-		std::string shaderType;
-		std::cout << shaderFilename << " shader compilation error: \n" << message << std::endl;
-		delete[] message; //delete message from heap
 		glDeleteShader(shaderId);
+
+		std::string shaderType;
+		std::cerr << "Shader compilation error for : " << shaderFilename << "\n" << message << std::endl;
+
 		return 0;
 	}
 
-	// return result if no errors
+	// Return result if no errors
 	return shaderId;
 }
 
-
+// Create an OpenGL shader program based on vertex shader and fragment shader file names
 GLuint Shader::createShader(const char* vertexShaderFilename, const char* fragmentShaderFilename) const {
 	std::string vertexShaderSource = parse(vertexShaderFilename);
 	std::string fragmentShaderSource = parse(fragmentShaderFilename);

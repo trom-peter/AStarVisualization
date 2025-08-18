@@ -2,8 +2,9 @@
 #include "infrastructure/opengl/base_renderer.h"
 #include <cstdint>
 
+
 struct FrameBuffer {
-	FrameBuffer(const uint32_t width, const uint32_t height) {
+	FrameBuffer(const GLuint width, const GLuint height) {
 		this->width = width;
 		this->height = height;
 
@@ -44,7 +45,7 @@ struct FrameBuffer {
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	}
 
-	void resize(const uint32_t width, const uint32_t height) {
+	void resize(const GLuint width, const GLuint height) {
 		this->width = width;
 		this->height = height;
 
@@ -65,7 +66,7 @@ struct FrameBuffer {
 		unbind();
 	}
 
-	float width, height;
+	GLuint width, height;
 	GLuint framebufferId;
 	GLuint colorTextureId;
 	GLuint renderbufferId;

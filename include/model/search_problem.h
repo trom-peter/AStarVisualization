@@ -6,7 +6,6 @@
 struct SearchEnvironment;
 struct Node;
 struct State;
-struct Graph;
 
 struct SearchProblem {
 	SearchProblem(SearchEnvironment& environment, const glm::ivec2 initial, const glm::ivec2 goal);

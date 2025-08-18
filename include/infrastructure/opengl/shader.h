@@ -33,8 +33,8 @@ struct Shader {
 	GLuint getShaderId() const;
 
 private:
-	GLuint compile(std::string shaderSource, GLenum type, const char* shaderFileName) const;
-	std::string parse(const char* filename) const;
+	GLuint compile(const std::string& shaderSource, GLenum type, const std::string& shaderFilename) const;
+	std::string parse(const std::string&) const;
 	GLuint createShader(const char* vertexShaderFilename, const char* fragmentShaderFilename) const;
 
 	std::unordered_map<std::string, GLint> uniformLocations = { {} };

@@ -278,9 +278,9 @@ VisualizationState GUI::showUI_Finished(const AStarSearch& aStar) const {
     ImGui::NewLine();
 
     ImGui::Text("Knoten");
-    ImGui::LabelText(std::to_string(aStar.consideredNodes).c_str(), u8"Betrachtet");
-    ImGui::LabelText(std::to_string(aStar.allExpanded.size()).c_str(), "Expandiert");
-    ImGui::LabelText(std::to_string(aStar.solutionPath.size()).c_str(), u8"Lösungpfad");
+    ImGui::LabelText(std::to_string(aStar.getConsideredNodes()).c_str(), u8"Betrachtet");
+    ImGui::LabelText(std::to_string(aStar.getAllExpanded().size()).c_str(), "Expandiert");
+    ImGui::LabelText(std::to_string(aStar.getSolutionPath().size()).c_str(), u8"Lösungpfad");
 
     ImGui::NewLine();
 

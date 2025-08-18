@@ -23,15 +23,15 @@ public:
 	void initGrid(const Topography& topo);
 	void updateToStep(const int step, const Graph& g, AStarSearch& aStar, const bool forwards);
 
-	void updateVisibility(const StategridConfig& config);
+	void updateVisibility(const bool defaultVisible, const bool frontierVisible, const bool reachedVisible);
 	void showSolutionPath(const std::vector<State> solutionPath, const SearchProblem& problem);
 	bool isVisible(const glm::vec3 color) const;
 	void clearGrid();
 
-	std::unordered_map<State, glm::vec3, StateHash> grid;
+	std::unordered_map<State, glm::vec3, StateHash> grid; // Map that stores color for each state
 	int gridSize;
 
-	//state colors
+	// State colors
 	glm::vec3 defaultColor;
 	glm::vec3 frontierColor;
 	glm::vec3 reachedColor;
@@ -39,7 +39,7 @@ public:
 	glm::vec3 goalStateColor;
 	glm::vec3 solutionStateColor;
 
-	//state visibility
+	// State visibility
 	bool defaultVisible;
 	bool frontierVisible;
 	bool reachedVisible;

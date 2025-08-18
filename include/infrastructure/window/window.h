@@ -26,13 +26,12 @@ private:
     void setupOpenGLAttributes() const;
     void setupTimeCount();
 
-    const char* title;
-    int width, height;
+    const char* title; // Title of window
+    int width, height; // Window width, height
     SDL_Window* window;
     SDL_GLContext glContext;
     uint64_t perfCounterFrequency;
     uint64_t lastCounter;
-    float time;
-    float delta;
-    int FPS;
+    float time; // Time since start of application
+    float delta; // Passed time since last frame
 };

@@ -2,6 +2,7 @@
 #include "infrastructure/opengl/base_renderer.h"
 #include "infrastructure/opengl/mesh.h"
 #include "model/topography.h"
+#include <memory>
 
 class Topography;
 class Camera;
@@ -23,5 +24,5 @@ private:
     void calculateNormals(std::vector<Vertex>& vertices, std::vector<uint32_t> indices) const;
 
     Topography& topography;
-    Mesh* topographyMesh;
+    std::unique_ptr<Mesh> topographyMesh;
 };

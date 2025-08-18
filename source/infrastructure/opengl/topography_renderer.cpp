@@ -5,27 +5,26 @@
 TopographyRenderer::TopographyRenderer(Topography& topography) :
     topography(topography), topographyMesh(nullptr), BaseRenderer() 
 {
-    shader = std::unique_ptr<Shader>(new Shader("shaders/topography.vert", "shaders/topography.frag"));
+    shader = std::make_unique<Shader>("shaders/topography.vert", "shaders/topography.frag");
     shader->bind();
 
-    vao = std::unique_ptr<VertexArray>(new VertexArray());
+    vao = std::make_unique<VertexArray>();
     vao->bind();
-    vao->setupVertexLayout();
 
     setTopography(topography);
 }
 
-TopographyRenderer::~TopographyRenderer() {
-    delete topographyMesh;
-}
+TopographyRenderer::~TopographyRenderer() {}
 
 void TopographyRenderer::setTopography(Topography& topography) {
+    // Set new topography
     this->topography = topography;
-    if (topographyMesh != nullptr) delete topographyMesh;
+
+    // Generate mesh for new topography
     std::vector<Vertex> vertices = generateVertices();
     std::vector<uint32_t> indices = generateIndices();
     calculateNormals(vertices, indices);
-    topographyMesh = new Mesh(vertices, vertices.size(), indices, indices.size());
+    topographyMesh = std::make_unique<Mesh>(vertices, vertices.size(), indices, indices.size());
 }
 
 void TopographyRenderer::drawTopography() const {
@@ -33,6 +32,7 @@ void TopographyRenderer::drawTopography() const {
         std::cerr << "ERROR: no topography available to render" << std::endl;
         return;
     }
+    // Render topography mesh
     vao->addVertexBuffer(*topographyMesh->vertexBuffer);
     shader->bind();
     topographyMesh->vertexBuffer->bind();
@@ -64,6 +64,7 @@ void TopographyRenderer::updateUniforms(const Camera& camera, const glm::mat4 mo
     shader->setUniformMatrix4fv("u_projection", 1, GL_FALSE, proj);
 }
 
+// Generate vertices for current topography
 std::vector<Vertex> TopographyRenderer::generateVertices() const {
     std::vector<Vertex> vertices;
     for (double z = 0; z < topography.getSize(); z += topography.getSpacing()) {
@@ -78,6 +79,7 @@ std::vector<Vertex> TopographyRenderer::generateVertices() const {
     return vertices;
 }
 
+// Generate indices for current topography
 std::vector<uint32_t> TopographyRenderer::generateIndices() const {
     std::vector<uint32_t> indices;
     int lastX = topography.getSize() / topography.getSpacing() - 1;
@@ -101,6 +103,7 @@ std::vector<uint32_t> TopographyRenderer::generateIndices() const {
     return indices;
 }
 
+// Generate normals for current topography
 void TopographyRenderer::calculateNormals(std::vector<Vertex>& vertices, std::vector<uint32_t> indices) const {
     for (size_t i = 0; i < indices.size(); i += 3) {
         uint32_t i0 = indices[i];
@@ -116,6 +119,7 @@ void TopographyRenderer::calculateNormals(std::vector<Vertex>& vertices, std::ve
 
         glm::vec3 normal = glm::normalize(glm::cross(u, v));
 
+        // Add normals to vertices
         vertices[i0].normal = normal;
         vertices[i1].normal = normal;
         vertices[i2].normal = normal;

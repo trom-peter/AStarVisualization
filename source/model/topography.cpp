@@ -4,8 +4,8 @@
 #define STB_PERLIN_IMPLEMENTATION
 #include "stb_perlin.h"
 
+// Topography generation settings
 float constexpr VERTEX_SPACING = 20.0f;
-int constexpr TOPOGRAPHY_AMPLITUDE = 500;
 int constexpr NOISE_OCTAVES = 4;
 float constexpr NOISE_LACUNARITY = 2.0f;
 float constexpr NOISE_GAIN = 0.5f;
@@ -13,7 +13,7 @@ float constexpr NOISE_RIDGE_OFFSET = 1.0f;
 
 Topography::Topography(const unsigned char seed, const float scale, 
     const int type, const int size, const int amplitude) :
-    seed(seed), size(size), amplitude(TOPOGRAPHY_AMPLITUDE), 
+    seed(seed), size(size), amplitude(amplitude),
     scale(scale), spacing(VERTEX_SPACING), type(type)
 {
     setMinMaxHeight();
@@ -26,7 +26,7 @@ void Topography::setMinMaxHeight() {
     float maxY = -FLT_MAX;
     for (double z = 0; z < size; z += spacing) {
         for (double x = 0; x < size; x += spacing) {
-            float y;
+            float y = 0;
             if (type == 0) 
                 y = stb_perlin_fbm_noise3_seed(
                     x * scale, z * scale, 
@@ -65,7 +65,7 @@ int Topography::getY(const int x, const int z) const {
     else
         std::cerr << "ERROR: getY() on topography with invalid topography type" << std::endl;
 
-    y = ((y - minY) * amplitude) / (maxY - minY); //normalize
+    y = ((y - minY) * amplitude) / (maxY - minY); // Normalize height
     return y;
 }
 

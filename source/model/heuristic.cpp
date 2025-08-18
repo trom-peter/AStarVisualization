@@ -5,6 +5,7 @@
 Heuristic::Heuristic(Topography& topo, const int heuristicId, const float overestimateFactor) :
     topo(topo), heuristicId(heuristicId), overestimateFactor(overestimateFactor) {}
 
+// Get heuristic by id
 std::function<float(State, State)> Heuristic::getFunction() const {
     switch (heuristicId) {
         case 0:
@@ -25,9 +26,9 @@ std::function<float(State, State)> Heuristic::getFunction() const {
 }
 
 std::function<float(State, State)> Heuristic::travelTime = [](State a, State b) {
-    float distance = sqrt(pow(a.x - b.x, 2) + pow(a.y - b.y, 2) + pow(a.z - b.z, 2));
+    float distance = sqrtf(pow(a.x - b.x, 2) + pow(a.y - b.y, 2) + pow(a.z - b.z, 2));
     float speed = 6.0f;
-    return ((distance / 1000) / speed) * 3600;
+    return ((distance / 1000.0f) / speed) * 3600.0f;
 };
 
 std::function<float(State, State)> Heuristic::travelTime_Overestimated(const float factor) {
@@ -38,9 +39,9 @@ std::function<float(State, State)> Heuristic::travelTime_Overestimated(const flo
 
 std::function<float(State, State)> Heuristic::travelTime_Intersections(const Topography& topo) {
     return [topo](State a, State b) {
-        float h = Heuristic::travelTime(a, b);	    // standard duration
-        int intersections = 0;			// number of intersections
-        int t = 50;						// added duration per intersection
+        float h = Heuristic::travelTime(a, b);	    // Standard heuristic
+        int intersections = 0;			// Number of intersections
+        int t = 50;						// Added duration per intersection
 
         glm::vec3 start = glm::vec3(a.x, a.y, a.z);
         glm::vec3 goal = glm::vec3(b.x, b.y, b.z);
@@ -66,10 +67,10 @@ std::function<float(State, State)> Heuristic::travelTime_Intersections(const Top
 
 std::function<float(State, State)> Heuristic::travelTime_WeightedHeights(const Topography& topo) {
     return [topo](State a, State b) {
-        float h = Heuristic::travelTime(a, b);	// standard duration
-        float height = a.y / topo.getMaxY();	// relative height of evaluated state
-        float t = 500.0f;					    // maximum time save
-        float timeSave = (1 - height) * t;      // actual time save
+        float h = Heuristic::travelTime(a, b);	// Standard duration
+        float height = a.y / topo.getMaxY();	// Relative height of evaluated state
+        float t = 500.0f;					    // Maximum time save
+        float timeSave = (1 - height) * t;      // Actual time save
         return std::max(h - timeSave, 0.0f);
     };
 };

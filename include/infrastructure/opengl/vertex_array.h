@@ -9,11 +9,11 @@ public:
 	~VertexArray();
 
 	void addVertexBuffer(VertexBuffer& vb) const;
-	void setupVertexLayout();
 	void bind() const;
 	void unbind() const;
 
 private:
+	void setupVertexLayout();
 	unsigned int vaoId;
-	VertexBufferLayout* layout;
+	VertexBufferLayout layout;
 };

@@ -7,9 +7,9 @@ struct VertexBuffer {
 	VertexBuffer(const void* data, const uint64_t numVertices, const unsigned long long vertexSize) : 
 		numVertices(numVertices) 
 	{
-		glGenBuffers(1, &bufferId); //generate buffer
-		glBindBuffer(GL_ARRAY_BUFFER, bufferId); //bind it to gl state machine
-		glBufferData(GL_ARRAY_BUFFER, numVertices * vertexSize, data, GL_STATIC_DRAW); // fill it with data
+		glGenBuffers(1, &bufferId);
+		glBindBuffer(GL_ARRAY_BUFFER, bufferId);
+		glBufferData(GL_ARRAY_BUFFER, numVertices * vertexSize, data, GL_STATIC_DRAW);
 	}
 
 	virtual ~VertexBuffer() {

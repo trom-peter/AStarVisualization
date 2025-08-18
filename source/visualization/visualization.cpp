@@ -3,7 +3,7 @@
 #include "infrastructure/geometry/sphere.h"
 #include "infrastructure/opengl/camera.h"
 
-// rendering and camera configuration
+// Rendering and camera configuration
 glm::vec3 constexpr BACKGROUND_COLOR = glm::vec3(0.1f);
 float constexpr CAMERA_FOV = 90.0f;
 float constexpr CAMERA_NEAR_PLANE = 10.0f;
@@ -15,7 +15,7 @@ float constexpr CAMERA_Y_ROT = 90.0f;
 Visualization::Visualization() : 
 	window("A* Visualisierung"), state(VisualizationState::ConfiguringSearchEnvironment), step(0),
 	environment(nullptr), aStar(nullptr), problem(nullptr), topoRenderer(nullptr), 
-	stategridRenderer(nullptr), fb(nullptr), camera(nullptr), vao(nullptr) {}
+	stategridRenderer(nullptr), fb(nullptr), camera(nullptr) {}
 
 bool Visualization::init() {
 	if (!window.init()) {
@@ -50,9 +50,8 @@ bool Visualization::init() {
 	stategridRenderer = std::make_unique<StategridRenderer>(environment->stategrid);
 
 	fb = std::make_unique<FrameBuffer>(window.getWidth() , window.getHeight());
-	vao = std::make_unique<VertexArray>();
-	camera = std::make_unique<Camera>(glm::radians(CAMERA_FOV), window.getWidth(),
-		window.getHeight(), CAMERA_NEAR_PLANE, CAMERA_FAR_PLANE);
+	camera = std::make_unique<Camera>(glm::radians(CAMERA_FOV), (float)window.getWidth(),
+		(float)window.getHeight(), CAMERA_NEAR_PLANE, CAMERA_FAR_PLANE);
 
 	camera->translate(glm::vec3(
 		environment->topography.getSize() / 2,
@@ -78,11 +77,11 @@ void Visualization::run() {
 	while (true) {
 		gui.startFrame();
 
-		//check if window was exited
+		// Check if window was exited
 		if (gui.isWindowExited())
 			state = VisualizationState::Quit;
 
-		//draw gui and update visualization state
+		// Draw gui and update visualization state
 		switch (state) {
 			case VisualizationState::ConfiguringSearchEnvironment:
 				state = gui.showUI_EnvironmentConfig(config_Environment);
@@ -119,33 +118,34 @@ void Visualization::run() {
 
 		fb->bind();
 		glViewport(0, 0, (int)fb->width, (int)fb->height);
-		camera->resizeProj(fb->width, fb->height);
+		camera->resizeProj((float)fb->width, (float)fb->height);
 
 		BaseRenderer::clear();
 
-		// draw topography into FrameBuffer fb
+		// Draw topography into FrameBuffer fb
 		topoRenderer->updateUniforms(*camera);
 		topoRenderer->drawTopography();
 
-		// draw stategrid into FrameBuffer fb
+		// Draw stategrid into FrameBuffer fb
 		stategridRenderer->drawStategrid(*camera);
 
 		fb->unbind();
 		glViewport(0, 0, window.getWidth(), window.getHeight());
 
-		// show visibility menu and update visibility regardless of state
+		// Show visibility menu and update visibility regardless of state
 		gui.showUI_Visibility(config_Stategrid);
-		environment->stategrid.updateVisibility(config_Stategrid);
+		environment->stategrid.updateVisibility(config_Stategrid.defaultVisible, 
+			config_Stategrid.frontierVisible, config_Stategrid.reachedVisible);
 
-		// show fb in viewport window
+		// Show fb in viewport window
 		gui.showUI_Viewport(*fb);
 
-		// render the whole gui
+		// Render the whole gui
 		gui.render();
 
-		// resize fb if viewport was resized
+		// Resize fb if viewport was resized
 		if (fb->width != gui.getViewportSize().x || fb->height != gui.getViewportSize().y) 
-			fb->resize(gui.getViewportSize().x, gui.getViewportSize().y);
+			fb->resize((GLuint)gui.getViewportSize().x, (GLuint)gui.getViewportSize().y);
 
 		window.swapBuffers();
 		window.updateTime();
@@ -158,7 +158,7 @@ int Visualization::quit() {
 }
 
 void Visualization::inEnvironment() {
-	// topography was changed by user
+	// Topography was changed by user
 	if (config_Environment.topographyType != environment->topography.getType() ||
 		config_Environment.seed != environment->topography.getSeed() ||
 		config_Environment.terrainScaling != environment->topography.getScale())
@@ -173,7 +173,7 @@ void Visualization::inEnvironment() {
 		topoRenderer->setTopography(environment->topography);
 	}
 
-	// gridsize was changed by user
+	// Gridsize was changed by user
 	if (config_Environment.gridSize != environment->stategrid.gridSize) {
 		environment->resetGrid(config_Environment.gridSize);
 	}
@@ -228,7 +228,8 @@ int Visualization::problemToSearching() {
 
 	// Initialize playback config
 	config_Playback.step = 0;
-	config_Playback.maxSteps = aStar->allExpanded.size();
+	config_Playback.maxSteps = (int)aStar->getAllExpanded().size();
+	return 0;
 }
 
 void Visualization::inSearching() {
@@ -256,7 +257,7 @@ void Visualization::inSearching() {
 
 void Visualization::searchingToFinished() {
 	// Show and highlight solution states
-	environment->stategrid.showSolutionPath(aStar->solutionPath, *problem);
+	environment->stategrid.showSolutionPath(aStar->getSolutionPath(), *problem);
 }
 
 void Visualization::finishedToEnvironment() {

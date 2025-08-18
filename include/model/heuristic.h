@@ -11,9 +11,10 @@ struct Heuristic {
     std::function<float(State, State)> getFunction() const;
     int heuristicId;
     Topography& topo;
-    float overestimateFactor; //what factor travelTime_Overestimated should be overestimated by. 
+    float overestimateFactor; // What factor travelTime_Overestimated should be overestimated by
 
 private:
+    // Heuristics
     static std::function<float(State, State)> travelTime;
     static std::function<float(State, State)> travelTime_Overestimated(const float factor);
     static std::function<float(State, State)> travelTime_Intersections(const Topography& topo);

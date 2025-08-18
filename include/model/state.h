@@ -30,7 +30,7 @@ struct State {
 
 struct StateHash {
     size_t operator()(const State& state) const {
-        // combine x y z hash
+        // Combine x y z hash
         size_t hx = std::hash<int>()(state.x);
         size_t hy = std::hash<int>()(state.y);
         size_t hz = std::hash<int>()(state.z);

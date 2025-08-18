@@ -37,18 +37,22 @@ void Stategrid::clearGrid() {
 }
 
 void Stategrid::updateToStep(const int step, const Graph& g, AStarSearch& aStar, const bool forwards) {
-    State expanded = aStar.allExpanded.at(step);
+    State expanded = aStar.getAllExpanded().at(step);
 
-    if (forwards) {
+    std::vector<State> frontier = aStar.getAllFrontiers().at(step); // Get frontier at step
+    
+    // Forwards step
+    if (forwards) { 
         grid[expanded] = reachedColor;
-        for (State s : aStar.allFrontiers.at(step)) {
+        for (State s : frontier) {
             grid[s] = frontierColor;
         }
-    } 
-    else {
+    }
+    // Backwards step
+    else { 
         grid[expanded] = frontierColor;
-        for (State& s : aStar.allFrontiers.at(step)) {
-            //check if any neighbour of s is a frontier node
+        for (State s : frontier) {
+            // Check if any neighbour of s is a frontier node
             bool anyNeighbourFrontier = false;
             for (State& n : g.getNeighbours(s.x, s.z)) {
                 if (grid[n] == reachedColor) {
@@ -57,11 +61,12 @@ void Stategrid::updateToStep(const int step, const Graph& g, AStarSearch& aStar,
                 }
             }
 
-            //only change s to default color if no neighbouring spheres are frontiers
+            // Only change s to default color if no neighbouring spheres are frontiers
             if (!anyNeighbourFrontier) grid[s] = defaultColor;
         }
     }
 
+    // Always show initial and goal state
     grid[aStar.getProblem().initial] = initialStateColor;
 
     grid[aStar.getProblem().goal] = goalStateColor;
@@ -79,10 +84,12 @@ void Stategrid::initGrid(const Topography& topo) {
     }
 }
 
-void Stategrid::updateVisibility(const StategridConfig& config) {
-    this->defaultVisible = config.defaultVisible;
-    this->frontierVisible = config.frontierVisible;
-    this->reachedVisible = config.reachedVisible;
+void Stategrid::updateVisibility(const bool defaultVisible, 
+    const bool frontierVisible, const bool reachedVisible) 
+{
+    this->defaultVisible = defaultVisible;
+    this->frontierVisible = frontierVisible;
+    this->reachedVisible = reachedVisible;
 }
 
 bool Stategrid::isVisible(const glm::vec3 color) const {

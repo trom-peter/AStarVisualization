@@ -14,19 +14,33 @@ public:
 	AStarSearch(SearchProblem& problem, Heuristic heuristic, SearchEnvironment& environment);
 	~AStarSearch();
 
-	void search();
+	void search(); 
+
+	void setHeuristic(const int heuristicId, const float overestimateFactor = 1.0f);
+
 	SearchProblem getProblem() const;
 	Heuristic getHeuristic() const;
 	std::shared_ptr<Node> getSolution() const;
-	void setHeuristic(const int heuristicId, const float overestimateFactor = 1.0f);
-
-	std::vector<std::vector<State>> allFrontiers;
-	std::vector<State> allExpanded;
-	std::vector<State> solutionPath;
-	int consideredNodes;
+	std::vector<std::vector<State>> getAllFrontiers() const;
+	std::vector<State> getAllExpanded() const;
+	std::vector<State> getSolutionPath() const;
+	int getConsideredNodes() const;
 
 private:
-	std::shared_ptr<Node> solution;
+	// Solution node. Is nullptr if search has not started or no solution was found
+	std::shared_ptr<Node> solution; 
+
+	// All frontiers of the search process. Only stores new states
+	std::vector<std::vector<State>> allFrontiers; 
+
+	// All expanded states in search process
+	std::vector<State> allExpanded; 
+
+	// Path of the found solution
+	std::vector<State> solutionPath;
+
+	int consideredNodes; // Amount of considered nodes in search process
+
 	SearchProblem& problem;
 	Heuristic heuristic;
 	void setConsideredNodes();

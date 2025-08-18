@@ -30,13 +30,13 @@ public:
 	float getSpacing() const;
 
 private:
-	int size;
-	int amplitude;
-	float scale;
-	float spacing;
-	unsigned char seed; // the seed for this specific topography
-	int type;
+	int size; // Topography size in meters
+	int amplitude; // Topography amplitude in meters
+	float scale; // The higher this parameter, the larger the terrain area. Also known as terrain complexity
+	float spacing; // Spacing between generated vertices
+	unsigned char seed; // The seed for this topography
+	int type; // Topography type (0/1)
 
-	float minY; //non normalized minimum and maximum height of the topography
-	float maxY;
+	float minY; // Non normalized minimum height of the topography
+	float maxY; // Non normalized maximum height of the topography
 };

@@ -22,9 +22,9 @@ public:
 	void setTopography(Topography& topo);
 
 private:
-	int n; // size of grid (n x n nodes)
-	int size; //size in units (size x size units)
-	int spacing; //horizontal, vertical space between all nodes
-	std::vector<std::vector<int>> adjMatrix; //adjacency matrix for storing edges and weights
-	Topography& topography; // topography object for getting y values for any x, z point
+	int n; // Size of grid (n x n nodes)
+	int size; // Size in units (size x size units)
+	int spacing; // Horizontal, vertical space between all nodes
+	std::vector<std::vector<int>> adjMatrix; // Adjacency matrix for storing edges and weights
+	Topography& topography; // Topography object for getting y values for any x, z point
 };

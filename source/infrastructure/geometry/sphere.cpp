@@ -1,16 +1,34 @@
 #include "infrastructure/geometry/sphere.h"
 
+int constexpr MIN_SECTOR_COUNT = 2;
+int constexpr MIN_STACK_COUNT = 2;
+float constexpr MIN_RADIUS = 0.0f;
+
 Sphere::Sphere(
     const float radius, const int sectorCount, const int stackCount, 
     const glm::vec3 position, const glm::vec3 scale, const glm::vec3 color) : 
     Shape(position, scale, color) 
 {
-    const int MIN_SECTOR_COUNT = 2;
-    const int MIN_STACK_COUNT = 2;
+    if (radius < MIN_RADIUS) {
+        this->radius = MIN_RADIUS;
+    }
+    else {
+        this->radius = radius;
+    }
 
-    this->radius = radius > 0.0f ? radius : 0.0f;
-    this->sectorCount = sectorCount > MIN_SECTOR_COUNT ? sectorCount : MIN_SECTOR_COUNT;
-    this->stackCount = stackCount > MIN_STACK_COUNT ? stackCount : MIN_STACK_COUNT;
+    if (sectorCount < MIN_SECTOR_COUNT) {
+        this->sectorCount = MIN_SECTOR_COUNT;
+    }
+    else {
+        this->sectorCount = sectorCount;
+    }
+
+    if (stackCount < MIN_STACK_COUNT) {
+        this->stackCount = MIN_STACK_COUNT;
+    }
+    else {
+        this->stackCount = stackCount;
+    }
 
     std::vector<Vertex> vertices = getVertices();
     std::vector<uint32_t> indices = getIndices();
@@ -20,34 +38,24 @@ Sphere::Sphere(
 
 std::vector<Vertex> Sphere::getVertices() const {
     std::vector<Vertex> vertices;
+    // Loop through stacks
+    for (int i = 0; i <= stackCount; ++i) {
 
-    float x, y, z, xy;                           // vertex position
-    float nx, ny, nz, lengthInv = 1.0f / radius; // normal
+        float V = (float)i / (float)stackCount;
+        float phi = V * M_PI;
 
-    float sectorStep = 2 * M_PI / sectorCount;
-    float stackStep = M_PI / stackCount;
-    float sectorAngle, stackAngle;
+        // Loop through the slices
+        for (int j = 0; j <= sectorCount; ++j) {
 
-    for (int i = 0; i <= stackCount; ++i)
-    {
-        stackAngle = M_PI / 2 - i * stackStep;
-        xy = radius * cosf(stackAngle);
-        z = radius * sinf(stackAngle);  
+            float U = (float)j / (float)sectorCount;
+            float theta = U * (M_PI * 2);
 
-        for (int j = 0; j <= sectorCount; ++j)
-        {
-            sectorAngle = j * sectorStep;
+            // Use spherical coordinates to calculate the positions
+            float x = cos(theta) * sin(phi);
+            float y = cos(phi);
+            float z = sin(theta) * sin(phi);
 
-            // vertex position
-            x = xy * cosf(sectorAngle);
-            y = xy * sinf(sectorAngle);
-
-            // normalized vertex normal
-            nx = x * lengthInv;
-            ny = y * lengthInv;
-            nz = z * lengthInv;
-
-            vertices.push_back(Vertex(glm::vec3(x, y, z), glm::vec3(nx, ny, nz)));
+            vertices.push_back(Vertex(glm::vec3(x,y,z), glm::vec3(0.0f)));
         }
     }
 
@@ -57,34 +65,20 @@ std::vector<Vertex> Sphere::getVertices() const {
 std::vector<uint32_t> Sphere::getIndices() const {
     std::vector<uint32_t> indices;
 
-    unsigned int k1, k2;
-    for(int i = 0; i < stackCount; ++i)
-    {
-        k1 = i * (sectorCount + 1);     // beginning of current stack
-        k2 = k1 + sectorCount + 1;      // beginning of next stack
+    // Calc the index positions
+    for (int i = 0; i < sectorCount * stackCount + sectorCount; ++i) {
+        indices.push_back(GLuint(i));
+        indices.push_back(GLuint(i + sectorCount + 1));
+        indices.push_back(GLuint(i + sectorCount));
 
-        for(int j = 0; j < sectorCount; ++j, ++k1, ++k2)
-        {
-            // 2 triangles per sector excluding 1st and last stacks
-            if(i != 0)
-            {
-                indices.push_back(k1);
-                indices.push_back(k2);
-                indices.push_back(k1 + 1);
-            }
-
-            if(i != (stackCount-1))
-            {
-                indices.push_back(k1 + 1);
-                indices.push_back(k2);
-                indices.push_back(k2 + 1);
-            }
-        }
+        indices.push_back(GLuint(i + sectorCount + 1));
+        indices.push_back(GLuint(i));
+        indices.push_back(GLuint(i + 1));
     }
 
     return indices;
 }
 
 std::string Sphere::toString() const {
-    return std::string("I am a Sphere with radius " + std::to_string(radius));
+    return std::string("Sphere with radius " + std::to_string(radius));
 }

@@ -14,8 +14,8 @@ public:
 	AStarSearch(SearchProblem& problem, Heuristic heuristic, SearchEnvironment& environment);
 	~AStarSearch();
 
-	void search(); 
-
+	void search();
+	void resetSearch();
 	void setHeuristic(const int heuristicId, const float overestimateFactor = 1.0f);
 
 	SearchProblem getProblem() const;

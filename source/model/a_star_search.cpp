@@ -7,17 +7,14 @@
 #include "model/search_environment.h"
 
 AStarSearch::AStarSearch(SearchProblem& problem, Heuristic heuristic, SearchEnvironment& environment) :
-	problem(problem), heuristic(heuristic), solution(nullptr), consideredNodes(0) {}
+	problem(problem), heuristic(heuristic), solution(nullptr), consideredNodes(0) {
+}
 
 AStarSearch::~AStarSearch() {}
 
 // Start the search for the current search problem
 void AStarSearch::search() {
 	int step = 0; // Number of expanded nodes. Used for adding states to allFrontiers at each step
-	allFrontiers.clear();
-	allExpanded.clear();
-	solutionPath.clear();
-	consideredNodes = 0;
 
 	std::shared_ptr<Node> initial = std::make_shared<Node>(problem.initial, 0);
 
@@ -27,13 +24,13 @@ void AStarSearch::search() {
 			b->pathCost + heuristic.getFunction()(b->s, problem.goal);
 		};
 
-	std::priority_queue<std::shared_ptr<Node>, 
+	std::priority_queue<std::shared_ptr<Node>,
 		std::vector<std::shared_ptr<Node>>, decltype(f)> frontier(f); // Frontier
 	frontier.push(initial);
 	allFrontiers.push_back({ initial->s });
 
 	std::unordered_map<State, std::shared_ptr<Node>, StateHash> reached; // Reached
-	reached.insert({ problem.initial, initial});
+	reached.insert({ problem.initial, initial });
 
 	while (!frontier.empty()) {
 		std::shared_ptr<Node> n = frontier.top();
@@ -50,6 +47,10 @@ void AStarSearch::search() {
 			solution = n;
 			setSolutionPath(n);
 			setConsideredNodes();
+			while (!frontier.empty()) {
+				frontier.pop(); // Clear rest of frontier
+			}
+			reached.clear(); // Clear reached
 			return;
 		}
 
@@ -69,12 +70,22 @@ void AStarSearch::search() {
 	solution = nullptr;
 }
 
-void AStarSearch::setSolutionPath(const std::shared_ptr<Node> n) {
-	if (n == nullptr) return;
-	else {
-		solutionPath.push_back(n->s);
-		setSolutionPath(n->parent);
-	}
+void AStarSearch::resetSearch() {
+	solution = nullptr;
+	allFrontiers.clear();
+	allExpanded.clear();
+	solutionPath.clear();
+	consideredNodes = 0;
+}
+
+void AStarSearch::setSolutionPath(std::shared_ptr<Node> n) {
+    std::vector<State> tmp;
+    while (n) {
+        tmp.push_back(n->s);
+        n = n->parent.lock();
+    }
+    std::reverse(tmp.begin(), tmp.end());
+    solutionPath = std::move(tmp);
 }
 
 void AStarSearch::setConsideredNodes() {

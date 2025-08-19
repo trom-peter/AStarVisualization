@@ -231,6 +231,7 @@ void Visualization::inProblem() {
 void Visualization::problemToSearching() {
 	// Start the configured search
 	aStar->search();
+
 	if (aStar->getSolution() == nullptr) {
 		throw std::runtime_error("A* could not find a solution");
 	}
@@ -275,6 +276,7 @@ void Visualization::finishedToEnvironment() {
 	config_Problem.reset();
 	config_Playback.step = 0;
 	config_Playback.maxSteps = 0;
+	aStar->resetSearch();
 }
 
 void Visualization::finishedToProblem() {
@@ -282,4 +284,5 @@ void Visualization::finishedToProblem() {
 	environment->resetGrid(environment->stategrid.gridResolution);
 	config_Playback.step = 0;
 	config_Playback.maxSteps = 0;
+	aStar->resetSearch();
 }

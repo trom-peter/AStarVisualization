@@ -17,7 +17,6 @@ struct PerformanceMeasure {
 		float distance = (float)(sqrt(dx * dx + dh * dh + dz * dz));
 		float speed = (MAX_TRAVEL_SPEED * exp(-3.5f * fabsf(slope + 0.05f)));
 		float travelTime = ((distance / 1000.0f) / speed) * 3600.0f; // Travel time in seconds
-
 		return travelTime;
 	};
 

@@ -25,5 +25,5 @@ struct EnvironmentConfig {
 
 	// Minimum and maximum grid resolution
 	static constexpr int GRID_RESOLUTION_MIN = 10;
-	static constexpr int GRID_RESOLUTION_MAX = 50;
+	static constexpr int GRID_RESOLUTION_MAX = 30;
 };

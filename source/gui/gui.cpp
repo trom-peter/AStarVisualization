@@ -274,7 +274,10 @@ VisualizationState GUI::showUI_Searching(PlaybackConfig& playbackConfig) const {
     }
     ImGui::Text("Expansion");
     if (ImGui::InputInt("##expansion", &playbackConfig.step) || playbackConfig.searchPlaying) {
-        playbackConfig.step = std::clamp(playbackConfig.step, 0, playbackConfig.maxSteps);
+        playbackConfig.step = std::clamp(
+            playbackConfig.step, 
+            0, 
+            playbackConfig.maxSteps);
     }
     if (playbackConfig.searchPlaying) {
         ImGui::EndDisabled();

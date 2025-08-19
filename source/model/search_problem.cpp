@@ -26,14 +26,14 @@ std::vector<std::shared_ptr<Node>> SearchProblem::actions(std::shared_ptr<Node> 
 	for (State s1 : neighbours) {
 		int actionCost = 0;
 
-		if (!graph.hasEdge(s0.x, s0.y, s1.x, s1.y)) {
+		if (!graph.hasEdge(s0.x, s0.z, s1.x, s1.z)) {
 			// Add edge with action cost if necessary
 			actionCost = PerformanceMeasure::hikingFunction(s0, s1);
 			graph.addEdge(s0.x, s0.z, s1.x, s1.z, actionCost);
 		}
 		else {
 			// Get action cost if edge already exists
-			actionCost = graph.getWeight(s0.x, s0.y, s1.x, s1.y);
+			actionCost = graph.getWeight(s0.x, s0.z, s1.x, s1.z);
 		}
 
 		int pathCost = n->pathCost + actionCost;

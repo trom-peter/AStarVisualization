@@ -1,8 +1,8 @@
 #pragma once
+#include <memory>
+#include "model/topography.h"
 #include "infrastructure/opengl/base_renderer.h"
 #include "infrastructure/opengl/mesh.h"
-#include "model/topography.h"
-#include <memory>
 
 class Topography;
 class Camera;

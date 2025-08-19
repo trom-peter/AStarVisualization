@@ -5,6 +5,7 @@
 #include "infrastructure/opengl/stategrid_renderer.h"
 #include "infrastructure/opengl/framebuffer.h"
 #include "infrastructure/opengl/camera.h"
+#include "infrastructure/window/window.h"
 #include "model/state_grid.h"
 #include "model/search_problem.h"
 #include "model/search_environment.h"
@@ -14,7 +15,6 @@
 #include "configurations/stategrid_configuration.h"
 #include "configurations/problem_configuration.h"
 #include "gui/gui.h"
-#include "infrastructure/window/window.h"
 
 class Visualization {
 public:
@@ -24,10 +24,9 @@ public:
     int quit();
 
 private:
-
     // State transitions
     void environmentToProblem();
-    int problemToSearching();
+    void problemToSearching();
     void searchingToFinished();
     void finishedToEnvironment();
     void finishedToProblem();

@@ -3,7 +3,6 @@
 #include "model/state.h"
 
 class AStarSearch;
-struct StategridConfig;
 struct State;
 class Topography;
 class Graph;
@@ -44,4 +43,3 @@ public:
 	bool frontierVisible;
 	bool reachedVisible;
 };
-

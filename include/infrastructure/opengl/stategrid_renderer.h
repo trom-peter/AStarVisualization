@@ -1,12 +1,11 @@
 #pragma once
 #include "infrastructure/opengl/base_renderer.h"
-#include "model/state_grid.h"
 #include "infrastructure/geometry/sphere.h"
+#include "model/state_grid.h"
 
 class Camera;
 
 class StategridRenderer : public BaseRenderer {
-
 public:
     StategridRenderer(Stategrid& stategrid);
 

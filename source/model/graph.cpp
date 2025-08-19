@@ -1,6 +1,9 @@
 #include "model/graph.h"
-#include <iostream>
 #include "model/state.h"
+#include <iostream>
+
+// Maximum amount of neighbours per state
+constexpr int NEIGHBOURS = 8;
 
 Graph::Graph(const int resolution, const int size, Topography& topo) : 
 	resolution(resolution), size(size), topography(topo) 
@@ -23,7 +26,7 @@ std::vector<State> Graph::getNeighbours(const int x, const int z) const {
 	std::vector<State> neighbours;
 
 	//all eight x,z neighbour offsets
-	int neighbourOffsets[8][2] = { 
+	int neighbourOffsets[NEIGHBOURS][2] = {
 		{0, spacing},			// top neighbour
 		{-spacing, spacing},	// top left neighbour
 		{-spacing, 0},			// left neighbour
@@ -34,12 +37,16 @@ std::vector<State> Graph::getNeighbours(const int x, const int z) const {
 		{spacing, spacing}		// top right neighbour
 	};
 
-	for (int i = 0; i < 8; i++) {
+	for (int i = 0; i < NEIGHBOURS; i++) {
 		int neighbourX = x + neighbourOffsets[i][0];
 		int neighbourZ = z + neighbourOffsets[i][1];
 
-		if (isValid(neighbourX, neighbourZ))
-			neighbours.push_back(State(neighbourX, topography.getY(neighbourX, neighbourZ), neighbourZ));
+		if (isValid(neighbourX, neighbourZ)) {
+			neighbours.push_back(
+				State(neighbourX, 
+					topography.getY(neighbourX, neighbourZ), 
+					neighbourZ));
+		}
 	}
 
 	return neighbours;

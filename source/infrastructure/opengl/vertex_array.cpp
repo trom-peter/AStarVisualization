@@ -28,7 +28,6 @@ void VertexArray::addVertexBuffer(VertexBuffer& vb) const {
 		glEnableVertexAttribArray(i);
 		glVertexAttribPointer(i, element.amount, element.type, 
 			element.normalized, layout.getStride(), (void*)offset);
-
 		offset += element.amount * element.getSize();
 	}
 }

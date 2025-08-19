@@ -11,6 +11,9 @@
 #include "model/a_star_search.h"
 #include "model/node.h"
 
+//GUI font size
+float constexpr FONT_SIZE = 18.0f;
+
 GUI::GUI() : font(nullptr), windowFlags(ImGuiWindowFlags()), dockingFlags(ImGuiDockNodeFlags()) {}
 
 void GUI::init(const Window& window) {
@@ -25,8 +28,7 @@ void GUI::init(const Window& window) {
     // Setup Dear ImGui style
     ImGui::StyleColorsDark();
     ImGuiStyle& style = ImGui::GetStyle();
-    if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
-    {
+    if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable) {
         style.WindowRounding = 0.0f;
         style.Colors[ImGuiCol_WindowBg].w = 1.0f;
     }
@@ -36,7 +38,7 @@ void GUI::init(const Window& window) {
     ImGui_ImplOpenGL3_Init("#version 450");
 
     io.Fonts->AddFontDefault();
-    font = io.Fonts->AddFontFromFileTTF("fonts/JetbrainsMonoRegular.ttf", 18.0f);
+    font = io.Fonts->AddFontFromFileTTF("fonts/JetbrainsMonoRegular.ttf", FONT_SIZE);
     windowFlags = ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoMove;
     dockingFlags = ImGuiDockNodeFlags_NoResize | ImGuiDockNodeFlags_PassthruCentralNode;
 }
@@ -69,24 +71,35 @@ VisualizationState GUI::showUI_EnvironmentConfig(EnvironmentConfig& envConfig) c
     // Show environment configuration menu
     ImGui::Begin("Konfiguration des Suchraums", nullptr, windowFlags);
 
+    // Seed input
     char buffer[4];
     sprintf_s(buffer, "%d", envConfig.seed);
     ImGui::Text("Seed");
-    if (ImGui::InputText("##seed", buffer, IM_ARRAYSIZE(buffer), ImGuiInputTextFlags_EnterReturnsTrue | ImGuiInputTextFlags_AutoSelectAll) || ImGui::IsItemDeactivatedAfterEdit()) {
-        envConfig.seed = static_cast<unsigned char>(std::clamp(atoi(buffer), 0, 255));
+    if (ImGui::InputText("##seed", buffer, IM_ARRAYSIZE(buffer), 
+        ImGuiInputTextFlags_EnterReturnsTrue | ImGuiInputTextFlags_AutoSelectAll) || 
+        ImGui::IsItemDeactivatedAfterEdit()) 
+    {
+        envConfig.seed = std::clamp<unsigned char>(
+            atoi(buffer), 
+            std::numeric_limits<unsigned char>::min(), 
+            std::numeric_limits<unsigned char>::max());
     }
+
+    // Random seed
     if (ImGui::Button(u8"Zufällig")) {
         envConfig.seed = SeedGenerator::getRandomSeed();
     }
 
     ImGui::NewLine();
 
+    // Topography type
     ImGui::Text(u8"Geländetyp");
     ImGui::RadioButton("1", &envConfig.topographyType, 0); ImGui::SameLine();
     ImGui::RadioButton("2", &envConfig.topographyType, 1);
 
     ImGui::NewLine();
 
+    // Topography complexity
     ImGui::Text(u8"Komplexität");
     if (ImGui::Button("Einfach")) {
         envConfig.terrainScaling = EnvironmentConfig::COMPLEXITY_LOW;
@@ -102,22 +115,31 @@ VisualizationState GUI::showUI_EnvironmentConfig(EnvironmentConfig& envConfig) c
 
     ImGui::NewLine();
 
+    // Grid resolution
     ImGui::Text(u8"Gitterauflösung (n * n)");
     if (ImGui::InputInt("##gridResolution", &envConfig.gridResolution)) {
-        envConfig.gridResolution = std::clamp(envConfig.gridResolution, 5, 30);
+        envConfig.gridResolution = std::clamp(
+            envConfig.gridResolution, 
+            EnvironmentConfig::GRID_RESOLUTION_MIN, 
+            EnvironmentConfig::GRID_RESOLUTION_MAX);
+
         envConfig.updateStateSpacing();
     }
 
     ImGui::NewLine();
 
-    if (ImGui::Button("Fertig")) nextState = VisualizationState::ConfiguringSearchProblem;
+    if (ImGui::Button("Fertig")) {
+        nextState = VisualizationState::ConfiguringSearchProblem;
+    }
 
     ImGui::End();
 
     return nextState;
 }
 
-VisualizationState GUI::showUI_SearchProblemConfig(ProblemConfig& problemConfig, const EnvironmentConfig& envConfig) const {
+VisualizationState GUI::showUI_SearchProblemConfig(
+    ProblemConfig& problemConfig, const EnvironmentConfig& envConfig) const 
+{
     VisualizationState nextState = VisualizationState::ConfiguringSearchProblem;
 
     // Search problem configuration
@@ -202,10 +224,14 @@ VisualizationState GUI::showUI_SearchProblemConfig(ProblemConfig& problemConfig,
 
     ImGui::Combo("Heuristik", &problemConfig.heuristic, items, IM_ARRAYSIZE(items));
 
-    if (problemConfig.heuristic == 2 && 
+    // Show overestimate factor input when overestimated heuristic is selected
+    if (items[problemConfig.heuristic] == u8"Wanderdauer Überschätzt" &&
         ImGui::InputFloat("Faktor", &problemConfig.overestimateFactor, 0.1f, 1.0f)) 
     {
-        problemConfig.overestimateFactor = std::clamp(problemConfig.overestimateFactor, 0.0f, 100.0f);
+        problemConfig.overestimateFactor = std::clamp(
+            problemConfig.overestimateFactor, 
+            ProblemConfig::OVERESTIMATE_FACTOR_MIN, 
+            ProblemConfig::OVERESTIMATE_FACTOR_MAX);
     }
 
     // Begin search
@@ -223,9 +249,11 @@ VisualizationState GUI::showUI_Searching(PlaybackConfig& playbackConfig) const {
     ImGui::Begin("Suche", nullptr, windowFlags);
 
     ImGui::Text("Expansionen pro Sekunde");
-
-    if (ImGui::InputInt("##expansionsPerSecond", &playbackConfig.searchRate, 1, 5)) {
-        playbackConfig.searchRate = std::clamp(playbackConfig.searchRate, 0, 60);
+    if (ImGui::InputInt("##expansionsPerSecond", &playbackConfig.searchRate, 1, NULL)) {
+        playbackConfig.searchRate = std::clamp(
+            playbackConfig.searchRate, 
+            PlaybackConfig::SEARCH_RATE_MIN, 
+            PlaybackConfig::SEARCH_RATE_MAX);
     }
 
     ImGui::SameLine();
@@ -240,12 +268,17 @@ VisualizationState GUI::showUI_Searching(PlaybackConfig& playbackConfig) const {
 
     ImGui::NewLine();
 
-    if (playbackConfig.searchPlaying) ImGui::BeginDisabled();
+    // Activate manual playback only if automatic playback is off
+    if (playbackConfig.searchPlaying) {
+        ImGui::BeginDisabled();
+    }
     ImGui::Text("Expansion");
     if (ImGui::InputInt("##expansion", &playbackConfig.step) || playbackConfig.searchPlaying) {
         playbackConfig.step = std::clamp(playbackConfig.step, 0, playbackConfig.maxSteps);
     }
-    if (playbackConfig.searchPlaying) ImGui::EndDisabled();
+    if (playbackConfig.searchPlaying) {
+        ImGui::EndDisabled();
+    }
 
     // Search playback is finished
     if (playbackConfig.step == playbackConfig.maxSteps) {

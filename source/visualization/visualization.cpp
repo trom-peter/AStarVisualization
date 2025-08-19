@@ -1,7 +1,7 @@
 #include "visualization/visualization.h"
-#include "model/state.h"
-#include "infrastructure/geometry/sphere.h"
 #include "infrastructure/opengl/camera.h"
+#include "infrastructure/geometry/sphere.h"
+#include "model/state.h"
 
 // Rendering and camera configuration
 glm::vec3 constexpr BACKGROUND_COLOR = glm::vec3(0.1f);
@@ -36,7 +36,8 @@ bool Visualization::init() {
 		config_Environment.topographyAmplitude, config_Environment.gridResolution,
 		Stategrid(config_Environment.gridResolution, 
 			config_Stategrid.defaultColor, config_Stategrid.frontierColor, config_Stategrid.reachedColor, 
-			config_Stategrid.initialStateColor, config_Stategrid.goalStateColor, config_Stategrid.solutionStateColor, 
+			config_Stategrid.initialStateColor, config_Stategrid.goalStateColor, 
+			config_Stategrid.solutionStateColor, 
 			config_Stategrid.defaultVisible, config_Stategrid.frontierVisible, config_Stategrid.reachedVisible));
 
 	problem = std::make_unique<SearchProblem>(*environment, config_Problem.initial, config_Problem.goal);
@@ -78,38 +79,44 @@ void Visualization::run() {
 		gui.startFrame();
 
 		// Check if window was exited
-		if (gui.isWindowExited())
+		if (gui.isWindowExited()) {
 			state = VisualizationState::Quit;
+		}
 
 		// Draw gui and update visualization state
 		switch (state) {
 			case VisualizationState::ConfiguringSearchEnvironment:
 				state = gui.showUI_EnvironmentConfig(config_Environment);
 				inEnvironment();
-				if (state == VisualizationState::ConfiguringSearchProblem) 
+				if (state == VisualizationState::ConfiguringSearchProblem) {
 					environmentToProblem();
+				}
 				break;
 
 			case VisualizationState::ConfiguringSearchProblem:
 				state = gui.showUI_SearchProblemConfig(config_Problem, config_Environment);
 				inProblem();
-				if (state == VisualizationState::Searching)
-					if (problemToSearching() == -1) break;
+				if (state == VisualizationState::Searching) {
+					problemToSearching();
+				}
 				break;
 
 			case VisualizationState::Searching:
 				state = gui.showUI_Searching(config_Playback);
 				inSearching();
-				if (state == VisualizationState::Finished)
+				if (state == VisualizationState::Finished) {
 					searchingToFinished();
+				}
 				break;
 
 			case VisualizationState::Finished:
 				state = gui.showUI_Finished(*aStar);
-				if (state == VisualizationState::ConfiguringSearchEnvironment)
+				if (state == VisualizationState::ConfiguringSearchEnvironment) {
 					finishedToEnvironment();
-				else if (state == VisualizationState::ConfiguringSearchProblem)
+				}
+				else if (state == VisualizationState::ConfiguringSearchProblem) {
 					finishedToProblem();
+				}
 				break;
 
 			case VisualizationState::Quit:
@@ -144,8 +151,9 @@ void Visualization::run() {
 		gui.render();
 
 		// Resize fb if viewport was resized
-		if (fb->width != gui.getViewportSize().x || fb->height != gui.getViewportSize().y) 
+		if (fb->width != gui.getViewportSize().x || fb->height != gui.getViewportSize().y) {
 			fb->resize((GLuint)gui.getViewportSize().x, (GLuint)gui.getViewportSize().y);
+		}
 
 		window.swapBuffers();
 		window.updateTime();
@@ -210,26 +218,26 @@ void Visualization::inProblem() {
 	environment->stategrid.grid[problem->goal] = config_Stategrid.goalStateColor;
 
 	// Heuristic was changed by user
-	if (config_Problem.heuristic != aStar->getHeuristic().heuristicId)
+	if (config_Problem.heuristic != aStar->getHeuristic().heuristicId) {
 		aStar->setHeuristic(config_Problem.heuristic);
+	}
 
 	// Heuristic overestimate factor was changed by user
-	if (config_Problem.overestimateFactor != aStar->getHeuristic().overestimateFactor)
+	if (config_Problem.overestimateFactor != aStar->getHeuristic().overestimateFactor) {
 		aStar->setHeuristic(config_Problem.heuristic, config_Problem.overestimateFactor);
+	}
 }
 
-int Visualization::problemToSearching() {
+void Visualization::problemToSearching() {
 	// Start the configured search
 	aStar->search();
 	if (aStar->getSolution() == nullptr) {
-		std::cout << "No path found." << std::endl;
-		return -1;
+		throw std::runtime_error("A* could not find a solution");
 	}
 
 	// Initialize playback config
 	config_Playback.step = 0;
 	config_Playback.maxSteps = (int)aStar->getAllExpanded().size();
-	return 0;
 }
 
 void Visualization::inSearching() {

@@ -9,8 +9,7 @@ int constexpr MIN_SECTOR_COUNT = 2;
 int constexpr MIN_STACK_COUNT = 2;
 float constexpr MIN_RADIUS = 0.0f;
 
-Sphere::Sphere(
-    const float radius, const int sectorCount, const int stackCount, 
+Sphere::Sphere(const float radius, const int sectorCount, const int stackCount, 
     const glm::vec3 position, const glm::vec3 scale, const glm::vec3 color) : 
     Shape(position, scale, color) 
 {
@@ -70,7 +69,7 @@ std::vector<Vertex> Sphere::getVertices() const {
 std::vector<uint32_t> Sphere::getIndices() const {
     std::vector<uint32_t> indices;
 
-    // Calc the index positions
+    // Calculate the indices
     for (int i = 0; i < sectorCount * stackCount + sectorCount; ++i) {
         indices.push_back(GLuint(i));
         indices.push_back(GLuint(i + sectorCount + 1));

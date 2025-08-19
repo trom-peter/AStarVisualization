@@ -1,16 +1,15 @@
 #pragma once
-
 #include <string>
 #include <unordered_map>
-#include "infrastructure/opengl/base_renderer.h"
 #include "glm/glm.hpp"
+#include "infrastructure/opengl/base_renderer.h"
 
 struct Shader {
 	Shader(const char* vertexShaderFilename, const char* fragmentShaderFileName);
 	virtual ~Shader();
 
-	void bind();
-	void unbind();
+	void bind() const;
+	void unbind() const;
 
 	GLint getUniformLocation(const std::string& name);
 

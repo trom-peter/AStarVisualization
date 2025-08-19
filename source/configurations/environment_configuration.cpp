@@ -1,13 +1,13 @@
 #include "configurations/environment_configuration.h"
 
 // Initial environment configuration
-int constexpr SEED = 0;
-int constexpr TOPOGRAPHY_TYPE = 0;
-float constexpr TERRAIN_SCALING = EnvironmentConfig::COMPLEXITY_LOW;
-int constexpr GRID_SIZE = 10;
-int constexpr TOPOGRAPHY_SIZE = 7000;
-int constexpr TOPOGRAPHY_AMPLITUDE = 500;
-int constexpr STATE_SPACING = (TOPOGRAPHY_SIZE / (GRID_SIZE - 1));
+constexpr int SEED = 0;
+constexpr int TOPOGRAPHY_TYPE = 0;
+constexpr float TERRAIN_SCALING = EnvironmentConfig::COMPLEXITY_LOW;
+constexpr int GRID_SIZE = 15;
+constexpr int TOPOGRAPHY_SIZE = 7000;
+constexpr int TOPOGRAPHY_AMPLITUDE = 500;
+constexpr int STATE_SPACING = (TOPOGRAPHY_SIZE / (GRID_SIZE - 1));
 
 EnvironmentConfig::EnvironmentConfig() : 
 	seed(SEED),

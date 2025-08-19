@@ -14,8 +14,7 @@ PlaybackConfig::PlaybackConfig() :
 	searchTime(SEARCH_TIME),
 	searchRate(SEARCH_RATE),
 	searchPlaying(SEARCH_PLAYING),
-	timePerIncrement(TIME_PER_INCREMENT) {
-}
+	timePerIncrement(TIME_PER_INCREMENT) {}
 
 // Reset config to initial configuration
 void PlaybackConfig::reset() {

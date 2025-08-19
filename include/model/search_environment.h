@@ -6,7 +6,6 @@
 class Stategrid;
 
 struct SearchEnvironment {
-
 	SearchEnvironment(
 		const unsigned char seed, const float terrainScaling, const int topographyType,
 		const int topographySize, const int topographyAmplitude,

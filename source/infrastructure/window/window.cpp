@@ -15,8 +15,10 @@ bool Window::init() {
 
     int screenWidth = dm.w;
     int screenHeight = dm.h;
-    this->width = screenWidth * 1.0f;
-    this->height = screenHeight * 1.0f;
+
+    // Window should be slighty smaller than the whole screen when minimized
+    this->width = screenWidth * 0.9f;
+    this->height = screenHeight * 0.9f;
 
     setupOpenGLAttributes();
 
@@ -27,7 +29,7 @@ bool Window::init() {
     SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
     SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 4); // 4x Multisampling
 
-
+    // Setup resizable maximized window
     SDL_WindowFlags window_flags = (SDL_WindowFlags)
         (SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE | SDL_WINDOW_MAXIMIZED);
 
@@ -41,7 +43,7 @@ bool Window::init() {
 
     glContext = SDL_GL_CreateContext(window);
     SDL_GL_MakeCurrent(window, glContext);
-    SDL_GL_SetSwapInterval(1); // Enable v-sync
+    SDL_GL_SetSwapInterval(1); // Enable V-Sync
     return true;
 }
 

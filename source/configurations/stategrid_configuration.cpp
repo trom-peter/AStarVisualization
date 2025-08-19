@@ -36,4 +36,3 @@ void StategridConfig::reset() {
 	frontierVisible = FRONTIER_VISIBLE;
 	reachedVisible = REACHED_VISIBLE;
 }
-

@@ -23,7 +23,7 @@ bool BaseRenderer::init() {
 #endif
 
     glEnable(GL_CULL_FACE);
-    glFrontFace(GL_CCW);  // Specify that the front faces are wound CCW    
+    glFrontFace(GL_CCW);  // Specify that the front faces are wound counter clock wise (CCW)    
     glCullFace(GL_BACK);  // Cull back faces
     glEnable(GL_DEPTH_TEST);
 
@@ -32,7 +32,7 @@ bool BaseRenderer::init() {
     return true;
 }
 
-// Clear background with the set clearColor.
+// Clear background with the set clearColor
 void BaseRenderer::clear() {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }

@@ -1,21 +1,25 @@
-#include <iostream>
 #include "infrastructure/opengl/camera.h"
+#include <iostream>
+#include <algorithm>
 
-Camera::Camera(const float fov, 
-	const float width, const float height, 
-	const float nearPlane, const float farPlane) : fov(fov) 
+float constexpr PITCH_MIN = -89.0f;
+float constexpr PITCH_MAX = 89.0f;
+
+Camera::Camera(const float fov,
+	const float width, const float height,
+	const float nearPlane, const float farPlane) :
+	fov(fov), nearPlane(nearPlane), farPlane(farPlane),
+	projection(glm::perspective(fov / 2.0f, width / height, nearPlane, farPlane)),
+	view(glm::mat4(1.0f)), 
+	position(glm::vec3(0.0f)), 
+	up(glm::vec3(0.0f, 1.0f, 0.0f)), 
+	yaw(0.0f), pitch(0.0f)
 {
-	projection = glm::perspective(fov / 2.0f, width / height, nearPlane, farPlane);
-	view = glm::mat4(1.0f);
-	position = glm::vec3(0.0f);
-	up = glm::vec3(0.0f, 1.0f, 0.0f);
-	yaw = 0.0f;
-	pitch = 0.0f;
 	update();
 }
 
 void Camera::resizeProj(const float width, const float height) {
-	projection = glm::perspective(fov / 2.0f, width / height, 10.0f, 20000.0f);
+	projection = glm::perspective(fov / 2.0f, width / height, nearPlane, farPlane);
 	update();
 }
 
@@ -40,8 +44,7 @@ void Camera::translate(const glm::vec3 v) {
 void Camera::rotate(const glm::vec2 degrees) {
 	yaw += degrees.x;
 	pitch -= degrees.y;
-	if (pitch > 89.0f) pitch = 89.0f;
-	if (pitch < -89.0f) pitch = -89.0f;
+	pitch = std::clamp(pitch, PITCH_MIN, PITCH_MAX);
 
 	glm::vec3 front(0.0f);
 	front.x = cos(glm::radians(pitch)) * cos(glm::radians(yaw));

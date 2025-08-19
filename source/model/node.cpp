@@ -1,6 +1,6 @@
 #include "model/node.h"
-#include <string>
 #include "model/state.h"
+#include <string>
 
 Node::Node(const int x, const int y, const int z, const int pathCost, std::shared_ptr<Node> parent) :
 	s(State(x, y, z)), parent(parent), pathCost(pathCost) {
@@ -23,6 +23,15 @@ Node::Node(const State state, std::shared_ptr<Node> parent, const int pathCost) 
 };
 
 std::string Node::getPath() const {
-	if (parent == nullptr) return "[" + std::to_string(s.x) + ", " + std::to_string(s.y) + ", " + std::to_string(s.z) + "]";
-	return parent->getPath() + " -> " + "[" + std::to_string(s.x) + ", " + std::to_string(s.y) + ", " + std::to_string(s.z) + "]";
+	if (parent == nullptr) {
+		return "[" + std::to_string(s.x) + ", " + 
+			std::to_string(s.y) + ", " + 
+			std::to_string(s.z) + "]";
+	}
+	else {
+		return parent->getPath() + " -> " + 
+			"[" + std::to_string(s.x) + ", " + 
+			std::to_string(s.y) + ", " + 
+			std::to_string(s.z) + "]";
+	}
 }

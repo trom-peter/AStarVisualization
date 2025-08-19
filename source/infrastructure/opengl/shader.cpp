@@ -13,11 +13,11 @@ Shader::~Shader() {
 	glDeleteProgram(shaderId);
 }
 
-void Shader::bind() {
+void Shader::bind() const {
 	glUseProgram(shaderId);
 }
 
-void Shader::unbind() {
+void Shader::unbind() const {
 	glUseProgram(0);
 }
 
@@ -29,8 +29,9 @@ GLuint Shader::getShaderId() const {
 std::string Shader::parse(const std::string& filename) const {
 	std::ifstream shaderFile(filename, std::ios::binary);
 
-	if (!shaderFile.is_open())
+	if (!shaderFile.is_open()) {
 		std::cerr << "Failed to open shader file: " + filename << std::endl;
+	}
 
 	std::ostringstream buffer;
 	buffer << shaderFile.rdbuf();
@@ -42,8 +43,9 @@ GLuint Shader::compile(const std::string& shaderSource, GLenum type, const std::
 {
 	GLuint shaderId = glCreateShader(type);
 
-	if (shaderId == 0)
+	if (shaderId == 0) {
 		std::cerr << "Failed to create shader for: " + shaderFilename << std::endl;
+	}
 
 	// Compile shader
 	const char* source = shaderSource.c_str();
@@ -92,6 +94,7 @@ GLuint Shader::createShader(const char* vertexShaderFilename, const char* fragme
 
 GLint Shader::getUniformLocation(const std::string& name) {
 	auto location = uniformLocations.find(name);
+
 	if (location != uniformLocations.end()) {
 		return location->second;
 	}

@@ -2,10 +2,13 @@
 #include "model/topography.h"
 #include "infrastructure/opengl/camera.h"
 
+constexpr const char* VERTEX_SHADER_LOCATION = "shaders/topography.vert";
+constexpr const char* FRAGMENT_SHADER_LOCATION = "shaders/topography.frag";
+
 TopographyRenderer::TopographyRenderer(Topography& topography) :
     topography(topography), topographyMesh(nullptr), BaseRenderer() 
 {
-    shader = std::make_unique<Shader>("shaders/topography.vert", "shaders/topography.frag");
+    shader = std::make_unique<Shader>(VERTEX_SHADER_LOCATION, FRAGMENT_SHADER_LOCATION);
     shader->bind();
 
     vao = std::make_unique<VertexArray>();

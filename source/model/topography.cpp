@@ -27,17 +27,19 @@ void Topography::setMinMaxHeight() {
     for (double z = 0; z < size; z += spacing) {
         for (double x = 0; x < size; x += spacing) {
             float y = 0;
-            if (type == 0) 
+
+            if (type == 0) {
                 y = stb_perlin_fbm_noise3_seed(
                     x * scale, z * scale, 0.0f, 
                     NOISE_LACUNARITY, NOISE_GAIN, 
                     NOISE_OCTAVES, seed) * amplitude;
-
-            else if (type == 1)
+            }
+            else if (type == 1) {
                 y = stb_perlin_ridge_noise3_seed(
                     x * scale, z * scale, 0.0f, 
                     NOISE_LACUNARITY, NOISE_GAIN, 
                     NOISE_RIDGE_OFFSET, NOISE_OCTAVES, seed) * amplitude;
+            }
 
             if (y < minY) minY = y;
             if (y > maxY) maxY = y;
@@ -51,19 +53,21 @@ void Topography::setMinMaxHeight() {
 int Topography::getY(const int x, const int z) const {
     int y = 0;
 
-    if (type == 0)
+    if (type == 0) {
         y = stb_perlin_fbm_noise3_seed(
             x * scale, z * scale, 0.0f, 
             NOISE_LACUNARITY, NOISE_GAIN, 
             NOISE_OCTAVES, seed) * amplitude;
-
-    else if (type == 1)
+    }
+    else if (type == 1) {
         y = stb_perlin_ridge_noise3_seed(
             x * scale, z * scale, 0.0f, 
             NOISE_LACUNARITY, NOISE_GAIN, 
             NOISE_RIDGE_OFFSET, NOISE_OCTAVES, seed) * amplitude;
-    else
+    }
+    else {
         std::cerr << "ERROR: getY() on topography with invalid topography type" << std::endl;
+    }
 
     y = ((y - minY) * amplitude) / (maxY - minY); // Normalize height
     return y;

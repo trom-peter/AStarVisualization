@@ -4,8 +4,8 @@
 #include "infrastructure/geometry/vertex.h"
 
 struct VertexBuffer {
-	VertexBuffer(const void* data, const uint64_t numVertices, const unsigned long long vertexSize) : 
-		numVertices(numVertices) 
+	VertexBuffer(const void* data, const uint64_t numVertices, 
+		const unsigned long long vertexSize) : numVertices(numVertices) 
 	{
 		glGenBuffers(1, &bufferId);
 		glBindBuffer(GL_ARRAY_BUFFER, bufferId);

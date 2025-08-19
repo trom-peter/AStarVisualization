@@ -1,7 +1,6 @@
 #pragma once
-#include "infrastructure/opengl/base_renderer.h"
 #include <cstdint>
-
+#include "infrastructure/opengl/base_renderer.h"
 
 struct FrameBuffer {
 	FrameBuffer(const GLuint width, const GLuint height) {

@@ -10,14 +10,17 @@
 float constexpr RADIUS = 1.0f;
 int constexpr SECTOR_COUNT = 36;
 int constexpr STACK_COUNT = 18;
+glm::vec3 constexpr POSITION = glm::vec3(0.0f);
+glm::vec3 constexpr SCALE = glm::vec3(1.0f);
+glm::vec3 constexpr COLOR = glm::vec3(1.0f);
 
 struct Sphere : Shape {
     Sphere(const float radius = RADIUS, 
         const int sectorCount = SECTOR_COUNT, 
         const int stackCount = STACK_COUNT,
-        const glm::vec3 position = glm::vec3(0.0f),
-        const glm::vec3 scale = glm::vec3(1.0f), 
-        const glm::vec3 color = glm::vec3(1.0f));
+        const glm::vec3 position = POSITION,
+        const glm::vec3 scale = SCALE,
+        const glm::vec3 color = COLOR);
 
     std::string toString() const override;
 

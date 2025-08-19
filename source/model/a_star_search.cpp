@@ -78,14 +78,12 @@ void AStarSearch::resetSearch() {
 	consideredNodes = 0;
 }
 
-void AStarSearch::setSolutionPath(std::shared_ptr<Node> n) {
-    std::vector<State> tmp;
-    while (n) {
-        tmp.push_back(n->s);
-        n = n->parent.lock();
-    }
-    std::reverse(tmp.begin(), tmp.end());
-    solutionPath = std::move(tmp);
+void AStarSearch::setSolutionPath(const std::shared_ptr<Node> n) {
+	if (n == nullptr) return;
+	else {
+		solutionPath.push_back(n->s);
+		setSolutionPath(n->parent.lock());
+	}
 }
 
 void AStarSearch::setConsideredNodes() {

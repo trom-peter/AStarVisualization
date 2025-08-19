@@ -8,7 +8,7 @@ Heuristic::Heuristic(Topography& topo, const int heuristicId, const float overes
     topo(topo), heuristicId(heuristicId), overestimateFactor(overestimateFactor) {}
 
 // Get heuristic by id
-std::function<float(State, State)> Heuristic::getFunction() const {
+std::function<int(State, State)> Heuristic::getFunction() const {
     switch (heuristicId) {
         case 0:
             return travelTime_Overestimated(0.0f);
@@ -27,52 +27,56 @@ std::function<float(State, State)> Heuristic::getFunction() const {
     }
 }
 
-std::function<float(State, State)> Heuristic::travelTime = [](State a, State b) {
+std::function<int(State, State)> Heuristic::travelTime = [](State a, State b) {
     float distance = sqrtf(pow(a.x - b.x, 2) + pow(a.y - b.y, 2) + pow(a.z - b.z, 2)); // In meters
     float speed = PerformanceMeasure::MAX_TRAVEL_SPEED; // 6 km/h
-    return ((distance / 1000.0f) / speed) * 3600.0f; // Return travel time in seconds
+    return (int)(((distance / 1000.0f) / speed) * 3600.0f); // Return travel time in seconds
 };
 
-std::function<float(State, State)> Heuristic::travelTime_Overestimated(const float factor) {
+std::function<int(State, State)> Heuristic::travelTime_Overestimated(const float factor) {
     return [factor](State a, State b) {
-        return factor * Heuristic::travelTime(a, b);
+        return (int)(factor * Heuristic::travelTime(a, b));
     };
 };
 
-std::function<float(State, State)> Heuristic::travelTime_Intersections(const Topography& topo) {
+std::function<int(State, State)> Heuristic::travelTime_Intersections(const Topography& topo) {
     return [topo](State a, State b) {
-        float h = Heuristic::travelTime(a, b);	    // Standard heuristic
-        int intersections = 0;			// Number of intersections
-        int t = 10;						// Added duration per intersection
+        int h = Heuristic::travelTime(a, b);	// Standard heuristic duration
+        int intersections = 0;			        // Number of intersections
+        int t = INTERSECTIONS_ADDED_DURATION;	// Added seconds per intersection
 
         glm::vec3 start = glm::vec3(a.x, a.y, a.z);
         glm::vec3 goal = glm::vec3(b.x, b.y, b.z);
-        glm::vec3 goalDir = glm::normalize(start - goal);
-        glm::vec3 stepSize = goalDir * 10.0f;
-        float totalDistance = glm::distance(start, goal);
+        glm::vec3 goalDir = glm::normalize(goal - start);
 
-        glm::vec3 pos = start;
-        bool aboveGround = true;
+        // Check for intersection every INTERSECTION_CHECK_STEP_SIZE meters
+        glm::vec3 stepSize = goalDir * INTERSECTION_CHECK_STEP_SIZE;
+
+        float totalDistance = glm::distance(start, goal); 
+        glm::vec3 pos = start; // Position to check for intersection
+
+        bool isAboveGround = true;
+        bool wasAboveGround = true;
 
         while (glm::distance(start, pos) < totalDistance) {
             pos += stepSize;
-            if (pos.y < topo.getY(pos.x, pos.z) && aboveGround) {
-                intersections++;
-                aboveGround = false;
+            isAboveGround = pos.y >= topo.getY(pos.x, pos.z); // Update isAboveGround
+            if (!isAboveGround && wasAboveGround) {
+                intersections++; 
             }
-            else aboveGround = true;
+            wasAboveGround = isAboveGround; // Update wasAboveGround
         }
 
         return h + intersections * t;
     };
 };
 
-std::function<float(State, State)> Heuristic::travelTime_WeightedHeights(const Topography& topo) {
+std::function<int(State, State)> Heuristic::travelTime_WeightedHeights(const Topography& topo) {
     return [topo](State a, State b) {
-        float h = Heuristic::travelTime(a, b);	// Standard duration
-        float height = a.y / topo.getMaxY();	// Relative height of evaluated state
-        float t = 500.0f;					    // Maximum time save for low heigths
-        float timeSave = (1 - height) * t;      // Actual time save
-        return std::max(h - timeSave, 0.0f);
+        float h = Heuristic::travelTime(a, b);	                // Standard heuristic duration
+        float height = (float)a.y / (float)topo.getAmplitude();	// Relative height of evaluated state
+        float t = WEIGHTED_HEIGHTS_MAX_TIME_SAVE;			    // Maximum time save for low heigths
+        float timeSave = (1 - height) * t;                      // Actual time save
+        return (int)(std::max(h - timeSave, 0.0f));
     };
 };

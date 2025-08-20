@@ -37,5 +37,3 @@ struct StateHash {
         return (hx ^ (hy << 1) ^ hz);
     }
 };
-
-

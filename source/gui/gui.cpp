@@ -220,12 +220,12 @@ VisualizationState GUI::showUI_SearchProblemConfig(
 
     // Heuristic choice
     const char* items[] = { "Keine", "Wanderdauer", 
-        u8"Wanderdauer Überschätzt", "Schnittpunkte", u8"Höhengewichtung"};
+        u8"Wanderdauer überschätzt", "Schnittpunkte", u8"Höhengewichtung"};
 
     ImGui::Combo("Heuristik", &problemConfig.heuristic, items, IM_ARRAYSIZE(items));
 
     // Show overestimate factor input when overestimated heuristic is selected
-    if (items[problemConfig.heuristic] == u8"Wanderdauer Überschätzt" &&
+    if (items[problemConfig.heuristic] == u8"Wanderdauer überschätzt" &&
         ImGui::InputFloat("Faktor", &problemConfig.overestimateFactor, 0.1f, 1.0f)) 
     {
         problemConfig.overestimateFactor = std::clamp(
@@ -233,6 +233,25 @@ VisualizationState GUI::showUI_SearchProblemConfig(
             ProblemConfig::OVERESTIMATE_FACTOR_MIN, 
             ProblemConfig::OVERESTIMATE_FACTOR_MAX);
     }
+
+    // Heuristic descriptions
+    if (items[problemConfig.heuristic] == "Wanderdauer") {
+        ImGui::Text(u8"Bewertung der Zustände anhand ihrer\ngeschätzten Wanderdauer zum Ziel.");
+    }
+
+    if (items[problemConfig.heuristic] == "Schnittpunkte") {
+        ImGui::Text(u8"Bewertung anhand der Wanderdauer zum Ziel sowie\n"
+            "der Anzahl an Schnittpunkten auf der\n"
+            "Luftlinie eines Zustands zum Ziel.");
+    }
+
+    if (items[problemConfig.heuristic] == u8"Höhengewichtung") {
+        ImGui::Text(u8"Bewertung anhand der Wanderdauer zum Ziel sowie\n"
+            "der Tiefe eines Zustands im Gelände. Je tiefer\n"
+            "er liegt, desto besser seine Bewertung.");
+    }
+
+    ImGui::NewLine();
 
     // Begin search
     if (ImGui::Button("Suche!", ImVec2(80.0f, 40.0f))) nextState = VisualizationState::Searching;

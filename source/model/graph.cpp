@@ -3,7 +3,7 @@
 #include <iostream>
 
 // Maximum amount of neighbours per state
-constexpr int NEIGHBOURS = 8;
+constexpr int MAX_NEIGHBOURS = 8;
 
 Graph::Graph(const int resolution, const int size, Topography& topo) : 
 	resolution(resolution), size(size), topography(topo) 
@@ -26,7 +26,7 @@ std::vector<State> Graph::getNeighbours(const int x, const int z) const {
 	std::vector<State> neighbours;
 
 	//all eight x,z neighbour offsets
-	int neighbourOffsets[NEIGHBOURS][2] = {
+	int neighbourOffsets[MAX_NEIGHBOURS][2] = {
 		{0, spacing},			// top neighbour
 		{-spacing, spacing},	// top left neighbour
 		{-spacing, 0},			// left neighbour
@@ -37,7 +37,7 @@ std::vector<State> Graph::getNeighbours(const int x, const int z) const {
 		{spacing, spacing}		// top right neighbour
 	};
 
-	for (int i = 0; i < NEIGHBOURS; i++) {
+	for (int i = 0; i < MAX_NEIGHBOURS; i++) {
 		int neighbourX = x + neighbourOffsets[i][0];
 		int neighbourZ = z + neighbourOffsets[i][1];
 

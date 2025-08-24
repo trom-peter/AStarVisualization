@@ -79,7 +79,9 @@ void AStarSearch::resetSearch() {
 }
 
 void AStarSearch::setSolutionPath(const std::shared_ptr<Node> n) {
-	if (n == nullptr) return;
+	if (n == nullptr) {
+		return;
+	}
 	else {
 		solutionPath.push_back(n->s);
 		setSolutionPath(n->parent.lock());

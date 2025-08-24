@@ -1,10 +1,10 @@
 #include "model/search_problem.h"
+#include <iostream>
+#include <memory>
 #include "model/search_environment.h"
 #include "model/node.h"
 #include "model/performance_measure.h"
 #include "configurations/problem_configuration.h"
-#include <iostream>
-#include <memory>
 
 SearchProblem::SearchProblem(SearchEnvironment& environment, const glm::ivec2 initial, const glm::ivec2 goal) :
 	graph(environment.graph),

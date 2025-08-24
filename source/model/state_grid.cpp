@@ -1,10 +1,10 @@
 #include "model/state_grid.h"
+#include <iostream>
+#include <unordered_map>
 #include "model/state.h"
 #include "model/graph.h"
 #include "model/a_star_search.h"
 #include "model/search_problem.h"
-#include <unordered_map>
-#include <iostream>
 
 Stategrid::Stategrid() :
     gridResolution(0),

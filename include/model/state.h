@@ -1,6 +1,6 @@
 #pragma once
-#include <glm/glm.hpp>
 #include <functional>
+#include <glm/glm.hpp>
 
 struct State {
 	State(const int x, const int y, const int z) : x(x), y(y), z(z) {}

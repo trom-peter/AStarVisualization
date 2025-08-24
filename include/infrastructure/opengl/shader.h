@@ -1,8 +1,8 @@
 #pragma once
 #include <string>
 #include <unordered_map>
-#include "glm/glm.hpp"
 #include "infrastructure/opengl/base_renderer.h"
+#include "glm/glm.hpp"
 
 struct Shader {
 	Shader(const char* vertexShaderFilename, const char* fragmentShaderFileName);

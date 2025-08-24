@@ -1,14 +1,13 @@
 #pragma once
 #include <memory>
-#include "model/topography.h"
 #include "infrastructure/opengl/base_renderer.h"
 #include "infrastructure/opengl/mesh.h"
+#include "model/topography.h"
 
 class Topography;
 class Camera;
 
 class TopographyRenderer : public BaseRenderer {
-
 public:
     TopographyRenderer(Topography& topography);
     ~TopographyRenderer();

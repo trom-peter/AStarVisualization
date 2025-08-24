@@ -1,7 +1,7 @@
 #pragma once
+#include <memory>
 #include "model/graph.h"
 #include "model/state.h"
-#include <memory>
 
 struct SearchEnvironment;
 struct Node;

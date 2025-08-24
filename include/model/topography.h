@@ -3,7 +3,6 @@
 #include <limits>
 
 class Topography {
-
 public:
 	Topography(const unsigned char seed, const float scale, 
 		const int type, const int size, const int amplitude);

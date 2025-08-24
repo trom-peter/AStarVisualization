@@ -7,12 +7,12 @@
 #include "infrastructure/geometry/shape.h"
 
 // Initial sphere configuration
-float constexpr RADIUS = 1.0f;
-int constexpr SECTOR_COUNT = 36;
-int constexpr STACK_COUNT = 18;
-glm::vec3 constexpr POSITION = glm::vec3(0.0f);
-glm::vec3 constexpr SCALE = glm::vec3(1.0f);
-glm::vec3 constexpr COLOR = glm::vec3(1.0f);
+constexpr float RADIUS = 1.0f;
+constexpr int SECTOR_COUNT = 36;
+constexpr int STACK_COUNT = 18;
+constexpr glm::vec3 POSITION = glm::vec3(0.0f);
+constexpr glm::vec3 SCALE = glm::vec3(1.0f);
+constexpr glm::vec3 COLOR = glm::vec3(1.0f);
 
 struct Sphere : Shape {
     Sphere(const float radius = RADIUS, 

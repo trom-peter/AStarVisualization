@@ -4,13 +4,13 @@
 #include "model/state.h"
 
 // Rendering and camera configuration
-glm::vec3 constexpr BACKGROUND_COLOR = glm::vec3(0.1f);
-float constexpr CAMERA_FOV = 90.0f;
-float constexpr CAMERA_NEAR_PLANE = 10.0f;
-float constexpr CAMERA_FAR_PLANE = 15000.0f;
-float constexpr CAMERA_HEIGHT = 10000.0f;
-float constexpr CAMERA_X_ROT = -90.0f;
-float constexpr CAMERA_Y_ROT = 90.0f;
+constexpr glm::vec3 BACKGROUND_COLOR = glm::vec3(0.1f);
+constexpr float CAMERA_FOV = 90.0f;
+constexpr float CAMERA_NEAR_PLANE = 10.0f;
+constexpr float CAMERA_FAR_PLANE = 15000.0f;
+constexpr float CAMERA_HEIGHT = 10000.0f;
+constexpr float CAMERA_X_ROT = -90.0f;
+constexpr float CAMERA_Y_ROT = 90.0f;
 
 Visualization::Visualization() : 
 	window("A* Visualisierung"), state(VisualizationState::ConfiguringSearchEnvironment), step(0),

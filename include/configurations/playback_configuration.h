@@ -15,6 +15,6 @@ struct PlaybackConfig {
 	float timePerIncrement; // How many seconds a step increment takes
 
 	// Minimum and maximum search rate
-	static constexpr int SEARCH_RATE_MIN = 1;
-	static constexpr int SEARCH_RATE_MAX = 60;
+	constexpr static int SEARCH_RATE_MIN = 1;
+	constexpr static int SEARCH_RATE_MAX = 60;
 };

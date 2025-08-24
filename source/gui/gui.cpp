@@ -1,18 +1,18 @@
 #include "gui/gui.h"
 #include <algorithm>
-#include "infrastructure/window/window.h"
-#include "infrastructure/opengl/framebuffer.h"
-#include "model/state_grid.h"
 #include "configurations/environment_configuration.h"
 #include "configurations/playback_configuration.h"
 #include "configurations/stategrid_configuration.h"
 #include "configurations/problem_configuration.h"
-#include "seed_generator.h"
+#include "infrastructure/window/window.h"
+#include "infrastructure/opengl/framebuffer.h"
 #include "model/a_star_search.h"
+#include "model/state_grid.h"
 #include "model/node.h"
+#include "seed_generator.h"
 
 //GUI font size
-float constexpr FONT_SIZE = 18.0f;
+constexpr float FONT_SIZE = 18.0f;
 
 GUI::GUI() : font(nullptr), windowFlags(ImGuiWindowFlags()), dockingFlags(ImGuiDockNodeFlags()) {}
 

@@ -19,11 +19,11 @@ struct EnvironmentConfig {
 	int stateSpacing; // Horizontal spacing between states in meters
 
 	// Terrain scaling values for every complexity
-	static constexpr float COMPLEXITY_LOW = 0.0001f;
-	static constexpr float COMPLEXITY_MEDIUM = 0.00015f;
-	static constexpr float COMPLEXITY_HIGH = 0.0002f;
+	constexpr static float COMPLEXITY_LOW = 0.0001f;
+	constexpr static float COMPLEXITY_MEDIUM = 0.00015f;
+	constexpr static float COMPLEXITY_HIGH = 0.0002f;
 
 	// Minimum and maximum grid resolution
-	static constexpr int GRID_RESOLUTION_MIN = 10;
-	static constexpr int GRID_RESOLUTION_MAX = 30;
+	constexpr static int GRID_RESOLUTION_MIN = 10;
+	constexpr static int GRID_RESOLUTION_MAX = 30;
 };

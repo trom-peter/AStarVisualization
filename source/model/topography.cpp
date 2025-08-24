@@ -5,11 +5,11 @@
 #include "stb_perlin.h"
 
 // Topography generation settings
-float constexpr VERTEX_SPACING = 20.0f;
-int constexpr NOISE_OCTAVES = 4;
-float constexpr NOISE_LACUNARITY = 2.0f;
-float constexpr NOISE_GAIN = 0.5f;
-float constexpr NOISE_RIDGE_OFFSET = 1.0f;
+constexpr float VERTEX_SPACING = 20.0f;
+constexpr int NOISE_OCTAVES = 4;
+constexpr float NOISE_LACUNARITY = 2.0f;
+constexpr float NOISE_GAIN = 0.5f;
+constexpr float NOISE_RIDGE_OFFSET = 1.0f;
 
 Topography::Topography(const unsigned char seed, const float scale, 
     const int type, const int size, const int amplitude) :

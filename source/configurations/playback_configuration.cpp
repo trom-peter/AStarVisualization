@@ -1,12 +1,12 @@
 #include "configurations/playback_configuration.h"
 
 // Initial playback configuration
-int constexpr STEP = 0;
-int constexpr MAX_STEPS = 0;
-float constexpr SEARCH_TIME = 0.0f;
-float constexpr SEARCH_RATE = 10.0f;
-bool constexpr SEARCH_PLAYING = false;
-float constexpr TIME_PER_INCREMENT = 1.0f / SEARCH_RATE;
+constexpr int STEP = 0;
+constexpr int MAX_STEPS = 0;
+constexpr float SEARCH_TIME = 0.0f;
+constexpr float SEARCH_RATE = 10.0f;
+constexpr bool SEARCH_PLAYING = false;
+constexpr float TIME_PER_INCREMENT = 1.0f / SEARCH_RATE;
 
 PlaybackConfig::PlaybackConfig() : 
 	step(STEP),

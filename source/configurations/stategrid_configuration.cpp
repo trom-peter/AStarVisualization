@@ -1,16 +1,16 @@
 #include "configurations/stategrid_configuration.h"
 
 // Initial stategrid configuration
-glm::vec3 constexpr DEFAULT_COLOR = glm::vec3(0.0f);
-glm::vec3 constexpr FRONTIER_COLOR = glm::vec3(1.0f);
-glm::vec3 constexpr REACHED_COLOR = glm::vec3(0.2f, 0.6f, 1.0f);
-glm::vec3 constexpr INITIAL_STATE_COLOR = glm::vec3(0.2f, 1.0f, 0.2f);
-glm::vec3 constexpr GOAL_STATE_COLOR = glm::vec3(1.0f, 0.2f, 0.2f);
-glm::vec3 constexpr SOLUTION_STATE_COLOR = glm::vec3(1.0f, 1.0f, 0.0f);
+constexpr glm::vec3 DEFAULT_COLOR = glm::vec3(0.0f);
+constexpr glm::vec3 FRONTIER_COLOR = glm::vec3(1.0f);
+constexpr glm::vec3 REACHED_COLOR = glm::vec3(0.2f, 0.6f, 1.0f);
+constexpr glm::vec3 INITIAL_STATE_COLOR = glm::vec3(0.2f, 1.0f, 0.2f);
+constexpr glm::vec3 GOAL_STATE_COLOR = glm::vec3(1.0f, 0.2f, 0.2f);
+constexpr glm::vec3 SOLUTION_STATE_COLOR = glm::vec3(1.0f, 1.0f, 0.0f);
 
-bool constexpr DEFAULT_VISIBLE = true;
-bool constexpr FRONTIER_VISIBLE = true;
-bool constexpr REACHED_VISIBLE = true;
+constexpr bool DEFAULT_VISIBLE = true;
+constexpr bool FRONTIER_VISIBLE = true;
+constexpr bool REACHED_VISIBLE = true;
 
 StategridConfig::StategridConfig() :
 	defaultColor(DEFAULT_COLOR),

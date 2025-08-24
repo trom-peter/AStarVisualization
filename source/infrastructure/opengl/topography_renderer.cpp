@@ -1,6 +1,6 @@
 #include "infrastructure/opengl/topography_renderer.h"
-#include "model/topography.h"
 #include "infrastructure/opengl/camera.h"
+#include "model/topography.h"
 
 constexpr const char* VERTEX_SHADER_LOCATION = "shaders/topography.vert";
 constexpr const char* FRAGMENT_SHADER_LOCATION = "shaders/topography.frag";

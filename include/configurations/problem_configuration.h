@@ -12,6 +12,6 @@ struct ProblemConfig {
 	glm::ivec2 goal;
 
 	// Mininum and maximum overestimate factor
-	static constexpr float OVERESTIMATE_FACTOR_MIN = 0.0f;
-	static constexpr float OVERESTIMATE_FACTOR_MAX = 10.0f;
+	constexpr static float OVERESTIMATE_FACTOR_MIN = 0.0f;
+	constexpr static float OVERESTIMATE_FACTOR_MAX = 10.0f;
 };

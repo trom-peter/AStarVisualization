@@ -2,8 +2,8 @@
 #include <iostream>
 #include <algorithm>
 
-float constexpr PITCH_MIN = -89.0f;
-float constexpr PITCH_MAX = 89.0f;
+constexpr float PITCH_MIN = -89.0f;
+constexpr float PITCH_MAX = 89.0f;
 
 Camera::Camera(const float fov,
 	const float width, const float height,

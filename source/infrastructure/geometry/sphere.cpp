@@ -5,9 +5,9 @@
 * https://github.com/Erkaman/cute-deferred-shading/tree/master
 */
 
-int constexpr MIN_SECTOR_COUNT = 2;
-int constexpr MIN_STACK_COUNT = 2;
-float constexpr MIN_RADIUS = 0.0f;
+constexpr int MIN_SECTOR_COUNT = 2;
+constexpr int MIN_STACK_COUNT = 2;
+constexpr float MIN_RADIUS = 0.0f;
 
 Sphere::Sphere(const float radius, const int sectorCount, const int stackCount, 
     const glm::vec3 position, const glm::vec3 scale, const glm::vec3 color) : 

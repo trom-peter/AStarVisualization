@@ -12,7 +12,7 @@
 #include "seed_generator.h"
 
 //GUI font size
-constexpr float FONT_SIZE = 18.0f;
+constexpr float FONT_SIZE = 25.0f;
 
 GUI::GUI() : font(nullptr), windowFlags(ImGuiWindowFlags()), dockingFlags(ImGuiDockNodeFlags()) {}
 
@@ -144,12 +144,12 @@ VisualizationState GUI::showUI_SearchProblemConfig(
 
     // Search problem configuration
     ImGui::Begin("Konfiguration des Suchproblems", nullptr, windowFlags);
-    ImGui::Text("Startzustand"); ImGui::SameLine(125); ImGui::Text("Zielzustand");
+    ImGui::Text("Startzustand"); ImGui::SameLine(225); ImGui::Text("Zielzustand");
     ImGui::NewLine();
 
     // Initial state configuration
     ImGui::BeginGroup();
-    ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 25);
+    ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 50);
     if (ImGui::ArrowButton("##up1", ImGuiDir_Up)) {
         problemConfig.initial.y = std::clamp(
             problemConfig.initial.y - envConfig.stateSpacing, 
@@ -158,13 +158,14 @@ VisualizationState GUI::showUI_SearchProblemConfig(
     }
 
     ImGui::BeginGroup();
+    ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 15);
     if (ImGui::ArrowButton("##left1", ImGuiDir_Left)) {
         problemConfig.initial.x = std::clamp(
             problemConfig.initial.x - envConfig.stateSpacing,
             0,
             (envConfig.gridResolution - 1) * envConfig.stateSpacing);
     }
-    ImGui::SameLine(0, 30);
+    ImGui::SameLine(0, 40);
     if (ImGui::ArrowButton("##right1", ImGuiDir_Right)) {
         problemConfig.initial.x = std::clamp(
             problemConfig.initial.x + envConfig.stateSpacing,
@@ -172,7 +173,7 @@ VisualizationState GUI::showUI_SearchProblemConfig(
             (envConfig.gridResolution - 1) * envConfig.stateSpacing);
     }
     ImGui::EndGroup();
-    ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 25);
+    ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 50);
     if (ImGui::ArrowButton("##down1", ImGuiDir_Down)) {
         problemConfig.initial.y = std::clamp(
             problemConfig.initial.y + envConfig.stateSpacing,
@@ -181,11 +182,11 @@ VisualizationState GUI::showUI_SearchProblemConfig(
     }
     ImGui::EndGroup();
 
-    ImGui::SameLine(0, 50);
+    ImGui::SameLine(0, 100);
 
     // Goal state configuration
     ImGui::BeginGroup();
-    ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 25);
+    ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 50);
     if (ImGui::ArrowButton("##up2", ImGuiDir_Up)) {
         problemConfig.goal.y = std::clamp(
             problemConfig.goal.y - envConfig.stateSpacing,
@@ -193,13 +194,14 @@ VisualizationState GUI::showUI_SearchProblemConfig(
             (envConfig.gridResolution - 1) * envConfig.stateSpacing);
     }
     ImGui::BeginGroup();
+    ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 15);
     if (ImGui::ArrowButton("##left2", ImGuiDir_Left)) {
         problemConfig.goal.x = std::clamp(
             problemConfig.goal.x - envConfig.stateSpacing,
             0,
             (envConfig.gridResolution - 1) * envConfig.stateSpacing);
     }
-    ImGui::SameLine(0, 30);
+    ImGui::SameLine(0, 40);
     if (ImGui::ArrowButton("##right2", ImGuiDir_Right)) {
         problemConfig.goal.x = std::clamp(
             problemConfig.goal.x + envConfig.stateSpacing,
@@ -207,7 +209,7 @@ VisualizationState GUI::showUI_SearchProblemConfig(
             (envConfig.gridResolution - 1) * envConfig.stateSpacing);
     }
     ImGui::EndGroup();
-    ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 25);
+    ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 50);
     if (ImGui::ArrowButton("##down2", ImGuiDir_Down)) {
         problemConfig.goal.y = std::clamp(
             problemConfig.goal.y + envConfig.stateSpacing,
@@ -240,15 +242,17 @@ VisualizationState GUI::showUI_SearchProblemConfig(
     }
 
     if (items[problemConfig.heuristic] == "Schnittpunkte") {
-        ImGui::Text(u8"Bewertung anhand der Wanderdauer zum Ziel sowie\n"
+        ImGui::Text(u8"Bewertung der Zustände anhand ihrer\n"
+            "geschätzten Wanderdauer zum Ziel sowie\n"
             "der Anzahl an Schnittpunkten auf der\n"
             "Luftlinie eines Zustands zum Ziel.");
     }
 
     if (items[problemConfig.heuristic] == u8"Höhengewichtung") {
-        ImGui::Text(u8"Bewertung anhand der Wanderdauer zum Ziel sowie\n"
-            "der Tiefe eines Zustands im Gelände. Je tiefer\n"
-            "er liegt, desto besser seine Bewertung.");
+        ImGui::Text(u8"Bewertung der Zustände anhand ihrer\n"
+            "geschätzten Wanderdauer zum Ziel sowie\n"
+            "der Tiefe der Zustände im Gelände.\n"
+            "Je tiefer, desto besser die Bewertung.");
     }
 
     ImGui::NewLine();
@@ -310,7 +314,7 @@ VisualizationState GUI::showUI_Searching(PlaybackConfig& playbackConfig) const {
 
     if (ImGui::BeginPopupModal("Pfad gefunden!")) {
         // Close Popup if user presses "Ok"
-        if (ImGui::Button("Ok", ImVec2(80.0f, 30.0f))) {
+        if (ImGui::Button("Ok", ImVec2(150.0f, 50.0f))) {
             nextState = VisualizationState::Finished;
             ImGui::CloseCurrentPopup();
         }

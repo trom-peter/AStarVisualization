@@ -39,7 +39,7 @@ void GUI::init(const Window& window) {
 
     io.Fonts->AddFontDefault();
     font = io.Fonts->AddFontFromFileTTF("fonts/JetbrainsMonoRegular.ttf", FONT_SIZE);
-    windowFlags = ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoMove;
+    windowFlags = ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse;
     dockingFlags = ImGuiDockNodeFlags_NoResize | ImGuiDockNodeFlags_PassthruCentralNode;
 }
 
@@ -69,7 +69,7 @@ VisualizationState GUI::showUI_EnvironmentConfig(EnvironmentConfig& envConfig) c
     VisualizationState nextState = VisualizationState::ConfiguringSearchEnvironment;
 
     // Show environment configuration menu
-    ImGui::Begin("Konfiguration des Suchraums", nullptr, windowFlags);
+    ImGui::Begin("Search environment configuration", nullptr, windowFlags);
 
     // Seed input
     char buffer[4];
@@ -86,37 +86,37 @@ VisualizationState GUI::showUI_EnvironmentConfig(EnvironmentConfig& envConfig) c
     }
 
     // Random seed
-    if (ImGui::Button(u8"Zufällig")) {
+    if (ImGui::Button(u8"Random")) {
         envConfig.seed = SeedGenerator::getRandomSeed();
     }
 
     ImGui::NewLine();
 
     // Topography type
-    ImGui::Text(u8"Geländetyp");
+    ImGui::Text(u8"Terrain type");
     ImGui::RadioButton("1", &envConfig.topographyType, 0); ImGui::SameLine();
     ImGui::RadioButton("2", &envConfig.topographyType, 1);
 
     ImGui::NewLine();
 
     // Topography complexity
-    ImGui::Text(u8"Komplexität");
-    if (ImGui::Button("Einfach")) {
+    ImGui::Text(u8"Complexity");
+    if (ImGui::Button("low")) {
         envConfig.terrainScaling = EnvironmentConfig::COMPLEXITY_LOW;
     }
 
-    if (ImGui::Button("Mittel")) {
+    if (ImGui::Button("medium")) {
         envConfig.terrainScaling = EnvironmentConfig::COMPLEXITY_MEDIUM;
     }     
 
-    if (ImGui::Button("Hoch")) {
+    if (ImGui::Button("high")) {
         envConfig.terrainScaling = EnvironmentConfig::COMPLEXITY_HIGH;
     }
 
     ImGui::NewLine();
 
     // Grid resolution
-    ImGui::Text(u8"Gitterauflösung (n * n)");
+    ImGui::Text("Grid resolution (n * n)");
     if (ImGui::InputInt("##gridResolution", &envConfig.gridResolution)) {
         envConfig.gridResolution = std::clamp(
             envConfig.gridResolution, 
@@ -128,7 +128,7 @@ VisualizationState GUI::showUI_EnvironmentConfig(EnvironmentConfig& envConfig) c
 
     ImGui::NewLine();
 
-    if (ImGui::Button("Fertig")) {
+    if (ImGui::Button("Done", ImVec2(100.0f, 50.0f))) {
         nextState = VisualizationState::ConfiguringSearchProblem;
     }
 
@@ -143,8 +143,8 @@ VisualizationState GUI::showUI_SearchProblemConfig(
     VisualizationState nextState = VisualizationState::ConfiguringSearchProblem;
 
     // Search problem configuration
-    ImGui::Begin("Konfiguration des Suchproblems", nullptr, windowFlags);
-    ImGui::Text("Startzustand"); ImGui::SameLine(225); ImGui::Text("Zielzustand");
+    ImGui::Begin("Search problem configuration", nullptr, windowFlags);
+    ImGui::Text("Initial state"); ImGui::SameLine(225); ImGui::Text("Goal state");
     ImGui::NewLine();
 
     // Initial state configuration
@@ -221,14 +221,14 @@ VisualizationState GUI::showUI_SearchProblemConfig(
     ImGui::NewLine();
 
     // Heuristic choice
-    const char* items[] = { "Keine", "Wanderdauer", 
-        u8"Wanderdauer überschätzt", "Schnittpunkte", u8"Höhengewichtung"};
+    const char* items[] = { "None", "Hiking duration", 
+        "Overestimated hiking duration", "Intersections", "Weighted heights"};
 
-    ImGui::Combo("Heuristik", &problemConfig.heuristic, items, IM_ARRAYSIZE(items));
+    ImGui::Combo("Heuristic", &problemConfig.heuristic, items, IM_ARRAYSIZE(items));
 
     // Show overestimate factor input when overestimated heuristic is selected
-    if (items[problemConfig.heuristic] == u8"Wanderdauer überschätzt" &&
-        ImGui::InputFloat("Faktor", &problemConfig.overestimateFactor, 0.1f, 1.0f)) 
+    if (items[problemConfig.heuristic] == "Overestimated hiking duration" &&
+        ImGui::InputFloat("Factor", &problemConfig.overestimateFactor, 0.1f, 1.0f)) 
     {
         problemConfig.overestimateFactor = std::clamp(
             problemConfig.overestimateFactor, 
@@ -237,28 +237,31 @@ VisualizationState GUI::showUI_SearchProblemConfig(
     }
 
     // Heuristic descriptions
-    if (items[problemConfig.heuristic] == "Wanderdauer") {
-        ImGui::Text(u8"Bewertung der Zustände anhand ihrer\ngeschätzten Wanderdauer zum Ziel.");
+    if (items[problemConfig.heuristic] == "Hiking duration") {
+        ImGui::Text("Evaluation of a state based on its estimated\n"
+            "hiking duration to the goal state.");
     }
 
-    if (items[problemConfig.heuristic] == "Schnittpunkte") {
-        ImGui::Text(u8"Bewertung der Zustände anhand ihrer\n"
-            "geschätzten Wanderdauer zum Ziel sowie\n"
-            "der Anzahl an Schnittpunkten auf der\n"
-            "Luftlinie eines Zustands zum Ziel.");
+    if (items[problemConfig.heuristic] == "Intersections") {
+        ImGui::Text("Evaluation of a state based on its estimated\n"
+            "hiking duration to the goal state and the\n"
+            "number of terrain intersections on the\n"
+            "straight-line path towards the goal.");
     }
 
-    if (items[problemConfig.heuristic] == u8"Höhengewichtung") {
-        ImGui::Text(u8"Bewertung der Zustände anhand ihrer\n"
-            "geschätzten Wanderdauer zum Ziel sowie\n"
-            "der Tiefe der Zustände im Gelände.\n"
-            "Je tiefer, desto besser die Bewertung.");
+    if (items[problemConfig.heuristic] == "Weighted heights") {
+        ImGui::Text("Evaluation of a state based on its estimated\n"
+            "hiking duration to the goal state and its height\n"
+            "in the terrain. The lower the state, the better\n"
+            "its evaluation.");
     }
 
     ImGui::NewLine();
 
     // Begin search
-    if (ImGui::Button("Suche!", ImVec2(80.0f, 40.0f))) nextState = VisualizationState::Searching;
+    if (ImGui::Button("Search!", ImVec2(100.0f, 50.0f))) {
+        nextState = VisualizationState::Searching;
+    }
 
     ImGui::End();
 
@@ -269,9 +272,9 @@ VisualizationState GUI::showUI_Searching(PlaybackConfig& playbackConfig) const {
     VisualizationState nextState = VisualizationState::Searching;
 
     // Playback configuration
-    ImGui::Begin("Suche", nullptr, windowFlags);
+    ImGui::Begin("Search", nullptr, windowFlags);
 
-    ImGui::Text("Expansionen pro Sekunde");
+    ImGui::Text("Expansions per second");
     if (ImGui::InputInt("##expansionsPerSecond", &playbackConfig.searchRate, 1, NULL)) {
         playbackConfig.searchRate = std::clamp(
             playbackConfig.searchRate, 
@@ -309,10 +312,10 @@ VisualizationState GUI::showUI_Searching(PlaybackConfig& playbackConfig) const {
     // Search playback is finished
     if (playbackConfig.step == playbackConfig.maxSteps) {
         playbackConfig.searchPlaying = false;
-        ImGui::OpenPopup("Pfad gefunden!"); // Open pop up
+        ImGui::OpenPopup("Path found!"); // Open pop up
     }
 
-    if (ImGui::BeginPopupModal("Pfad gefunden!")) {
+    if (ImGui::BeginPopupModal("Path found!")) {
         // Close Popup if user presses "Ok"
         if (ImGui::Button("Ok", ImVec2(150.0f, 50.0f))) {
             nextState = VisualizationState::Finished;
@@ -329,27 +332,27 @@ VisualizationState GUI::showUI_Finished(const AStarSearch& aStar) const {
     VisualizationState nextState = VisualizationState::Finished;
 
     // Search statistics
-    ImGui::Begin("Statistik", nullptr, windowFlags);
+    ImGui::Begin("Statistics", nullptr, windowFlags);
     char sTime[100];
     sprintf_s(sTime, "%.2fh", aStar.getSolution()->pathCost / 3600.0f); // Show travel time in hours
-    ImGui::LabelText(sTime, u8"Wanderdauer");
+    ImGui::LabelText(sTime, "Hiking duration");
 
     ImGui::NewLine();
 
-    ImGui::Text("Knoten");
-    ImGui::LabelText(std::to_string(aStar.getConsideredNodes()).c_str(), u8"Betrachtet");
-    ImGui::LabelText(std::to_string(aStar.getAllExpanded().size()).c_str(), "Expandiert");
-    ImGui::LabelText(std::to_string(aStar.getSolutionPath().size()).c_str(), u8"Lösungpfad");
+    ImGui::Text("Nodes");
+    ImGui::LabelText(std::to_string(aStar.getConsideredNodes()).c_str(), "Considered");
+    ImGui::LabelText(std::to_string(aStar.getAllExpanded().size()).c_str(), "Expanded");
+    ImGui::LabelText(std::to_string(aStar.getSolutionPath().size()).c_str(), "Solution");
 
     ImGui::NewLine();
 
     // Menu for going back
-    ImGui::Text(u8"Zurück zu:");
-    if (ImGui::Button("Suchproblem")) {
+    ImGui::Text("Back to configuring:");
+    if (ImGui::Button("Search problem")) {
         nextState = VisualizationState::ConfiguringSearchProblem;
     }
     ImGui::SameLine();
-    if (ImGui::Button("Suchumgebung")) {
+    if (ImGui::Button("Search environment")) {
         nextState = VisualizationState::ConfiguringSearchEnvironment;
     }
 
@@ -359,7 +362,7 @@ VisualizationState GUI::showUI_Finished(const AStarSearch& aStar) const {
 
 void GUI::showUI_Viewport(FrameBuffer& fb) {
     // Visualization viewport
-    ImGui::Begin("Visualisierung", nullptr, windowFlags);
+    ImGui::Begin("Visualization", nullptr, windowFlags);
     {
         ImGui::BeginChild("Viewport");
 
@@ -374,9 +377,9 @@ void GUI::showUI_Viewport(FrameBuffer& fb) {
 
 void GUI::showUI_Visibility(StategridConfig& gridConfig) const {
     // Visibility menu
-    ImGui::Begin("Sichtbarkeit", nullptr, windowFlags);
-    ImGui::Checkbox("Unbesucht", &gridConfig.defaultVisible);
-    ImGui::Checkbox("Grenzbereich", &gridConfig.frontierVisible);
+    ImGui::Begin("Visibility", nullptr, windowFlags);
+    ImGui::Checkbox("Unexplored", &gridConfig.defaultVisible);
+    ImGui::Checkbox("Frontier", &gridConfig.frontierVisible);
     ImGui::Checkbox("Reached", &gridConfig.reachedVisible);
     ImGui::End();
 }

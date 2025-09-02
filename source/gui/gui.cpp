@@ -12,7 +12,7 @@
 #include "seed_generator.h"
 
 //GUI font size
-constexpr float FONT_SIZE = 25.0f;
+constexpr float FONT_SIZE = 23.0f;
 
 GUI::GUI() : font(nullptr), windowFlags(ImGuiWindowFlags()), dockingFlags(ImGuiDockNodeFlags()) {}
 
